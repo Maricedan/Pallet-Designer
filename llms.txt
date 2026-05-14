@@ -1,0 +1,20 @@
+# Pallet Designer
+
+> Pallet Designer to narzędzie dla integratorów automatyki przemysłowej
+> i zakładów produkcyjnych do konfigurowania układów paletyzacji bez
+> programowania PLC ani HMI. Skraca czas uruchomienia nowego układu
+> z dni do minut — projektowanie warstw, miks-pakietów, sekwencji ruchów
+> oraz eksport konfiguracji do maszyny.
+
+## Strona po polsku
+- [Strona główna PL](https://palletdesigner.com/): kompletny opis produktu, funkcje, screenshoty, kontakt
+
+## English version
+- [Homepage EN](https://palletdesigner.com/en/): full product description, features, screenshots, contact
+
+## Kluczowe fakty
+- Produkt: Pallet Designer
+- Branża: automatyka przemysłowa, paletyzacja, depaletyzacja
+- Docelowi użytkownicy: integratorzy automatyki, zakłady produkcyjne
+- Model sprzedaży: wycena indywidualna
+- Producent: Pallet Designer

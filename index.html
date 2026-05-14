@@ -1,0 +1,2551 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pallet Designer — konfigurator paletyzacji bez programowania</title>
+<meta name="description" content="Konfigurator paletyzacji bez programowania — Pallet Designer skraca przygotowanie nowych układów z dni do minut, generuje dane do maszyny i upraszcza pracę integratorów automatyki.">
+<meta name="keywords" content="paletyzacja, depaletyzacja, konfigurator paletyzacji, układ palety, automatyka przemysłowa, PLC, HMI, robot paletyzujący, integrator automatyki, Pallet Designer">
+<meta name="author" content="Pallet Designer">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="googlebot" content="index, follow">
+<meta name="yandex-verification" content="aba6a804feca8da4">
+<meta name="theme-color" content="#3ec5f3">
+
+<link rel="canonical" href="https://palletdesigner.com/">
+
+<link rel="alternate" hreflang="pl" href="https://palletdesigner.com/">
+<link rel="alternate" hreflang="en" href="https://palletdesigner.com/en/">
+<link rel="alternate" hreflang="x-default" href="https://palletdesigner.com/">
+
+<meta property="og:title" content="Pallet Designer — konfiguruj paletyzację bez programowania">
+<meta property="og:description" content="Konfigurator paletyzacji bez programowania PLC/HMI. Nowy układ w kilka minut, generowanie danych prosto do maszyny.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://palletdesigner.com/">
+<meta property="og:site_name" content="Pallet Designer">
+<meta property="og:locale" content="pl_PL">
+<meta property="og:locale:alternate" content="en_US">
+<meta property="og:image" content="https://palletdesigner.com/logo.png">
+<meta property="og:image:alt" content="Logo Pallet Designer">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Pallet Designer — konfiguruj paletyzację bez programowania">
+<meta name="twitter:description" content="Konfigurator paletyzacji bez programowania PLC/HMI. Nowy układ w kilka minut, generowanie danych prosto do maszyny.">
+<meta name="twitter:image" content="https://palletdesigner.com/logo.png">
+
+<link rel="icon" type="image/png" href="logo.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Pallet Designer",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "Industrial Automation Software",
+      "operatingSystem": "Windows",
+      "description": "Środowisko do konfiguracji procesów paletyzacji i depaletyzacji. Aplikacja desktopowa z opcjonalnym rozszerzeniem dla PLC/HMI eliminującym ręczną analizę układów i przeprogramowywanie maszyn.",
+      "url": "https://palletdesigner.com/",
+      "image": "https://palletdesigner.com/screen-hero.png",
+      "inLanguage": "pl-PL",
+      "offers": {
+        "@type": "Offer",
+        "availability": "https://schema.org/InStock",
+        "priceCurrency": "PLN",
+        "price": "0",
+        "description": "Wycena indywidualna — skontaktuj się w sprawie oferty."
+      },
+      "featureList": [
+        "Konfiguracja układów paletyzacji bez programowania",
+        "Miksowanie produktów na palecie",
+        "Eksport do PLC i HMI",
+        "Generowanie dokumentacji",
+        "Konfigurator dla klienta końcowego"
+      ]
+    },
+    {
+      "@type": "Organization",
+      "name": "Pallet Designer",
+      "url": "https://palletdesigner.com/",
+      "logo": "https://palletdesigner.com/logo.png"
+    },
+    {
+      "@type": "WebSite",
+      "name": "Pallet Designer",
+      "url": "https://palletdesigner.com/",
+      "inLanguage": "pl-PL"
+    }
+  ]
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  /* Brand palette */
+  --sky: #3ec5f3;
+  --sky-bright: #1ba6d4;
+  --sky-deep: #0a7ea8;
+  --sky-soft: #d6eef9;
+  --sky-mist: #ecf6fb;
+  --sky-haze: #f5fbfd;
+
+  /* Backgrounds */
+  --cream: #fefcf6;
+  --cream-warm: #fbf6e9;
+  --bg: #fbfaf4;
+  --bg-alt: #f7f5ec;
+
+  /* Text */
+  --ink: #0a2c3d;
+  --ink-soft: #4f6c7a;
+  --ink-faded: #8aa1ad;
+
+  /* Surfaces */
+  --surface: #ffffff;
+  --surface-warm: #fffdf6;
+  --line: #e6eef2;
+  --line-soft: #f0f5f8;
+
+  /* Accents */
+  --peach: #ffe0c8;
+  --peach-soft: #fff1e3;
+  --mint: #cfeee0;
+  --mint-soft: #e8f7ef;
+  --rose: #ffd9da;
+
+  /* Shadows */
+  --shadow-soft: 0 12px 40px -12px rgba(10, 80, 110, 0.10);
+  --shadow-lift: 0 24px 60px -12px rgba(10, 80, 110, 0.18);
+  --shadow-deep: 0 32px 80px -16px rgba(10, 80, 110, 0.22);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle film-grain overlay across the whole page */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04 0 0 0 0 0.18 0 0 0 0 0.24 0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+
+main, header, footer { position: relative; z-index: 2; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.container-wide {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+/* Typography primitives */
+.serif-italic {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-feature-settings: "ss01", "ss02";
+}
+
+/* Header */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 18px 0;
+  background: rgba(251, 250, 244, 0.78);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(230, 238, 242, 0.55);
+}
+header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand-row img { width: 38px; height: 38px; }
+.brand-name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 19px;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+.brand-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--ink-faded);
+  text-transform: uppercase;
+  margin-left: -4px;
+  padding-left: 14px;
+  border-left: 1px solid var(--line);
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.nav-link {
+  color: var(--ink-soft);
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--ink); }
+
+.header-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  background: var(--ink);
+  color: white;
+  border-radius: 100px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  letter-spacing: -0.005em;
+}
+.header-cta:hover {
+  background: var(--sky-deep);
+  transform: translateY(-1px);
+}
+.header-cta svg { width: 13px; height: 13px; }
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.5);
+}
+.lang-switch .lang-active {
+  color: var(--ink);
+  font-weight: 700;
+}
+.lang-switch .lang-link {
+  color: var(--ink-faded);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.lang-switch .lang-link:hover { color: var(--ink); }
+.lang-switch .lang-divider {
+  width: 1px;
+  height: 10px;
+  background: var(--line);
+}
+
+@media (max-width: 700px) {
+  .nav-link, .brand-tag { display: none; }
+  .header-cta { padding: 10px 16px; font-size: 13px; }
+  .lang-switch { padding: 5px 10px; font-size: 10px; gap: 8px; }
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  padding: 90px 0 130px;
+  overflow: hidden;
+}
+.hero-blob-1 {
+  position: absolute;
+  top: -150px;
+  right: -180px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(62, 197, 243, 0.20) 0%, transparent 60%);
+  border-radius: 50%;
+  filter: blur(50px);
+  pointer-events: none;
+}
+.hero-blob-2 {
+  position: absolute;
+  bottom: -100px;
+  left: -150px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(255, 224, 200, 0.55) 0%, transparent 60%);
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.25fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 8px 12px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 100px;
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-bottom: 30px;
+  box-shadow: 0 4px 14px rgba(20, 80, 110, 0.04);
+}
+.hero-eyebrow .dot {
+  width: 8px;
+  height: 8px;
+  background: var(--sky);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(62, 197, 243, 0.18);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(62, 197, 243, 0.18); }
+  50% { box-shadow: 0 0 0 9px rgba(62, 197, 243, 0.04); }
+}
+
+.hero h1 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  letter-spacing: -0.028em;
+  line-height: 1.0;
+  margin-bottom: 28px;
+  color: var(--ink);
+  word-wrap: break-word;
+}
+.hero h1 em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--sky-deep);
+  font-size: 1.05em;
+  padding: 0 0.04em;
+}
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+
+.hero .lede {
+  font-size: 1.18rem;
+  color: var(--ink-soft);
+  margin-bottom: 36px;
+  max-width: 540px;
+  line-height: 1.55;
+}
+.cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 26px;
+  border-radius: 100px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  letter-spacing: -0.005em;
+}
+.btn-primary {
+  background: var(--ink);
+  color: white;
+}
+.btn-primary:hover {
+  background: var(--sky-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 16px 32px rgba(10, 126, 168, 0.32);
+}
+.btn-secondary {
+  background: var(--surface);
+  color: var(--ink);
+  border-color: var(--line);
+}
+.btn-secondary:hover {
+  border-color: var(--sky);
+  color: var(--sky-deep);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(20, 80, 110, 0.06);
+}
+.btn svg { width: 17px; height: 17px; }
+
+.hero-extras {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  letter-spacing: 0.04em;
+}
+.hero-extras .meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink-faded);
+}
+.hero-extras .meta::after {
+  content: "";
+  width: 22px;
+  height: 1px;
+  background: var(--line);
+}
+.brochure-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sky-deep);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--sky-deep);
+  padding-bottom: 2px;
+  transition: all 0.25s ease;
+}
+.brochure-link:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+.brochure-link svg { width: 13px; height: 13px; }
+
+/* Hero visual */
+.hero-visual {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hero-frame {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  background: var(--surface);
+  border-radius: 28px;
+  padding: 14px;
+  box-shadow:
+    0 30px 80px -20px rgba(20, 80, 110, 0.28),
+    0 8px 24px -8px rgba(20, 80, 110, 0.12);
+  border: 1px solid var(--line);
+  transform: rotate(-1.8deg);
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hero-frame:hover { transform: rotate(0deg) translateY(-6px); }
+.hero-frame::before {
+  content: "";
+  position: absolute;
+  top: -22px;
+  right: -22px;
+  width: 88px;
+  height: 88px;
+  background: linear-gradient(135deg, var(--sky), var(--sky-bright));
+  border-radius: 50%;
+  opacity: 0.92;
+  z-index: -1;
+  filter: blur(2px);
+}
+.hero-frame::after {
+  content: "";
+  position: absolute;
+  bottom: -18px;
+  left: -18px;
+  width: 64px;
+  height: 64px;
+  background: var(--peach);
+  border-radius: 50%;
+  z-index: -1;
+}
+.hero-screen {
+  width: 100%;
+  border-radius: 18px;
+  display: block;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, var(--sky-mist) 0%, var(--sky-soft) 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero-screen img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.float-tag {
+  position: absolute;
+  background: var(--surface);
+  padding: 9px 14px 9px 12px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  z-index: 2;
+}
+.float-tag .tag-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sky);
+}
+.float-tag.t-tl { top: 20px; left: -24px; transform: rotate(-3deg); }
+.float-tag.t-br { bottom: 30px; right: -28px; transform: rotate(2.5deg); }
+.float-tag.t-tl .tag-dot { background: var(--sky); }
+.float-tag.t-br .tag-dot { background: #f0a878; }
+
+@media (max-width: 700px) {
+  .float-tag.t-tl, .float-tag.t-br { display: none; }
+}
+
+/* Process card */
+.process {
+  position: relative;
+  padding: 0 0 60px;
+}
+.process-card {
+  background: linear-gradient(135deg, var(--sky-mist) 0%, var(--cream) 100%);
+  border: 1px solid var(--line);
+  border-radius: 32px;
+  padding: 44px 48px;
+  position: relative;
+  overflow: hidden;
+}
+.process-card::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(62, 197, 243, 0.18) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.process-card::after {
+  content: "";
+  position: absolute;
+  bottom: -80px;
+  left: -80px;
+  width: 220px;
+  height: 220px;
+  background: radial-gradient(circle, rgba(255, 224, 200, 0.4) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.process-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr auto;
+  gap: 0;
+  align-items: center;
+}
+.process-step {
+  text-align: center;
+  padding: 0 12px;
+}
+.process-step .num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--sky-deep);
+  letter-spacing: 0.18em;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+.process-step .label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: -0.022em;
+  color: var(--ink);
+  line-height: 1.1;
+}
+.process-arrow {
+  font-size: 26px;
+  color: var(--sky);
+  font-weight: 300;
+  padding: 0 18px;
+  user-select: none;
+  line-height: 1;
+}
+.process-tagline {
+  padding-left: 32px;
+  border-left: 1px solid rgba(230, 238, 242, 0.7);
+  margin-left: 14px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.process-tagline .timer {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 800;
+  font-size: 2.6rem;
+  letter-spacing: -0.035em;
+  color: var(--sky-deep);
+  line-height: 1;
+  display: inline-flex;
+  align-items: baseline;
+}
+.process-tagline .timer .lt {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.42em;
+  color: var(--ink-soft);
+  margin-right: 0.28em;
+  align-self: center;
+  letter-spacing: 0;
+}
+.process-tagline .timer .num {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+  color: var(--sky-deep);
+}
+.process-tagline .timer .unit {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.4em;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  align-self: center;
+  margin-left: 0.4em;
+}
+.process-tagline .timer-label {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* Standard sections */
+section.standard {
+  padding: 110px 0;
+  position: relative;
+}
+.section-head {
+  margin-bottom: 60px;
+  max-width: 760px;
+}
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  background: var(--sky-soft);
+  color: var(--sky-deep);
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 24px;
+}
+h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.6vw, 3.3rem);
+  letter-spacing: -0.032em;
+  line-height: 1.02;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+h2 em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  color: var(--sky-deep);
+  font-size: 1.05em;
+}
+.section-intro {
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 640px;
+}
+.section-head.center .section-intro { margin: 0 auto; }
+
+/* Video demo */
+.video-section { background: linear-gradient(180deg, var(--bg) 0%, var(--sky-haze) 100%); }
+.video-wrap {
+  position: relative;
+  padding-bottom: 56.25%;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: var(--shadow-deep);
+  border: 1px solid var(--line);
+}
+.video-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Problems */
+.problems-section {
+  background: linear-gradient(180deg, var(--sky-haze) 0%, var(--bg) 100%);
+}
+.problems-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+.problem-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 36px;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.problem-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(62, 197, 243, 0.3);
+}
+.problem-card .num {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--sky-deep);
+  letter-spacing: 0.16em;
+  margin-bottom: 18px;
+  padding: 5px 11px;
+  background: var(--sky-mist);
+  border-radius: 6px;
+  align-self: flex-start;
+}
+.problem-card .num::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+.problem-card h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.34rem;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  margin-bottom: 14px;
+  color: var(--ink);
+}
+.problem-card .problem-desc {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  margin-bottom: 22px;
+  line-height: 1.6;
+  flex-grow: 1;
+}
+.problem-card .solution {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--sky-mist) 0%, var(--sky-soft) 100%);
+  border-radius: 14px;
+  font-size: 0.96rem;
+  color: var(--ink);
+  line-height: 1.5;
+  font-weight: 500;
+}
+.problem-card .solution::before {
+  content: "→";
+  color: var(--sky-deep);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  margin-top: -1px;
+}
+
+/* How it works */
+.howto-section {
+  position: relative;
+  overflow: hidden;
+}
+.howto-section::before {
+  content: "";
+  position: absolute;
+  top: 10%;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(62, 197, 243, 0.10) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.howto-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 70px;
+  align-items: start;
+}
+.howto-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.howto-step {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 24px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--line);
+  transition: padding 0.3s ease;
+}
+.howto-step:last-child { border-bottom: none; }
+.howto-step:hover { padding-left: 8px; }
+.howto-step .step-num {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2.6rem;
+  color: var(--sky-deep);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+.howto-step h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.16rem;
+  letter-spacing: -0.018em;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.howto-step p {
+  color: var(--ink-soft);
+  font-size: 0.96rem;
+  line-height: 1.55;
+}
+
+.howto-visual {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  justify-content: center;
+}
+.circle-frame {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 1;
+}
+.circle-frame::before {
+  content: "";
+  position: absolute;
+  inset: -24px;
+  background: linear-gradient(135deg, var(--sky-soft) 0%, var(--peach) 100%);
+  border-radius: 50%;
+  filter: blur(34px);
+  opacity: 0.7;
+  z-index: -1;
+}
+.circle-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--sky-mist), var(--sky-soft));
+  box-shadow: 0 24px 60px -20px rgba(10, 80, 110, 0.32);
+  border: 6px solid var(--surface);
+  position: relative;
+}
+.circle-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.circle-deco {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  background: var(--surface);
+  padding: 9px 15px;
+  border-radius: 100px;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-soft);
+  white-space: nowrap;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.circle-deco::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  background: var(--sky);
+  border-radius: 50%;
+}
+.circle-deco.tl { top: 8%; left: -8%; transform: rotate(-6deg); }
+.circle-deco.br { bottom: 12%; right: -6%; transform: rotate(4deg); }
+
+/* Capabilities */
+.more-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--cream-warm) 100%);
+}
+.more-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.05fr;
+  gap: 60px;
+  align-items: start;
+}
+.more-blob-wrap {
+  position: sticky;
+  top: 100px;
+  display: flex;
+  justify-content: center;
+}
+.blob-shape {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1;
+}
+.blob-image {
+  position: absolute;
+  inset: 0;
+  clip-path: path('M250,40 C340,40 440,90 460,200 C480,310 410,400 320,440 C230,480 100,460 50,360 C0,260 30,140 110,80 C170,40 200,40 250,40 Z');
+  -webkit-clip-path: path('M250,40 C340,40 440,90 460,200 C480,310 410,400 320,440 C230,480 100,460 50,360 C0,260 30,140 110,80 C170,40 200,40 250,40 Z');
+  background: linear-gradient(135deg, var(--sky-mist), var(--sky-soft));
+  filter: drop-shadow(0 20px 40px rgba(20, 80, 110, 0.18));
+}
+.blob-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.blob-tag {
+  position: absolute;
+  background: var(--surface);
+  padding: 10px 16px;
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid var(--line);
+  font-weight: 500;
+  z-index: 3;
+}
+.blob-tag.t1 { top: 5%; right: -12px; transform: rotate(5deg); }
+.blob-tag.t1::before { content: "✦  "; color: var(--sky-deep); }
+.blob-tag.t2 { bottom: 8%; left: -12px; transform: rotate(-4deg); }
+.blob-tag.t2::before { content: "◆  "; color: var(--sky-deep); }
+
+.more-features {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.more-feature {
+  padding: 26px 30px;
+  background: var(--surface);
+  border-radius: 20px;
+  border: 1px solid var(--line);
+  transition: all 0.3s ease;
+}
+.more-feature:hover {
+  border-color: rgba(62, 197, 243, 0.4);
+  transform: translateX(6px);
+  box-shadow: var(--shadow-soft);
+}
+.more-feature h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.018em;
+  margin-bottom: 10px;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.more-feature h4 .icon {
+  width: 38px;
+  height: 38px;
+  background: var(--sky-mist);
+  border-radius: 11px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.more-feature h4 .icon svg { width: 18px; height: 18px; color: var(--sky-deep); }
+.more-feature p {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.6;
+}
+
+/* Audience */
+.audience-section { background: var(--bg); }
+.users-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+.user-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 28px 22px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.user-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sky), var(--sky-bright));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s ease;
+}
+.user-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: transparent;
+}
+.user-card:hover::before { transform: scaleX(1); }
+.user-card .role-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--sky-mist);
+  color: var(--sky-deep);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.user-card h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: -0.018em;
+  margin-bottom: 10px;
+  color: var(--ink);
+}
+.user-card p {
+  font-size: 0.93rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+@media (max-width: 1100px) {
+  .users-grid { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 720px) {
+  .users-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 480px) {
+  .users-grid { grid-template-columns: 1fr; }
+}
+
+/* Numbers / outcomes */
+.numbers-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--sky-haze) 100%);
+  padding: 110px 0;
+  position: relative;
+  overflow: hidden;
+}
+.numbers-section::before {
+  content: "";
+  position: absolute;
+  top: 30%;
+  right: -200px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(255, 224, 200, 0.35) 0%, transparent 60%);
+  border-radius: 50%;
+  filter: blur(40px);
+  pointer-events: none;
+}
+.numbers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  margin-top: 50px;
+}
+.stat-card {
+  position: relative;
+  padding: 32px 28px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: all 0.35s ease;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+.stat-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 130px;
+  height: 130px;
+  background: radial-gradient(circle at top right, rgba(62, 197, 243, 0.10), transparent 70%);
+  border-radius: 0 24px 0 0;
+  pointer-events: none;
+}
+.stat-card .big {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--sky-deep);
+  margin-bottom: 12px;
+  display: inline-flex;
+  align-items: baseline;
+}
+.stat-card .big em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 1.05em;
+}
+.stat-card .big .lt {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 0.42em;
+  color: var(--ink-soft);
+  margin-right: 0.28em;
+  align-self: center;
+  letter-spacing: 0;
+}
+.stat-card .big .unit {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.32em;
+  font-weight: 500;
+  color: var(--ink-faded);
+  letter-spacing: 0.1em;
+  margin-left: 0.4em;
+  align-self: center;
+}
+.stat-card h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.stat-card p {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.numbers-features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+.feature-card {
+  position: relative;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: all 0.35s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+}
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+}
+.feature-card .fc-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(62, 197, 243, 0.14), rgba(62, 197, 243, 0.04));
+  border: 1px solid rgba(62, 197, 243, 0.18);
+  margin-bottom: 4px;
+}
+.feature-card .fc-icon svg { width: 20px; height: 20px; color: var(--sky-deep); }
+.feature-card h4 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.feature-card p {
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+@media (max-width: 1000px) {
+  .numbers-grid { grid-template-columns: repeat(2, 1fr); }
+  .numbers-features { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 520px) {
+  .numbers-grid { grid-template-columns: 1fr; }
+  .numbers-features { grid-template-columns: 1fr; }
+}
+
+/* About author */
+.author-section {
+  background: linear-gradient(180deg, var(--sky-haze) 0%, var(--cream-warm) 100%);
+  padding: 110px 0;
+  position: relative;
+  overflow: hidden;
+}
+.author-section::before {
+  content: "";
+  position: absolute;
+  bottom: -150px;
+  left: -100px;
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(62, 197, 243, 0.10) 0%, transparent 60%);
+  border-radius: 50%;
+  filter: blur(40px);
+}
+.author-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.8fr;
+  gap: 70px;
+  align-items: start;
+  position: relative;
+}
+.author-card {
+  position: sticky;
+  top: 100px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  padding: 36px;
+  box-shadow: var(--shadow-soft);
+  text-align: left;
+}
+.author-photo-frame {
+  position: relative;
+  margin: 0 0 30px;
+  aspect-ratio: 3 / 4;
+  border-radius: 22px;
+  transform: rotate(-1.8deg);
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.author-photo-frame:hover { transform: rotate(0deg) translateY(-3px); }
+.author-photo-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 22%;
+  border-radius: 22px;
+  display: block;
+  box-shadow: var(--shadow-lift);
+  position: relative;
+  z-index: 2;
+}
+.author-photo-frame::before {
+  content: "";
+  position: absolute;
+  bottom: -16px;
+  left: -16px;
+  width: 64px;
+  height: 64px;
+  background: var(--peach);
+  border-radius: 50%;
+  z-index: 1;
+}
+.author-photo-frame::after {
+  content: "";
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 76px;
+  height: 76px;
+  background: linear-gradient(135deg, var(--sky), var(--sky-bright));
+  border-radius: 50%;
+  opacity: 0.88;
+  z-index: 1;
+  filter: blur(1px);
+}
+.author-card h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.32rem;
+  letter-spacing: -0.022em;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.author-card .author-role {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--sky-deep);
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.author-card .author-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+.author-card .author-tag {
+  display: inline-flex;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--ink-soft);
+  background: var(--sky-mist);
+  padding: 4px 10px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+.author-card .contact-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px dashed var(--line);
+  padding-top: 22px;
+}
+.author-card .contact-mini a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.94rem;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.author-card .contact-mini a:hover { color: var(--sky-deep); }
+.author-card .contact-mini svg { width: 14px; height: 14px; color: var(--sky-deep); flex-shrink: 0; }
+
+.author-quote {
+  position: relative;
+}
+.author-quote .quote-mark {
+  position: absolute;
+  top: -30px;
+  left: -10px;
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 8rem;
+  color: var(--sky);
+  opacity: 0.22;
+  line-height: 1;
+  pointer-events: none;
+}
+.author-quote h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3vw, 2.2rem);
+  line-height: 1.18;
+  letter-spacing: -0.025em;
+  margin-bottom: 28px;
+  color: var(--ink);
+  position: relative;
+}
+.author-quote h2 em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--sky-deep);
+}
+.author-quote .quote-body {
+  font-size: 1.06rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+  display: flow-root;
+}
+.author-quote .quote-body p { margin-bottom: 18px; }
+.author-quote .quote-body p:last-child { margin-bottom: 0; }
+.author-quote .quote-body strong { color: var(--ink); font-weight: 600; }
+.author-quote .signature {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: 1.4rem;
+  color: var(--sky-deep);
+  margin-top: 30px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+@media (max-width: 900px) {
+  .author-grid { grid-template-columns: 1fr; gap: 40px; }
+  .author-card { position: static; max-width: 420px; margin: 0 auto; }
+}
+
+/* FAQ */
+.faq-section {
+  padding: 110px 0;
+  position: relative;
+}
+.faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 80px;
+  align-items: start;
+}
+.faq-grid .section-head { margin-bottom: 0; max-width: 100%; }
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--line);
+}
+.faq-item {
+  border-bottom: 1px solid var(--line);
+  padding: 4px 0;
+}
+.faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.12rem;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+  transition: color 0.25s ease;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--sky-deep); }
+.faq-item .faq-toggle {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--sky-mist);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+.faq-item .faq-toggle::before,
+.faq-item .faq-toggle::after {
+  content: "";
+  position: absolute;
+  background: var(--sky-deep);
+  transition: transform 0.3s ease;
+}
+.faq-item .faq-toggle::before {
+  width: 12px;
+  height: 1.5px;
+}
+.faq-item .faq-toggle::after {
+  width: 1.5px;
+  height: 12px;
+}
+.faq-item[open] .faq-toggle { background: var(--sky); }
+.faq-item[open] .faq-toggle::before { background: white; }
+.faq-item[open] .faq-toggle::after { background: white; transform: rotate(90deg); }
+.faq-item .faq-body {
+  padding: 0 0 26px 0;
+  color: var(--ink-soft);
+  font-size: 1rem;
+  line-height: 1.65;
+  max-width: 680px;
+}
+.faq-item .faq-body p { margin-bottom: 12px; }
+.faq-item .faq-body p:last-child { margin-bottom: 0; }
+.faq-item .faq-body strong { color: var(--ink); font-weight: 600; }
+.faq-item .faq-body a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--sky-deep);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--sky-deep);
+  padding-bottom: 2px;
+}
+.faq-item .faq-body a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.faq-item .faq-body a svg { width: 13px; height: 13px; }
+
+@media (max-width: 900px) {
+  .faq-grid { grid-template-columns: 1fr; gap: 40px; }
+}
+
+/* Final CTA */
+.final-cta {
+  padding: 130px 0;
+  position: relative;
+  overflow: hidden;
+}
+.final-cta::before {
+  content: "";
+  position: absolute;
+  inset: 40px 32px;
+  background:
+    radial-gradient(ellipse at 30% 30%, rgba(62, 197, 243, 0.20) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 70%, rgba(255, 224, 200, 0.5) 0%, transparent 60%),
+    linear-gradient(135deg, var(--sky-mist) 0%, var(--cream) 100%);
+  border-radius: 40px;
+  border: 1px solid var(--line);
+}
+.final-cta .container {
+  position: relative;
+  text-align: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+.final-cta h2 {
+  margin-bottom: 18px;
+  max-width: 760px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.final-cta .section-intro {
+  margin-bottom: 48px;
+  max-width: 620px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.final-cta .section-label {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  max-width: 880px;
+  margin: 0 auto;
+}
+.contact-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 32px 26px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  text-decoration: none;
+  color: var(--ink);
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.contact-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 60%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--sky), var(--sky-bright));
+  transition: transform 0.4s ease;
+  border-radius: 3px 3px 0 0;
+}
+.contact-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(62, 197, 243, 0.4);
+}
+.contact-card:hover::after { transform: translateX(-50%) scaleX(1); }
+.contact-card.primary {
+  background: linear-gradient(135deg, var(--ink) 0%, #134057 100%);
+  color: white;
+  border-color: var(--ink);
+}
+.contact-card.primary:hover {
+  background: linear-gradient(135deg, var(--sky-deep) 0%, var(--ink) 100%);
+  border-color: var(--sky-deep);
+}
+.contact-card .ic {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: var(--sky-mist);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  transition: all 0.3s ease;
+}
+.contact-card .ic svg { width: 24px; height: 24px; color: var(--sky-deep); }
+.contact-card.primary .ic { background: rgba(62, 197, 243, 0.18); }
+.contact-card.primary .ic svg { color: var(--sky); }
+.contact-card .label-small {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sky-deep);
+  font-weight: 500;
+}
+.contact-card.primary .label-small { color: var(--sky); }
+.contact-card h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: -0.018em;
+  margin: 0;
+}
+.contact-card .value {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  font-weight: 500;
+  word-break: break-all;
+}
+.contact-card.primary .value { color: rgba(255, 255, 255, 0.78); }
+.contact-card .arrow {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--sky-deep);
+  font-family: 'JetBrains Mono', monospace;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 0.3s ease;
+  font-weight: 500;
+}
+.contact-card.primary .arrow { color: var(--sky); }
+.contact-card:hover .arrow { gap: 10px; }
+
+.copy-email-row {
+  margin-top: 28px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.copy-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  background: white;
+  border: 1px solid rgba(15, 90, 122, 0.22);
+  border-radius: 999px;
+  color: var(--ink);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.copy-email:hover {
+  border-color: var(--sky-deep);
+  background: var(--sky-mist);
+  color: var(--sky-deep);
+}
+.copy-email svg { width: 14px; height: 14px; flex-shrink: 0; }
+.copy-email.copied {
+  color: #15803d;
+  border-color: rgba(21, 128, 61, 0.5);
+  background: rgba(21, 128, 61, 0.08);
+}
+.copy-email-inline {
+  margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: all 0.2s ease;
+}
+.copy-email-inline:hover {
+  color: var(--sky);
+  border-color: var(--sky);
+}
+.copy-email-inline svg { width: 11px; height: 11px; display: block; }
+.copy-email-inline.copied {
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.5);
+}
+
+/* Footer */
+footer {
+  background: var(--ink);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 80px 0 36px;
+  position: relative;
+  overflow: hidden;
+}
+footer::before {
+  content: "";
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(62, 197, 243, 0.12) 0%, transparent 60%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 80px;
+  margin-bottom: 56px;
+  position: relative;
+}
+.footer-brand img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 22px;
+  filter: brightness(1.1);
+}
+.footer-brand h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+  margin-bottom: 10px;
+  letter-spacing: -0.022em;
+}
+.footer-brand p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.97rem;
+  max-width: 380px;
+  line-height: 1.6;
+}
+.contact-block h4 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(62, 197, 243, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  margin-bottom: 22px;
+}
+.contact-list { list-style: none; }
+.contact-list li {
+  margin-bottom: 14px;
+  font-size: 0.97rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+.contact-list .label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 4px;
+}
+.contact-list a {
+  color: white;
+  text-decoration: none;
+  border-bottom: 1px dotted rgba(255, 255, 255, 0.3);
+  transition: all 0.2s;
+}
+.contact-list a:hover { border-bottom-color: var(--sky); color: var(--sky); }
+.contact-list strong { color: white; font-weight: 600; }
+
+.footer-bottom {
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.06em;
+  position: relative;
+}
+.footer-privacy {
+  margin-top: 14px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 980px) {
+  .hero { padding: 60px 0 80px; }
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  .hero-visual { order: -1; }
+  .hero-frame { max-width: 360px; }
+  .process-card { padding: 36px 30px; }
+  .process-inner {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+  .process-step {
+    text-align: left;
+    padding: 0;
+    border-bottom: 1px dashed var(--line);
+    padding-bottom: 22px;
+  }
+  .process-arrow { display: none; }
+  .process-tagline {
+    padding-left: 0;
+    border-left: none;
+    margin-left: 0;
+    padding-top: 6px;
+  }
+  .problems-grid { grid-template-columns: 1fr; }
+  .howto-list { grid-template-columns: 1fr; gap: 50px; }
+  .howto-visual { position: static; }
+  .more-grid { grid-template-columns: 1fr; gap: 50px; }
+  .more-blob-wrap { order: -1; position: static; }
+  section.standard { padding: 80px 0; }
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .final-cta { padding: 80px 0; }
+  .final-cta::before { inset: 20px 20px; border-radius: 28px; }
+  .contact-cards { grid-template-columns: 1fr; gap: 14px; }
+  .author-section { padding: 80px 0; }
+  .numbers-section { padding: 80px 0; }
+  .faq-section { padding: 80px 0; }
+}
+@media (max-width: 540px) {
+  .container, .container-wide { padding: 0 22px; }
+  .btn { padding: 14px 22px; font-size: 0.94rem; flex: 1; justify-content: center; }
+  .process-card { padding: 28px 22px; border-radius: 24px; }
+  .problem-card { padding: 28px; }
+  .blob-tag.t1, .blob-tag.t2 { display: none; }
+  .circle-deco.tl, .circle-deco.br { display: none; }
+}
+
+/* Scroll-reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <a href="#top" class="brand-row">
+      <img src="logo.png" alt="Logo Pallet Designer">
+      <span class="brand-name">Pallet Designer</span>
+      <span class="brand-tag">(de)paletyzacja · automatyka · konfigurator</span>
+    </a>
+    <div class="nav-actions">
+      <a href="#jak-dziala" class="nav-link">Jak działa</a>
+      <a href="#faq" class="nav-link">FAQ</a>
+      <div class="lang-switch" aria-label="Wybór języka">
+        <span class="lang-active" aria-current="true">PL</span>
+        <span class="lang-divider"></span>
+        <a href="en/index.html" class="lang-link" hreflang="en">EN</a>
+      </div>
+      <a href="#kontakt" class="header-cta">
+        <span>Umów demo</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-blob-1"></div>
+  <div class="hero-blob-2"></div>
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        Dla integratorów · zakładów produkcyjnych
+      </div>
+      <h1>Każdy nowy układ palety w&nbsp;<em>trzy minuty</em> na&nbsp;Twojej maszynie</h1>
+      <p class="lede">Pallet Designer to&nbsp;aplikacja, która skraca przygotowanie nowych układów (de)paletyzacji z&nbsp;dni do&nbsp;minut. Wprowadzasz dane urządzenia (raz), projektujesz układ, generujesz dane i&nbsp;wgrywasz je&nbsp;na&nbsp;maszynę — <strong>bez&nbsp;symulacji, bez&nbsp;przeprogramowywania, bez&nbsp;testów od&nbsp;zera</strong></p>
+      <div class="cta-row">
+        <a href="#kontakt" class="btn btn-primary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          Umów 20-minutowe demo
+        </a>
+        <a href="#video" class="btn btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Obejrzyj film 2 min
+        </a>
+      </div>
+      <div class="hero-extras">
+        <span class="meta">DEMO NA ŻYWO · BEZ ZOBOWIĄZAŃ</span>
+        <a href="Pallet_Designer_broszura.pdf" target="_blank" rel="noopener" class="brochure-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Pobierz broszurę PDF
+        </a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-frame">
+        <span class="float-tag t-tl"><span class="tag-dot"></span>walidacja wyników</span>
+        <span class="float-tag t-br"><span class="tag-dot"></span>dane do maszyny</span>
+        <div class="hero-screen">
+          <img src="screen-hero.png" alt="Pallet Designer — program do konfiguracji układu palety">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Process steps -->
+<section class="process">
+  <div class="container">
+    <div class="process-card">
+      <div class="process-inner">
+        <div class="process-step">
+          <div class="num">01 — PROJEKT</div>
+          <div class="label">Zaprojektuj układ</div>
+        </div>
+        <span class="process-arrow">→</span>
+        <div class="process-step">
+          <div class="num">02 — DANE</div>
+          <div class="label">Prześlij pliki</div>
+        </div>
+        <span class="process-arrow">→</span>
+        <div class="process-step">
+          <div class="num">03 — START</div>
+          <div class="label">Uruchom maszynę</div>
+        </div>
+        <div class="process-tagline">
+          <div class="timer">
+            <span class="lt">&lt;</span><span class="num">3</span><span class="unit">min</span>
+          </div>
+          <div class="timer-label">Cały proces</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Audience -->
+<section class="standard audience-section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Dla kogo</div>
+      <h2>Jedno narzędzie <em>wielu odbiorców</em></h2>
+      <p class="section-intro">Pallet Designer wspiera projekt na&nbsp;każdym etapie — od&nbsp;pierwszej rozmowy handlowej, przez konstrukcję i&nbsp;programowanie, aż po&nbsp;codzienną obsługę nowych układów na&nbsp;produkcji</p>
+    </div>
+    <div class="users-grid">
+      <div class="user-card">
+        <div class="role-tag">01</div>
+        <h3>Dział sprzedaży</h3>
+        <p>Szybka analiza układów klienta i&nbsp;oszacowanie wydajności — nawet podczas spotkania na&nbsp;żywo</p>
+      </div>
+      <div class="user-card">
+        <div class="role-tag">02</div>
+        <h3>Konstruktorzy</h3>
+        <p>Weryfikacja układu palety, wymiarów produktu i&nbsp;pracy chwytaka bez&nbsp;ręcznego rysowania wariantów</p>
+      </div>
+      <div class="user-card">
+        <div class="role-tag">03</div>
+        <h3>Automatycy</h3>
+        <p>Mniej programowania, brak przygotowywania receptur, mniej ryzyka błędów, krótszy czas uruchomienia</p>
+      </div>
+      <div class="user-card">
+        <div class="role-tag">04</div>
+        <h3>Programiści robotów</h3>
+        <p>Gotowe dane do&nbsp;symulacji i&nbsp;pracy robota, bez&nbsp;każdorazowego przygotowywania układu od&nbsp;zera</p>
+      </div>
+      <div class="user-card">
+        <div class="role-tag">05</div>
+        <h3>Zakład produkcyjny</h3>
+        <p>Samodzielna konfiguracja nowych układów paletyzacji — przewaga konkurencyjna oferty integratora</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Demo video -->
+<section class="standard video-section" id="video">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Demo</div>
+      <h2>Zobacz Pallet Designer <em>w&nbsp;akcji</em></h2>
+      <p class="section-intro">Krótka prezentacja pokazuje cały przepływ: projektowanie warstw, miksowanie produktów, budowę palety, generowanie danych oraz uruchomienie i&nbsp;wykonanie układu na&nbsp;maszynie</p>
+    </div>
+    <div class="video-wrap">
+      <iframe src="https://www.youtube.com/embed/XmZR3UqLgtY" title="Pallet Designer — demo programu do konfiguracji paletyzacji" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</section>
+
+<!-- Problems -->
+<section class="standard problems-section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Co zmienia w&nbsp;procesie</div>
+      <h2>Mniej ręcznej pracy. <em>Szybsze uruchomienia</em></h2>
+      <p class="section-intro">Nowe produkty, zmiany opakowań i&nbsp;kolejne układy palet nie&nbsp;muszą oznaczać dni analiz, poprawek i&nbsp;programowania. Pallet Designer porządkuje ten proces w&nbsp;jednym narzędziu</p>
+    </div>
+    <div class="problems-grid">
+      <div class="problem-card">
+        <div class="num">PROBLEM 01</div>
+        <h3>Każdy nowy układ angażuje inżynierów na&nbsp;zbyt długo</h3>
+        <p class="problem-desc">Nowy produkt lub&nbsp;zmiana opakowania zwykle oznacza ręczną analizę, projektowanie układu, modyfikacje programu i&nbsp;wyjazd do&nbsp;klienta. To&nbsp;blokuje ludzi, podnosi koszt wdrożenia i&nbsp;wydłuża uruchomienie</p>
+        <div class="solution">Dane układu palety powstają automatycznie — czas przygotowania spada z&nbsp;dni do&nbsp;minut, uruchomienie za&nbsp;pośrednictwem wygenerowanych plików</div>
+      </div>
+      <div class="problem-card">
+        <div class="num">PROBLEM 02</div>
+        <h3>Ręczne projektowanie zwiększa ryzyko błędów</h3>
+        <p class="problem-desc">Ręcznie opracowywane i&nbsp;wprowadzane do&nbsp;sterownika układy obarczone są ryzykiem błędów, które wychodzą dopiero przy uruchomieniu, gdy kosztują najwięcej</p>
+        <div class="solution">Automatycznie generowane zestawy danych, walidowane na&nbsp;podstawie parametrów stanowiska, zapewniają pewne i&nbsp;poprawne działanie maszyny od&nbsp;pierwszych chwil po&nbsp;załadowaniu układu</div>
+      </div>
+      <div class="problem-card">
+        <div class="num">PROBLEM 03</div>
+        <h3>Produkcja potrzebuje elastyczności, a&nbsp;nie&nbsp;kolejnego zgłoszenia serwisowego</h3>
+        <p class="problem-desc">Zakłady produkcyjne chcą szybko reagować na&nbsp;zamówienia, nowe warianty i&nbsp;zmiany opakowań. Bez&nbsp;odpowiedniego narzędzia każda zmiana układu wraca do&nbsp;integratora</p>
+        <div class="solution">Samoobsługowy konfigurator dla&nbsp;klienta końcowego — mniej zależności i&nbsp;mocniejsza oferta integratora</div>
+      </div>
+      <div class="problem-card">
+        <div class="num">PROBLEM 04</div>
+        <h3>Brakuje standaryzacji robot ↔ PLC</h3>
+        <p class="problem-desc">Brak standaryzacji skutkuje każdorazowym, czasochłonnym przygotowywaniem rozwiązania i&nbsp;trudniejszym utrzymaniem kodu i&nbsp;maszyny</p>
+        <div class="solution">Rozwiązanie wprowadza spójną ideologię dotyczącą procesu paletyzacji lub&nbsp;depaletyzacji oraz wymiany danych pomiędzy maszyną i&nbsp;robotem przy zachowaniu otwartości oraz elastyczności systemu</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it works -->
+<section class="standard howto-section" id="jak-dziala">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Jak to działa</div>
+      <h2>Od&nbsp;konfiguracji do&nbsp;<em>gotowej palety</em></h2>
+      <p class="section-intro">Najpierw ustawiasz parametry technologiczne stanowiska. Potem tworzysz układy palet, które aplikacja waliduje i&nbsp;zamienia na&nbsp;dane gotowe dla&nbsp;maszyny</p>
+    </div>
+    <div class="howto-list">
+      <div class="howto-steps">
+        <div class="howto-step">
+          <div class="step-num">01</div>
+          <div>
+            <h4>Konfiguracja parametrów maszyny</h4>
+            <p>Robisz to&nbsp;raz dla&nbsp;danego stanowiska. Dzięki temu Pallet Designer zna ograniczenia maszyny i&nbsp;wie, które operacje są możliwe</p>
+          </div>
+        </div>
+        <div class="howto-step">
+          <div class="step-num">02</div>
+          <div>
+            <h4>Projektowanie warstw palety</h4>
+            <p>Układasz produkty w&nbsp;przejrzystym interfejsie graficznym — bez&nbsp;CAD-a, arkuszy i&nbsp;ręcznego przeliczania pozycji</p>
+          </div>
+        </div>
+        <div class="howto-step">
+          <div class="step-num">03</div>
+          <div>
+            <h4>Podział na&nbsp;odłożenia robota</h4>
+            <p>Aplikacja może zrobić to&nbsp;algorytmicznie albo pozwolić Ci&nbsp;przejąć pełną kontrolę nad cyklem odkładania w&nbsp;trybie ręcznym</p>
+          </div>
+        </div>
+        <div class="howto-step">
+          <div class="step-num">04</div>
+          <div>
+            <h4>Budowa pełnej palety</h4>
+            <p>Tworzysz kompletną paletę z&nbsp;przygotowanych warstw, z&nbsp;obsługą przekładek, walidacją parametrów i&nbsp;podglądem dla&nbsp;operatora</p>
+          </div>
+        </div>
+        <div class="howto-step">
+          <div class="step-num">05</div>
+          <div>
+            <h4>Generowanie danych do&nbsp;maszyny</h4>
+            <p>Eksportujesz pliki uniwersalne albo dane przygotowane bezpośrednio pod&nbsp;sterowanie maszyny — najczęściej PLC&nbsp;i&nbsp;HMI. Format można dostosować do&nbsp;Twojego systemu</p>
+          </div>
+        </div>
+      </div>
+      <div class="howto-visual">
+        <div class="circle-frame">
+          <span class="circle-deco tl">algorytm</span>
+          <span class="circle-deco br">walidacja układu</span>
+          <div class="circle-img">
+            <img src="screen-layer.png" alt="Wizualizacja warstwy palety">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Capabilities -->
+<section class="standard more-section">
+  <div class="container">
+    <div class="section-head">
+      <div class="section-label">Więcej możliwości</div>
+      <h2>Nie&nbsp;tylko układ palety. <em>Cały przepływ danych</em></h2>
+      <p class="section-intro">Pallet Designer może obsłużyć więcej niż samo projektowanie warstw: miksowanie produktów, eksport danych do&nbsp;symulacji robotów, dokumentację PDF, oszacowanie wydajności, dedykowane formaty wynikowe i&nbsp;wiele więcej na&nbsp;życzenie klienta</p>
+    </div>
+    <div class="more-grid">
+      <div class="more-blob-wrap">
+        <div class="blob-shape">
+          <span class="blob-tag t1">miksowanie</span>
+          <span class="blob-tag t2">specyfikacja PDF</span>
+          <div class="blob-image">
+            <img src="screen-mix.png" alt="Miksowanie produktów na palecie w Pallet Designer">
+          </div>
+        </div>
+      </div>
+      <div class="more-features">
+        <div class="more-feature">
+          <h4>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            </span>
+            Miksowanie produktów
+          </h4>
+          <p>Tworzysz warstwy złożone z&nbsp;różnych typów produktów. Produkty mogą różnić się wariantem, na&nbsp;przykład smakiem lub&nbsp;przeznaczeniem, przy&nbsp;zachowaniu tych samych wymiarów opakowania</p>
+        </div>
+        <div class="more-feature">
+          <h4>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14a9 3 0 0 0 18 0V5"/><path d="M3 12a9 3 0 0 0 18 0"/></svg>
+            </span>
+            Eksport CSV do&nbsp;symulacji robotów
+          </h4>
+          <p>Pliki CSV z&nbsp;parametrami palety i&nbsp;ruchów robota powstają w&nbsp;kilka sekund. Możesz od&nbsp;razu wykorzystać je&nbsp;w&nbsp;symulatorze, żeby sprawdzić wykonalność i&nbsp;wydajność układu przed uruchomieniem</p>
+        </div>
+        <div class="more-feature">
+          <h4>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+            </span>
+            Automatyczna dokumentacja PDF
+          </h4>
+          <p>Program generuje raport z&nbsp;opisem palety, warstwami, parametrami technicznymi i&nbsp;wizualizacjami. To&nbsp;gotowy materiał do&nbsp;dokumentacji projektu, archiwum lub&nbsp;wysłania do&nbsp;klienta</p>
+        </div>
+        <div class="more-feature">
+          <h4>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            </span>
+            Integracja PLC/HMI
+          </h4>
+          <p>Gotowy kod programu, ekrany panelu operatorskiego oraz&nbsp;skrypty HMI — operator zyskuje wizualny podgląd warstwy i&nbsp;obsługę korekt bez&nbsp;dodatkowej pracy programistycznej — możliwość dostosowania do&nbsp;różnych systemów</p>
+        </div>
+        <div class="more-feature">
+          <h4>
+            <span class="icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+            </span>
+            Autorski program — pełna elastyczność
+          </h4>
+          <p>Aplikacja i&nbsp;formaty eksportu mogą być dostosowane do&nbsp;konkretnego stanowiska, standardu integratora albo wymagań klienta końcowego — od&nbsp;dodatkowych pól w&nbsp;plikach po&nbsp;nowe zakładki lub&nbsp;funkcje w&nbsp;programie</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Numbers / outcomes -->
+<section class="numbers-section">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-label">Co zyskujesz</div>
+      <h2>Konkrety, które <em>liczą się</em> w&nbsp;ofercie</h2>
+      <p class="section-intro">Pallet Designer skraca czas przygotowywania i&nbsp;uruchamiania stanowisk paletyzujących, ogranicza liczbę błędów i&nbsp;rozszerza ofertę o&nbsp;gotowy, niezawodny konfigurator dla&nbsp;klienta końcowego</p>
+    </div>
+    <div class="numbers-grid">
+      <div class="stat-card">
+        <div class="big">
+          <span class="lt">&lt;</span><em>3</em><span class="unit">min</span>
+        </div>
+        <h4>Od&nbsp;projektu do&nbsp;danych</h4>
+        <p>Od&nbsp;projektu układu po&nbsp;dane gotowe dla&nbsp;maszyny — pełen przepływ w&nbsp;jednym narzędziu</p>
+      </div>
+      <div class="stat-card">
+        <div class="big">
+          <em>0</em><span class="unit">ręcznego programowania</span>
+        </div>
+        <h4>Nowy układ bez&nbsp;zmian w&nbsp;kodzie</h4>
+        <p>Kolejne układy paletyzacji nie&nbsp;wymagają ręcznego dopisywania receptur ani&nbsp;modyfikacji programu pod&nbsp;każdy wariant</p>
+      </div>
+      <div class="stat-card">
+        <div class="big">
+          <em>5</em><span class="unit">ról</span>
+        </div>
+        <h4>Jeden proces dla&nbsp;wielu zespołów</h4>
+        <p>Sprzedaż, konstrukcja, automatyka, robotyka i&nbsp;produkcja — wsparcie dla&nbsp;każdego działu</p>
+      </div>
+      <div class="stat-card">
+        <div class="big">
+          <em>100</em><span class="unit">%</span>
+        </div>
+        <h4>Walidacja układu</h4>
+        <p>Każdy projekt jest sprawdzany względem parametrów stanowiska na&nbsp;etapie tworzenia — program uniemożliwia wygenerowanie niepoprawnych danych</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- About author -->
+<section class="author-section">
+  <div class="container">
+    <div class="section-head center">
+      <div class="section-label">O autorze</div>
+    </div>
+    <div class="author-grid">
+      <div class="author-card">
+        <div class="author-photo-frame">
+          <img src="photo_MD.jpg" alt="Marcin Daniun">
+        </div>
+        <h3>Marcin Daniun</h3>
+        <div class="author-role">Autor · automatyk i&nbsp;programista IT</div>
+        <div class="author-tags">
+          <span class="author-tag">10 lat doświadczenia</span>
+          <span class="author-tag">PLC / HMI</span>
+          <span class="author-tag">IT dla przemysłu</span>
+        </div>
+        <div class="contact-mini">
+          <a href="mailto:marcin@palletdesigner.com" target="_blank" rel="noopener" onclick="return openMail(event, this.href)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            marcin@palletdesigner.com
+          </a>
+          <a href="tel:+48517734241">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            +48 517 734 241
+          </a>
+          <a href="https://www.linkedin.com/in/marcin-daniun" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45z"/></svg>
+            linkedin.com/in/marcin-daniun
+          </a>
+        </div>
+      </div>
+      <div class="author-quote">
+        <span class="quote-mark">"</span>
+        <h2>Od&nbsp;operatora do&nbsp;kierownika działu automatyki. <em>Poznałem maszyny z&nbsp;wielu stron</em></h2>
+        <div class="quote-body">
+          <p>Programowanie PLC zacząłem jeszcze na&nbsp;studiach. Znaczną część wolnego czasu spędzałem wtedy w&nbsp;laboratorium przy stanowiskach dydaktycznych — to&nbsp;tam zaczęła się moja pasja do&nbsp;automatyki, programowania i&nbsp;tworzenia narzędzi ułatwiających ludziom pracę</p>
+          <p>Przez kolejne lata poznałem tę branżę z&nbsp;wielu perspektyw: <strong>pracownika produkcji w&nbsp;Belgii, montera szaf sterowniczych, automatyko-mechaniko-elektryka, nauczyciela akademickiego, programisty PLC/HMI i&nbsp;kierownika działu automatyki</strong>. Dzięki temu rozumiem nie&nbsp;tylko kod i&nbsp;schemat, ale&nbsp;też realia montażu, uruchomienia, utrzymania ruchu i&nbsp;codziennej pracy operatorów</p>
+          <p>Dziś łączę automatykę z&nbsp;IT, żeby tworzyć narzędzia, które upraszczają pracę zespołów technicznych — zwiększające efektywność projektów oraz&nbsp;dające realną przewagę rynkową. Pallet Designer jest jednym z&nbsp;tych narzędzi</p>
+          <p>Najprostszy sposób, żeby ocenić, czy&nbsp;Pallet Designer pasuje do&nbsp;Twojego procesu, to&nbsp;<strong>20-minutowe demo online</strong>. Pokażę aplikację, przejdziemy przez przykładowy układ palety i&nbsp;porozmawiamy jaki zakres wdrożenia ma&nbsp;sens</p>
+        </div>
+        <div class="signature">— Marcin Daniun</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="faq-grid">
+      <div class="section-head">
+        <div class="section-label">FAQ</div>
+        <h2>Najczęściej <em>zadawane pytania</em></h2>
+        <p class="section-intro">Poniżej znajdziesz odpowiedzi na&nbsp;najważniejsze pytania o&nbsp;konfigurację paletyzacji, integrację ze&nbsp;sterowaniem i&nbsp;wdrożenie Pallet Designera</p>
+      </div>
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Z&nbsp;jakim systemem sterowania współpracuje Pallet Designer?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Pallet Designer generuje dane w&nbsp;formatach, które można dopasować do&nbsp;konkretnego stanowiska — między innymi CSV, JSON oraz własne struktury danych. Dzięki temu aplikację można zintegrować z&nbsp;różnymi systemami sterowania</p>
+            <p>Pod system PLC/HMI Siemensa są gotowe bloki funkcyjne, ekrany i&nbsp;skrypty HMI. Po&nbsp;stronie PLC obsługują one proces (de)paletyzacji, a&nbsp;po&nbsp;stronie HMI operator maszyny zyskuje wizualny podgląd aktualnie wykonywanej warstwy oraz obsługę korekt — wszystko w&nbsp;ramach gotowego systemu bez&nbsp;konieczności wkładu dodatkowej pracy programistycznej dla&nbsp;każdego układu</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Czy Pallet Designer da&nbsp;się połączyć z&nbsp;robotami?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Tak. Aplikacja może generować dane potrzebne do&nbsp;symulacji w&nbsp;środowiskach obsługi robotów (np.&nbsp;RoboGuide). Obsługę ruchów rzeczywistego urządzenia można zrealizować poprzez nadrzędny system sterowania lub&nbsp;bezpośrednio po&nbsp;odpowiednim przygotowaniu programu robota</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Ile trwa wdrożenie Pallet Designera?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Sama <strong>aplikacja</strong> może być gotowa do&nbsp;pracy bardzo szybko — nauka obsługi programu i&nbsp;konfiguracja parametrów konkretnej maszyny to&nbsp;zazwyczaj jeden dzień</p>
+            <p>Pełna <strong>integracja z&nbsp;systemem sterowania</strong> zależy od&nbsp;stanowiska, użytych sterowników i&nbsp;wymagań klienta. Zwykle podstawowe zintegrowanie aplikacji z&nbsp;używanym środowiskiem razem ze&nbsp;szkoleniami to&nbsp;jeden tydzień — każdy kolejny projekt bazuje już na&nbsp;gotowych modułach</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Czy można dostosować eksportowane dane i&nbsp;funkcje programu?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Tak. To&nbsp;jeden z&nbsp;atutów rozwiązania. Pallet Designer jest programem autorskim, więc można rozwijać go&nbsp;pod&nbsp;konkretną potrzebę</p>
+            <p>Razem z&nbsp;aplikacją dostarczana jest pewna metodologia postrzegania procesu i&nbsp;komunikacji pomiędzy systemami, którą integrator może wdrożyć lub&nbsp;pozostać w&nbsp;całości lub&nbsp;częściowo przy swojej — wspólnie z&nbsp;zespołem technicznym integratora dążymy do&nbsp;opracowania najwygodniejszego rozwiązania uwzględniając aktualne potrzeby</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Czy konfigurator nadaje się dla&nbsp;klienta końcowego?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Tak. Pallet Designer może działać jako&nbsp;samoobsługowy konfigurator paletyzacji dla&nbsp;zakładu produkcyjnego. Operator lub&nbsp;technolog może przygotować nowy układ bez&nbsp;każdorazowego angażowania integratora. Parametry maszyny są przygotowywane przez integratora na&nbsp;etapie tworzenia projektu — klient końcowy nie&nbsp;ma&nbsp;możliwości ich zmiany, dzięki czemu może generować wyłącznie wykonalne i&nbsp;bezpieczne układy</p>
+            <p>Dla integratora to&nbsp;mocny element oferty: klient dostaje możliwą, dostępną elastyczność, bez&nbsp;generowania kosztów dorabiania dodatkowych układów</p>
+            <p>Jeżeli założenia projektowe nie&nbsp;uwzględniają konfiguratora dla&nbsp;klienta końcowego to&nbsp;Pallet Designer i&nbsp;tak wspiera zespół przy przygotowaniu projektu, a&nbsp;po&nbsp;wdrożeniu umożliwia dorobienie nowego układu w&nbsp;kilka minut z&nbsp;możliwością wysłania plików do&nbsp;klienta</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Czy po&nbsp;wdrożeniu jest możliwość pracy „po&nbsp;staremu"?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Tak. Pallet Designer generuje zestaw danych, które automatycznie trafiają do&nbsp;odpowiednich bloków pamięci, jednak automatyk lub&nbsp;robotyk nadal może kontrolować te&nbsp;dane i&nbsp;wypełniać je&nbsp;ręcznie lub&nbsp;poprzez własne narzędzia. Ideą systemu jest usprawnianie, nie&nbsp;ograniczanie</p>
+          </div>
+        </details>
+        <details class="faq-item">
+          <summary>Czy da&nbsp;się zobaczyć program przed decyzją?<span class="faq-toggle"></span></summary>
+          <div class="faq-body">
+            <p>Tak. Standardowo zaczynamy od&nbsp;<strong>demo z&nbsp;działania aplikacji online</strong>. Możliwe jest stworzenie układu zaproponowanego przez klienta. Dzięki temu od&nbsp;razu widać, jak aplikacja działa w&nbsp;praktyce i&nbsp;gdzie może skrócić pracę</p>
+            <p>Możesz też obejrzeć film lub&nbsp;pobrać broszurę PL lub&nbsp;EN i&nbsp;przekazać ją&nbsp;zespołowi</p>
+            <p style="margin-top: 16px;">
+              <a href="Pallet_Designer_broszura.pdf" target="_blank" rel="noopener">
+                Pobierz broszurę PL (PDF)
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+              &nbsp;&nbsp;
+              <a href="Pallet_Designer_broszura_eng.pdf" target="_blank" rel="noopener">
+                Brochure EN (PDF)
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </a>
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact / final CTA -->
+<section class="final-cta" id="kontakt">
+  <div class="container">
+    <div class="section-label">Porozmawiajmy</div>
+    <h2>Pokaż swój układ palety. <em>Zbudujemy go&nbsp;w&nbsp;Pallet Designerze</em></h2>
+    <p class="section-intro">20&nbsp;minut, demo online i&nbsp;konkretna odpowiedź, czy&nbsp;Pallet Designer pasuje do&nbsp;Twojej maszyny, procesu i&nbsp;modelu pracy. Bez&nbsp;zobowiązań</p>
+
+    <div class="contact-cards">
+      <a href="mailto:marcin@palletdesigner.com?subject=Pallet%20Designer%20%E2%80%94%20demo&body=Dzie%C5%84%20dobry%2C%0A%0Achcia%C5%82bym%20um%C3%B3wi%C4%87%2020-minutowe%20demo%20Pallet%20Designera.%0A%0A" class="contact-card primary" target="_blank" rel="noopener" onclick="return openMail(event, this.href)">
+        <span class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <span class="label-small">Demo · oferta · pytania</span>
+        <h3>Wyślij e-mail</h3>
+        <span class="value">marcin@palletdesigner.com</span>
+        <span class="arrow">napisz teraz →</span>
+      </a>
+
+      <a href="tel:+48517734241" class="contact-card">
+        <span class="ic">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </span>
+        <span class="label-small">Porozmawiajmy</span>
+        <h3>Zadzwoń</h3>
+        <span class="value">+48 517 734 241</span>
+        <span class="arrow">połącz →</span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/marcin-daniun" target="_blank" rel="noopener" class="contact-card">
+        <span class="ic">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.95v5.66H9.36V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zm1.78 13.02H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.55C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </span>
+        <span class="label-small">Profil zawodowy</span>
+        <h3>LinkedIn</h3>
+        <span class="value">marcin-daniun</span>
+        <span class="arrow">zobacz profil →</span>
+      </a>
+    </div>
+
+    <div class="copy-email-row">
+      <span>e-mail do schowka:</span>
+      <button type="button" class="copy-email" onclick="return copyEmail(this)" aria-label="Skopiuj adres e-mail">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        <span class="copy-text">marcin@palletdesigner.com</span>
+      </button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <img src="logo.png" alt="Logo Pallet Designer">
+        <h3>Pallet Designer</h3>
+        <p>Program do&nbsp;konfiguracji paletyzacji i&nbsp;depaletyzacji bez&nbsp;programowania</p>
+      </div>
+      <div class="contact-block">
+        <h4>Kontakt</h4>
+        <ul class="contact-list">
+          <li><strong>Marcin Daniun Automatyka</strong></li>
+          <li><span class="label">NIP</span>8481837200</li>
+          <li><span class="label">Telefon</span><a href="tel:+48517734241">517 734 241</a></li>
+          <li><span class="label">E-mail</span><a href="mailto:marcin@palletdesigner.com" target="_blank" rel="noopener" onclick="return openMail(event, this.href)">marcin@palletdesigner.com</a><button type="button" class="copy-email-inline" onclick="return copyEmail(this, 'marcin@palletdesigner.com')" aria-label="Skopiuj adres e-mail" title="Skopiuj"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span class="copy-text">kopiuj</span></button></li>
+          <li><span class="label">LinkedIn</span><a href="https://www.linkedin.com/in/marcin-daniun" target="_blank" rel="noopener">linkedin.com/in/marcin-daniun</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© Marcin Daniun Automatyka</span>
+      <span>PALLET DESIGNER · PROGRAM DO KONFIGURACJI (DE)PALETYZACJI</span>
+    </div>
+    <div class="footer-privacy">Strona używa Cloudflare Web Analytics do anonimowego pomiaru odwiedzin, bez cookies</div>
+  </div>
+</footer>
+
+<script>
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('section').forEach((s) => {
+  s.classList.add('reveal');
+  observer.observe(s);
+});
+
+function openMail(e, url) {
+  const win = window.open(url, '_blank');
+  if (!win) return true;
+  e.preventDefault();
+  return false;
+}
+
+function copyEmail(btn, email) {
+  const label = btn.querySelector('.copy-text');
+  const text = email || (label ? label.textContent : 'marcin@palletdesigner.com');
+  const flash = () => {
+    btn.classList.add('copied');
+    let prev;
+    if (label) { prev = label.textContent; label.textContent = btn.classList.contains('copy-email-inline') ? 'ok' : 'Skopiowano!'; }
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      if (label && prev !== undefined) label.textContent = prev;
+    }, 1800);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(flash).catch(() => {});
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.opacity = '0';
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); flash(); } catch (_) {}
+    document.body.removeChild(ta);
+  }
+  return false;
+}
+</script>
+
+<!-- Cloudflare Web Analytics -->
+<script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "0f346838e12741ea8c98a745360c1104"}'></script>
+<!-- End Cloudflare Web Analytics -->
+
+</body>
+</html>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://palletdesigner.com/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://palletdesigner.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://palletdesigner.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://palletdesigner.com/"/>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-hero.png</image:loc>
+      <image:title>Pallet Designer — interfejs aplikacji</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-mix.png</image:loc>
+      <image:title>Pallet Designer — miksowanie produktów na palecie</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-layer.png</image:loc>
+      <image:title>Pallet Designer — panel HMI z wizualizacją warstwy palety</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/logo.png</image:loc>
+      <image:title>Pallet Designer — logo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://palletdesigner.com/en/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://palletdesigner.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://palletdesigner.com/en/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://palletdesigner.com/"/>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-hero.png</image:loc>
+      <image:title>Pallet Designer — application interface</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-mix.png</image:loc>
+      <image:title>Pallet Designer — mixed-product palletizing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/screen-layer.png</image:loc>
+      <image:title>Pallet Designer — HMI panel with pallet layer visualization</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://palletdesigner.com/logo.png</image:loc>
+      <image:title>Pallet Designer — logo</image:title>
+    </image:image>
+  </url>
+</urlset>
