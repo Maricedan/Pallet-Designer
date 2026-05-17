@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pallet Designer — Cennik (prototyp)</title>
+<meta name="robots" content="noindex, nofollow">
+
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Lora:ital,wght@0,400..700;1,400..700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --sky: #3ec5f3;
+  --sky-bright: #1ba6d4;
+  --sky-deep: #0a7ea8;
+  --sky-soft: #d6eef9;
+  --sky-mist: #ecf6fb;
+  --sky-haze: #f5fbfd;
+
+  --cream: #fefcf6;
+  --cream-warm: #fbf6e9;
+  --bg: #fbfaf4;
+  --bg-alt: #f7f5ec;
+
+  --ink: #0a2c3d;
+  --ink-soft: #4f6c7a;
+  --ink-faded: #8aa1ad;
+
+  --surface: #ffffff;
+  --surface-warm: #fffdf6;
+  --line: #e6eef2;
+  --line-soft: #f0f5f8;
+
+  --peach: #ffe0c8;
+  --peach-soft: #fff1e3;
+  --mint: #cfeee0;
+  --mint-soft: #e8f7ef;
+  --rose: #ffd9da;
+
+  --shadow-soft: 0 12px 40px -12px rgba(10, 80, 110, 0.10);
+  --shadow-lift: 0 24px 60px -12px rgba(10, 80, 110, 0.18);
+  --shadow-deep: 0 32px 80px -16px rgba(10, 80, 110, 0.22);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.04 0 0 0 0 0.18 0 0 0 0 0.24 0 0 0 0.045 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: multiply;
+}
+main, header, footer { position: relative; z-index: 2; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.serif-italic {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+}
+.mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* Prototype banner */
+.proto-banner {
+  background: linear-gradient(90deg, #fff3d6, #fde8c2);
+  color: #6b4710;
+  padding: 10px 24px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  text-align: center;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid #f0d8a8;
+}
+
+/* Simple header */
+header.site {
+  padding: 18px 0;
+  background: rgba(251, 250, 244, 0.78);
+  backdrop-filter: blur(16px) saturate(180%);
+  border-bottom: 1px solid rgba(230, 238, 242, 0.55);
+}
+header.site .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+  color: var(--ink);
+}
+.brand img {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+}
+.brand .name {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+.brand .tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-faded);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-top: 2px;
+}
+.cta-mini {
+  padding: 11px 22px;
+  background: var(--ink);
+  color: var(--cream);
+  border-radius: 100px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.92rem;
+  text-decoration: none;
+  letter-spacing: -0.005em;
+  border: 1px solid var(--ink);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-mini:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Section primitives */
+section {
+  padding: 110px 0;
+}
+.section-head {
+  margin-bottom: 56px;
+  max-width: 760px;
+}
+.section-head.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 18px;
+  background: var(--sky-soft);
+  color: var(--sky-deep);
+  border-radius: 100px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  margin-bottom: 24px;
+}
+h2 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.6vw, 3.3rem);
+  letter-spacing: -0.032em;
+  line-height: 1.02;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+h2 em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  color: var(--sky-deep);
+  font-size: 1.05em;
+}
+.section-intro {
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 640px;
+}
+.section-head.center .section-intro { margin: 0 auto; }
+
+/* === SECTION 1: MODEL LICENCJONOWANIA === */
+.model-section {
+  background: linear-gradient(180deg, var(--bg) 0%, var(--sky-haze) 100%);
+}
+.model-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+  margin-bottom: 36px;
+}
+.model-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 36px 32px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.model-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lift);
+  border-color: rgba(62, 197, 243, 0.3);
+}
+.model-card.highlighted {
+  background: linear-gradient(180deg, #fffdf8 0%, var(--cream-warm) 100%);
+  border-color: var(--peach);
+}
+.model-card .mc-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--sky-mist);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 22px;
+}
+.model-card.highlighted .mc-icon {
+  background: var(--peach-soft);
+}
+.model-card h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.34rem;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  margin-bottom: 8px;
+  color: var(--ink);
+}
+.model-card .tagline {
+  color: var(--ink-soft);
+  font-size: 0.97rem;
+  line-height: 1.5;
+  margin-bottom: 22px;
+}
+.model-card .mc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+  flex-grow: 1;
+}
+.model-card .mc-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 7px 0;
+  font-size: 0.93rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+.model-card .mc-list li::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--sky);
+  margin-top: 9px;
+}
+.model-card .mc-models {
+  padding: 14px 16px;
+  background: var(--sky-haze);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  font-size: 0.87rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+.model-card .mc-models strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.model-card .mc-price-block {
+  border-top: 1px dashed var(--line);
+  padding-top: 20px;
+  margin-top: auto;
+}
+.model-card .mc-price {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.model-card.highlighted .mc-price {
+  color: var(--sky-deep);
+  font-size: 2rem;
+}
+.model-card .mc-price small {
+  font-size: 0.62em;
+  font-weight: 500;
+  color: var(--ink-soft);
+  letter-spacing: -0.005em;
+}
+.model-card .mc-price-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-faded);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+}
+.model-card .mc-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 22px;
+  background: var(--ink);
+  color: var(--cream);
+  text-decoration: none;
+  border-radius: 100px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s;
+}
+.model-card .mc-cta:hover {
+  background: var(--sky-deep);
+  transform: translateY(-1px);
+}
+.model-card.highlighted .mc-cta {
+  background: var(--sky-deep);
+}
+.model-card.highlighted .mc-cta:hover {
+  background: var(--ink);
+}
+
+/* Pasek pod kaflami */
+.model-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 26px 36px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  box-shadow: var(--shadow-soft);
+}
+.model-footer-bar p {
+  color: var(--ink-soft);
+  font-size: 0.98rem;
+  line-height: 1.5;
+  max-width: 720px;
+}
+.model-footer-bar p strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+.model-footer-bar .cta-secondary {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  background: var(--sky-soft);
+  color: var(--sky-deep);
+  text-decoration: none;
+  border-radius: 100px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.25s;
+  border: 1px solid transparent;
+}
+.model-footer-bar .cta-secondary:hover {
+  background: var(--sky);
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* === SECTION 2: ROI === */
+.roi-section {
+  background: var(--bg);
+}
+.roi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.roi-field {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 40px 36px;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.3s;
+}
+.roi-field:hover {
+  box-shadow: var(--shadow-soft);
+}
+.roi-field .rf-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--mint-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 22px;
+}
+.roi-field.b .rf-icon {
+  background: var(--peach-soft);
+}
+.roi-field h3 {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 1.18;
+  letter-spacing: -0.022em;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+.roi-field h3 em {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--sky-deep);
+  font-size: 1.04em;
+}
+.roi-headline {
+  padding: 22px 26px;
+  background: linear-gradient(135deg, var(--sky-mist) 0%, var(--sky-soft) 100%);
+  border-radius: 16px;
+  margin-bottom: 26px;
+}
+.roi-field.b .roi-headline {
+  background: linear-gradient(135deg, var(--peach-soft) 0%, var(--peach) 100%);
+}
+.roi-headline .rh-num {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 700;
+  font-size: 1.45rem;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  line-height: 1.15;
+  margin-bottom: 4px;
+}
+.roi-headline .rh-num strong {
+  color: var(--sky-deep);
+  font-weight: 700;
+}
+.roi-field.b .roi-headline .rh-num strong { color: #b86826; }
+.roi-headline .rh-note {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+/* ROI items with tooltips */
+.roi-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 26px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+details.roi-item {
+  border-bottom: 1px solid var(--line-soft);
+  padding: 0;
+  transition: background 0.2s;
+  border-radius: 10px;
+}
+details.roi-item[open] {
+  background: var(--sky-haze);
+  border-bottom-color: transparent;
+}
+.roi-field.b details.roi-item[open] {
+  background: #fff8f0;
+}
+details.roi-item:last-child {
+  border-bottom: none;
+}
+details.roi-item > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 12px;
+  font-size: 0.97rem;
+  color: var(--ink);
+  user-select: none;
+  border-radius: 10px;
+  transition: background 0.2s;
+}
+details.roi-item > summary::-webkit-details-marker { display: none; }
+details.roi-item > summary:hover {
+  background: var(--sky-haze);
+}
+.roi-field.b details.roi-item > summary:hover {
+  background: #fff8f0;
+}
+.roi-num {
+  flex-shrink: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 600;
+  font-size: 0.86rem;
+  color: var(--sky-deep);
+  background: var(--sky-mist);
+  padding: 5px 10px;
+  border-radius: 7px;
+  letter-spacing: -0.005em;
+  min-width: 92px;
+  text-align: center;
+}
+.roi-field.b .roi-num {
+  color: #b86826;
+  background: var(--peach-soft);
+}
+.roi-label {
+  flex-grow: 1;
+  font-weight: 500;
+}
+.info-icon {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--line);
+  color: var(--ink-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  transition: all 0.2s;
+}
+details.roi-item > summary:hover .info-icon,
+details.roi-item[open] .info-icon {
+  background: var(--sky-deep);
+  color: white;
+}
+details.roi-item[open] .info-icon {
+  transform: rotate(45deg);
+}
+.roi-explanation {
+  padding: 6px 16px 18px 118px;
+  color: var(--ink-soft);
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+.roi-closer {
+  padding: 18px 22px;
+  background: var(--bg-alt);
+  border-radius: 14px;
+  font-size: 0.97rem;
+  color: var(--ink);
+  line-height: 1.55;
+  margin-top: 4px;
+}
+.roi-closer strong { font-weight: 700; }
+
+/* ROI bottom CTA */
+.roi-cta {
+  text-align: center;
+  padding: 36px 0 0 0;
+}
+.roi-cta p {
+  max-width: 640px;
+  margin: 0 auto 24px;
+  font-size: 1.05rem;
+  color: var(--ink-soft);
+}
+.roi-cta a.cta-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background: var(--ink);
+  color: var(--cream);
+  text-decoration: none;
+  border-radius: 100px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: all 0.25s;
+}
+.roi-cta a.cta-main:hover {
+  background: var(--sky-deep);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lift);
+}
+
+/* Prototype footer note */
+.proto-note {
+  background: #f8f4e9;
+  border-top: 1px solid #ead9b6;
+  padding: 28px 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #6b4710;
+  line-height: 1.7;
+  letter-spacing: 0.02em;
+}
+.proto-note .container { max-width: 900px; }
+.proto-note strong { color: #4a2f08; }
+
+/* === Responsive === */
+@media (max-width: 980px) {
+  section { padding: 80px 0; }
+  .model-grid { grid-template-columns: 1fr; }
+  .roi-grid { grid-template-columns: 1fr; }
+  .model-footer-bar { flex-direction: column; align-items: stretch; text-align: center; }
+  .model-footer-bar .cta-secondary { justify-content: center; }
+  .roi-explanation { padding-left: 16px; }
+  .roi-num { min-width: 84px; font-size: 0.82rem; padding: 5px 8px; }
+}
+@media (max-width: 560px) {
+  .container { padding: 0 22px; }
+  .model-card { padding: 28px 24px; }
+  .roi-field { padding: 30px 24px; }
+  details.roi-item > summary { gap: 10px; }
+  .roi-num { min-width: 78px; font-size: 0.78rem; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="proto-banner">
+  PROTOTYP CENNIKA · WERSJA 1 (KAFELKI) · porównaj z <a href="cennik-prototyp-v2.html" style="color:#6b4710;text-decoration:underline;">v2 (grupy)</a> · <a href="cennik-prototyp-v3.html" style="color:#6b4710;text-decoration:underline;">v3 (prawdziwa tabela)</a> · powrót do <a href="index.html" style="color:#6b4710;text-decoration:underline;">strony głównej</a>
+</div>
+
+<header class="site">
+  <div class="container">
+    <a href="index.html" class="brand">
+      <img src="logo.png" alt="Logo Pallet Designer">
+      <div>
+        <span class="name">Pallet Designer</span>
+        <span class="tag">CENNIK · MODEL WSPÓŁPRACY</span>
+      </div>
+    </a>
+    <a href="#kontakt" class="cta-mini">Umów rozmowę</a>
+  </div>
+</header>
+
+<main>
+
+<!-- ============== SEKCJA 1: MODEL LICENCJONOWANIA ============== -->
+<section class="model-section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="section-label">Model licencjonowania</span>
+      <h2>Trzy elementy, <em>jedna prosta logika</em></h2>
+      <p class="section-intro">
+        Licencja dla zespołu projektowego integratora, licencja dla aplikacji u klienta końcowego oraz jednorazowa integracja z systemem PLC/HMI. Każdy element można kupić osobno albo razem — dopasowujemy zakres do skali Twoich projektów
+      </p>
+    </div>
+
+    <div class="model-grid">
+
+      <!-- KAFEL 1: INTEGRATOR -->
+      <article class="model-card">
+        <div class="mc-icon" aria-hidden="true">🧑‍💻</div>
+        <h3>Licencja dla integratora</h3>
+        <p class="tagline">Dla zespołu, który projektuje i konfiguruje maszyny</p>
+
+        <ul class="mc-list">
+          <li>Pełna funkcjonalność aplikacji desktop</li>
+          <li>Licencja na stanowisko (przenoszalna między komputerami w organizacji)</li>
+          <li>Praca offline — bez wymogu stałego internetu</li>
+          <li>Aktualizacje i support w cenie subskrypcji</li>
+          <li>Sterowniki bazowe Siemens TIA</li>
+        </ul>
+
+        <div class="mc-models">
+          <strong>Subskrypcja roczna</strong> — utrzymanie i aktualizacje w cenie<br>
+          <strong>Licencja dożywotnia</strong> — wycena indywidualna
+        </div>
+
+        <div class="mc-price-block">
+          <div class="mc-price">Wycena indywidualna</div>
+          <div class="mc-price-note">zależnie od liczby stanowisk</div>
+          <a class="mc-cta" href="mailto:marcin@palletdesigner.com?subject=Pallet%20Designer%20%E2%80%94%20licencja%20dla%20integratora&body=Dzie%C5%84%20dobry%2C%20prosz%C4%99%20o%20wycen%C4%99%20licencji%20dla%20%5Bliczba%5D%20stanowisk.">Zapytaj o cenę →</a>
+        </div>
+      </article>
+
+      <!-- KAFEL 2: KLIENT KOŃCOWY -->
+      <article class="model-card">
+        <div class="mc-icon" aria-hidden="true">🏭</div>
+        <h3>Licencja aplikacji dla klienta końcowego</h3>
+        <p class="tagline">Aplikacja konfiguracyjna, którą dostarczasz razem z maszyną</p>
+
+        <ul class="mc-list">
+          <li>Aplikacja Pallet Designer u klienta końcowego</li>
+          <li>Projektowanie nowych układów po stronie operatora / technologa</li>
+          <li>Parametry stanowiska zaszyte przez integratora</li>
+          <li>Eksport danych do maszyny (PLC / HMI / robot)</li>
+          <li>Generowanie PDF z układem</li>
+        </ul>
+
+        <div class="mc-models">
+          <strong>Subskrypcja roczna</strong> lub <strong>licencja dożywotnia</strong><br>
+          <strong>Pakiety wolumenowe</strong> — taniej przy zakupie kilku licencji naraz
+        </div>
+
+        <div class="mc-price-block">
+          <div class="mc-price">Wycena indywidualna</div>
+          <div class="mc-price-note">roczna lub dożywotnia · pakiety</div>
+          <a class="mc-cta" href="mailto:marcin@palletdesigner.com?subject=Pallet%20Designer%20%E2%80%94%20licencja%20dla%20klienta%20ko%C5%84cowego">Zapytaj o ofertę →</a>
+        </div>
+      </article>
+
+      <!-- KAFEL 3: PLC/HMI -->
+      <article class="model-card highlighted">
+        <div class="mc-icon" aria-hidden="true">⚙️</div>
+        <h3>Integracja PLC/HMI</h3>
+        <p class="tagline">Pakiet startowy — uruchamiamy Pallet Designera w Twojej maszynie</p>
+
+        <ul class="mc-list">
+          <li>Bloki funkcyjne dla <strong>Siemens TIA Portal</strong></li>
+          <li>Komplet ekranów HMI z podglądem warstw</li>
+          <li>Szkolenie zespołu integratora</li>
+          <li>Asysta przy pierwszym wdrożeniu na maszynie</li>
+          <li>Drobne dopasowanie kodu pod standard integratora</li>
+        </ul>
+
+        <div class="mc-models">
+          <strong>Siemens TIA Portal</strong> · obecnie wspierany system<br>
+          Inne brandy PLC — wycena indywidualna
+        </div>
+
+        <div class="mc-price-block">
+          <div class="mc-price">12 000 PLN <small>netto, jednorazowo</small></div>
+          <div class="mc-price-note">brak abonamentu · płatność jednorazowa</div>
+          <a class="mc-cta" href="mailto:marcin@palletdesigner.com?subject=Pallet%20Designer%20%E2%80%94%20integracja%20PLC%2FHMI">Umów rozmowę o wdrożeniu →</a>
+        </div>
+      </article>
+
+    </div>
+
+    <!-- PASEK POD KAFELKAMI -->
+    <div class="model-footer-bar">
+      <p>
+        <strong>Modyfikacje na życzenie wyceniamy indywidualnie.</strong> Każdy projekt ma swoją specyfikę — dopisanie nowego formatu eksportu, integracja z istniejącym systemem czy customowy moduł to osobna pozycja, którą wyceniamy po krótkiej rozmowie
+      </p>
+      <a href="#kontakt" class="cta-secondary">Porozmawiajmy o Twoim projekcie →</a>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ============== SEKCJA 2: ZWROT INWESTYCJI ============== -->
+<section class="roi-section">
+  <div class="container">
+    <div class="section-head center">
+      <span class="section-label">Zwrot inwestycji</span>
+      <h2>Pallet Designer <em>zwraca się</em> już na pierwszym projekcie</h2>
+      <p class="section-intro">
+        Wartość Pallet Designera dla integratora ma dwa źródła: <strong>mniej godzin zespołu projektowego</strong> na każdej maszynie oraz <strong>nowa pozycja w ofercie dla klienta końcowego</strong>, którą sprzedaje się bez dodatkowej pracy programistycznej
+      </p>
+    </div>
+
+    <div class="roi-grid">
+
+      <!-- POLE A: ZESPÓŁ PROJEKTOWY -->
+      <article class="roi-field a">
+        <div class="rf-icon" aria-hidden="true">⏱</div>
+        <h3>Twój zespół projektowy pracuje <em>szybciej</em></h3>
+
+        <div class="roi-headline">
+          <div class="rh-num"><strong>22–58 h</strong> oszczędności na typowym projekcie</div>
+          <div class="rh-note">≈ 4 400 – 11 600 PLN przy stawce 200 PLN/h</div>
+        </div>
+
+        <ul class="roi-list">
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">4–8 h</span>
+                <span class="roi-label">Konstrukcja i analiza wykonalności</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Konstruktor szybciej dobiera chwytak i analizuje wykonalność układu. W aplikacji od razu widać, czy dana wielkość chwytaka pozwala na zaplanowane odłożenia, czy nie ma kolizji, ile elementów można pobierać jednocześnie. Decyzje, które wcześniej wymagały rysowania wariantów i przeliczania w arkuszu — robisz teraz w kilka minut, na żywym podglądzie
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">6–14 h</span>
+                <span class="roi-label">Programowanie PLC i HMI</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Nie ma ręcznego dopisywania receptur do każdego nowego układu. Bloki funkcyjne Siemens TIA i ekrany HMI są w komplecie — wczytujesz dane wygenerowane przez aplikację i maszyna od razu wie, co ma robić. Operator dostaje wizualny podgląd warstwy bez dodatkowej pracy programisty
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">4–10 h</span>
+                <span class="roi-label">Programowanie / przygotowanie robota</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Robotyk lub automatyk dostają gotowy podział na odłożenia i pozycje pobierania. Dane są w spójnym formacie — można je wczytać do symulacji, zweryfikować trajektorię, sprawdzić ryzyko kolizji bez ręcznego rysowania każdego punktu. Możesz też przejąć kontrolę nad cyklem w trybie ręcznym, jeśli projekt tego wymaga
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">8–24 h</span>
+                <span class="roi-label">Testowanie i uruchomienie</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Najmocniejsza pozycja oszczędności. Po wdrożeniu Pallet Designera testujesz <strong>fizycznie tylko pierwszy układ</strong> — sprawdzasz punkty robota, chwytak, pozycje względem produktu. Od tego momentu każdy następny układ wygenerowany w aplikacji <strong>po prostu działa</strong> — bo wszystko powstaje w tym samym systemie, na tych samych parametrach stanowiska. Bez przygotowywania scenariuszy testowych, bez czekania na dostawę produktu z magazynu, bez układania warstw ręcznie tylko po to, żeby przetestować kolejną
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">dni → min</span>
+                <span class="roi-label">Modyfikacje i dorabianie układów</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Klient prosi o korektę albo nowy wariant? Otwierasz układ w aplikacji, przesuwasz to, co trzeba, generujesz, wgrywasz — <strong>dwie minuty roboty</strong>. W interfejsie graficznym widać korektę na żywo, więc znika ryzyko „dałem korektę w złą stronę". Brak ręcznego przeliczania pozycji, brak otwierania-zamykania receptur, brak szukania po plikach
+              </p>
+            </details>
+          </li>
+        </ul>
+
+        <div class="roi-closer">
+          <strong>Te godziny zostają w marży integratora.</strong> Klient końcowy ich nie widzi — widzi tylko maszynę, która działa szybciej i bez kar za opóźnienia
+        </div>
+      </article>
+
+      <!-- POLE B: KONFIGURATOR -->
+      <article class="roi-field b">
+        <div class="rf-icon" aria-hidden="true">💼</div>
+        <h3>Gotowy konfigurator <em>w Twojej ofercie</em></h3>
+
+        <div class="roi-headline">
+          <div class="rh-num"><strong>Miesiące</strong> R&amp;D zaoszczędzone na własnym konfiguratorze</div>
+          <div class="rh-note">2–6 miesięcy pracy programisty + testy + utrzymanie</div>
+        </div>
+
+        <ul class="roi-list">
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">+1 pozycja</span>
+                <span class="roi-label">Konfigurator jako pozycja w ofercie</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Klient końcowy chce elastyczności — możliwości dorabiania nowych układów bez angażowania integratora przy każdej zmianie smaku, opakowania czy wariantu. Pallet Designer daje to jako gotową funkcję. Możesz ją zaofertować jako <strong>dodatkową, płatną pozycję w cenie maszyny</strong> — koszt po Twojej stronie minimalny (licencja), wartość dla klienta wymierna (samoobsługa, niezależność od integratora)
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">minuty</span>
+                <span class="roi-label">Nowy układ po wdrożeniu — bez angażu zespołu</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Nawet jeśli klient nie kupił konfiguratora — kiedy zadzwoni z prośbą o nowy układ palety, przygotowanie tego po Twojej stronie zajmuje minuty zamiast godzin. Ile policzysz klientowi za to zlecenie — to Twoja polityka. Marża rośnie, bo koszt po Twojej stronie spada do minimum
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">30 sek.</span>
+                <span class="roi-label">PDF z układem — komunikacja z klientem</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Kiedy chcesz zaprezentować klientowi zaproponowany układ — projektujesz go w aplikacji, klikasz „generuj PDF" i masz gotowy dokument: wizualizacje warstw, parametry techniczne, opis pełnej palety. Bez rysowania w CAD, bez zrzutów ekranu, bez sklejania w PowerPoincie. Standardowy format, który możesz wysłać mailem albo dołączyć do oferty
+              </p>
+            </details>
+          </li>
+          <li>
+            <details class="roi-item">
+              <summary>
+                <span class="roi-num">1 standard</span>
+                <span class="roi-label">Standaryzacja procesu robot ↔ PLC</span>
+                <span class="info-icon" aria-hidden="true">+</span>
+              </summary>
+              <p class="roi-explanation">
+                Wszystkie projekty paletyzacji w Twojej firmie pracują na tej samej logice: te same struktury danych, te same formaty eksportu, te same bloki PLC. Nowy inżynier wchodzi w projekt szybciej. Maszyna utrzymywana 5 lat po wdrożeniu nadal działa według czytelnego standardu. Mniej zaskoczeń, mniej „dlaczego ten projekt jest inny"
+              </p>
+            </details>
+          </li>
+        </ul>
+
+        <div class="roi-closer">
+          <strong>Konfigurator dla klienta końcowego to nie koszt — to nowa marża.</strong> Wlicza się go w wycenę maszyny, klient otrzymuje samodzielność, Ty otrzymujesz zysk z mocniejszej oferty
+        </div>
+      </article>
+
+    </div>
+
+    <!-- ROI BOTTOM CTA -->
+    <div class="roi-cta" id="kontakt">
+      <p>Pallet Designer zwraca się <strong>w pierwszej maszynie</strong> — z oszczędności godzin zespołu, a dodatkowo otwiera nową pozycję w ofercie dla klienta końcowego</p>
+      <a href="mailto:marcin@palletdesigner.com?subject=Pallet%20Designer%20%E2%80%94%20kalkulacja%20ROI" class="cta-main">Policzmy ROI dla Twojego scenariusza →</a>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<div class="proto-note">
+  <div class="container">
+    <strong>// Notatki do prototypu</strong><br>
+    Tooltips: kliknij wiersz w sekcji ROI — rozwinie się wyjaśnienie. Działa bez JS, dostępne klawiaturą (Tab + Enter).<br>
+    Ikony emoji są placeholderem — docelowo SVG w stylu reszty strony (linie, geometria, te same kolory co w `index.html`).<br>
+    Wyróżniona karta (PLC/HMI) ma ciepły akcent, bo to jedyna karta z konkretną ceną — wzrok się na niej zatrzymuje.<br>
+    CTA-i mailto z subjectami i body — od razu otwierają klienta poczty z gotowym zapytaniem.<br>
+    Po zatwierdzeniu treści (cennik.md): przenoszę do `index.html` jako nową sekcję między „Liczby" a „O autorze".
+  </div>
+</div>
+
+</body>
+</html>
