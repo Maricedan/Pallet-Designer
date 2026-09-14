@@ -1,0 +1,50 @@
+# Pallet Designer
+
+> Pallet Designer is a tool for industrial automation integrators
+> and manufacturing plants for configuring palletizing layouts without
+> programming the PLC or HMI. It cuts the time to start up a new layout
+> from days to minutes — layer pattern design, mixed-product palletizing,
+> motion sequencing and export of the configuration to the machine.
+
+## Polish version (primary)
+- [Homepage PL](https://palletdesigner.com/): full product description, features, screenshots, contact
+
+## English version
+- [Homepage EN](https://palletdesigner.com/en/): full product description, features, screenshots, contact
+
+## German version
+- [Homepage DE](https://palletdesigner.com/de/): full product description, features, screenshots, contact
+
+## Key facts
+- Product: Pallet Designer
+- Industry: industrial automation, palletizing, depalletizing
+- Target users: automation system integrators, manufacturing plants, PLC/HMI programmers, robot programmers, sales teams for palletizing machines
+- Sales model: annual licence + optional one-off integration; perpetual licence available
+- Vendor: Pallet Designer (Marcin Daniun Automatyka, Poland)
+
+## Features
+- Palletizing layer pattern configurator without PLC/HMI programming
+- Mixed-product palletizing on a single pallet (variant mix)
+- Split of the layout into robot pick-and-place sequences
+- Generation of data ready to load into the machine (CSV, JSON, custom structures)
+- Ready function blocks, HMI screens and scripts for Siemens PLC/HMI
+- Configuration export for robot simulation environments (e.g. RoboGuide)
+- Automatic PDF documentation of the layout
+- Feasibility and safety validation of the layout
+- Self-service mode: end-customer configurator (an operator or process engineer designs layouts themselves, within parameters set up by the integrator)
+
+## Pricing model
+- All prices are net (VAT added). Every quote is confirmed in a written offer before ordering.
+- Integrator licence (one design seat, annual subscription): from 12,000 PLN/year net (PL market) or from EUR 2,800/year net (EN/DE markets). Includes full program functionality, data export to the machine, files for robot simulation, PDF documentation, user manual and team training; works without permanent internet; transferable between devices.
+- Team pack (several seats in one company) and perpetual licence (one-off, roughly equivalent to five years of subscription): quoted on request.
+- End-customer application licence: quoted on request; depends on the number of machines, lines and plants at the end customer; available as a perpetual licence or an annual subscription; deployment packs for further lines or plants of the same customer.
+- Machine integration: one-off, quoted by scope; depends on the controller platform (Siemens standard: ready PLC function blocks, HMI screens and scripts, team training, assistance at first commissioning); other control systems, extra export formats, MES/ERP integration and on-site training quoted after agreeing the scope.
+- Before buying: 20-minute online demo on the customer's own pallet layout, followed by a tailored offer.
+
+## Contact
+- Email: kontakt@palletdesigner.com (PL/DE), contact@palletdesigner.com (EN)
+- Phone: +48 517 734 241
+- LinkedIn: https://www.linkedin.com/in/marcin-daniun
+- Initial conversation format: 20-minute online demo with a layout proposed by the customer
+- Brochure (PL): https://palletdesigner.com/Pallet_Designer_broszura.pdf
+- Brochure (EN): https://palletdesigner.com/Pallet_Designer_broszura_eng.pdf

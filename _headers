@@ -1,0 +1,30 @@
+# Pallet Designer — Cloudflare Pages headers
+# Długie cache dla zasobów które się nie zmieniają (immutable assets)
+
+/_fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.webmanifest
+  Cache-Control: public, max-age=604800
+
+/*.pdf
+  Cache-Control: public, max-age=2592000
+
+# HTML — krótszy cache, żeby zmiany treści się propagowały
+/*.html
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/
+  Cache-Control: public, max-age=3600, must-revalidate
