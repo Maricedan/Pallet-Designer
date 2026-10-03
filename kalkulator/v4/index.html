@@ -1,0 +1,732 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3ec5f3">
+<title>Kalkulator korzyści - Pallet Designer</title>
+<link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+<link rel="shortcut icon" href="../../favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<style>
+/* Fonts and palette of palletdesigner.com (cennik, section "Zwrot inwestycji") */
+@font-face{font-family:'Plus Jakarta Sans';src:url('../../_fonts/PlusJakartaSans-VF.woff2') format('woff2-variations');font-weight:200 800;font-display:swap}
+@font-face{font-family:'IBM Plex Sans';src:url('../../_fonts/IBMPlexSans-VF.woff2') format('woff2-variations');font-weight:100 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('../../_fonts/JetBrainsMono-VF.woff2') format('woff2-variations');font-weight:100 800;font-display:swap}
+@font-face{font-family:'Lora';src:url('../../_fonts/Lora-Italic-VF.woff2') format('woff2-variations');font-weight:400 700;font-style:italic;font-display:swap}
+:root{
+  --sky:#3ec5f3;--sky-bright:#1ba6d4;--sky-deep:#0a7ea8;--sky-soft:#d6eef9;--sky-mist:#ecf6fb;--sky-haze:#f5fbfd;
+  --cream:#fefcf6;--bg:#fbfaf4;--bg-alt:#f7f5ec;
+  --ink:#0a2c3d;--ink-soft:#4f6c7a;--ink-faded:#8aa1ad;
+  --surface:#fff;--line:#e6eef2;--line-soft:#f0f5f8;--edge:#c9d6dd;
+  --peach:#ffe0c8;--peach-soft:#fff1e3;--amber:#b86826;--mint-soft:#e8f7ef;--green:#1b7a43;--warn:#b3261e;
+  --shadow-soft:0 12px 40px -12px rgba(10,80,110,.10);
+  --mono:'JetBrains Mono',monospace;--head:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-y:scroll;scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15.5px;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:40px 32px 90px}
+button{font:inherit;color:inherit}
+h1 em,h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--sky-deep);font-size:1.04em}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid var(--sky-bright);outline-offset:2px}
+
+/* opening: what the calculator covers and where the three minutes come from */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 396px;gap:28px;align-items:stretch;margin-bottom:38px}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}
+.section-label{display:inline-flex;padding:8px 16px;background:var(--sky-soft);color:var(--sky-deep);border-radius:100px;font-family:var(--mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.14em}
+h1{font-family:var(--head);font-weight:700;font-size:2.45rem;line-height:1.1;letter-spacing:-.028em;margin-bottom:10px}
+.intro{color:var(--ink-soft);font-size:1.05rem;max-width:640px}
+.ghost{padding:8px 16px;border:1px solid var(--line);border-radius:100px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--ink-soft);white-space:nowrap}
+.ghost:hover{border-color:var(--sky-deep);color:var(--sky-deep)}
+.steps{list-style:none;counter-reset:step;display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:22px}
+.steps li{counter-increment:step;border-top:2px solid var(--sky-soft);padding-top:10px;font-size:.9rem;line-height:1.4;font-weight:500}
+.steps li::before{content:counter(step);display:block;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--sky-deep);margin-bottom:3px}
+.steps li small{display:block;font-weight:400;color:var(--ink-faded);font-size:12.5px}
+.three{border:1px solid var(--line);border-radius:22px;padding:22px 26px;background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.cap{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep)}
+.three-n{font-family:var(--head);font-weight:700;font-size:5.2rem;line-height:1;letter-spacing:-.04em;color:var(--sky-deep);margin:4px 0 2px;white-space:nowrap}
+.three-n small{font-size:.24em;font-weight:500;letter-spacing:0;color:var(--ink-soft);margin:0 8px 0 0}
+.three-n span + small{margin:0 0 0 8px}
+.three p{font-size:.92rem;line-height:1.5;margin-top:8px}
+.three p.cond{color:var(--ink-soft)}
+.three p.exp{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.88rem}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 396px;gap:28px;align-items:start}
+.blk{margin-bottom:38px;scroll-margin-top:16px}
+.blk-h{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.blk-h .no{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--sky-deep);background:var(--sky-mist);border-radius:7px;padding:3px 8px}
+h2{font-family:var(--head);font-weight:700;font-size:1.42rem;line-height:1.2;letter-spacing:-.022em}
+.blk-lead{color:var(--ink-soft);margin:0 0 14px;max-width:640px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 24px 16px;margin-bottom:12px;position:relative}
+.card-h{display:grid;grid-template-columns:minmax(0,1fr) 168px;gap:0 16px;align-items:start}
+.card-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font-family:var(--head);font-weight:700;font-size:1.1rem;letter-spacing:-.015em;line-height:1.25}
+.card-d{color:var(--ink-soft);font-size:.93rem;line-height:1.5;margin:4px 0 8px;max-width:520px}
+.chip{justify-self:end;width:168px;text-align:right;font-variant-numeric:tabular-nums}
+.chip b{display:block;height:30px;line-height:30px;padding:0 10px;border-radius:8px;background:var(--sky-mist);color:var(--ink);font-family:var(--mono);font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden}
+.chip small{display:block;height:18px;line-height:18px;font-size:11.5px;color:var(--ink-faded);font-family:var(--mono);white-space:nowrap;margin-top:2px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);background:var(--sky-mist);border-radius:6px;padding:2px 8px}
+.note{color:var(--ink-soft);font-size:.88rem;line-height:1.5;margin-top:8px}
+.notes{list-style:none;margin-top:8px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.notes li{position:relative;padding:2px 0 2px 16px;color:var(--ink-soft);font-size:.88rem;line-height:1.5}
+.notes li::before{content:"";position:absolute;left:2px;top:11px;width:5px;height:5px;border-radius:50%;background:var(--ink-faded)}
+[data-neg]{color:var(--warn) !important}
+
+/* a choice between a few answers */
+.seg-l{font-weight:600;margin-bottom:10px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{padding:7px 15px;border:1px solid var(--edge);border-radius:100px;background:#fff;cursor:pointer;font-size:.9rem;line-height:1.25}
+.seg button:hover{border-color:var(--sky-deep)}
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.seg-hint{height:40px;line-height:20px;overflow:hidden;margin-top:10px;color:var(--ink-soft);font-size:.88rem}
+
+/* a switch: on / off */
+.switch{position:relative;display:inline-flex;align-items:center;min-height:24px;padding:0 0 0 50px;border:none;background:none;cursor:pointer;font-weight:600;font-size:.92rem;white-space:nowrap}
+.switch::before{content:"";position:absolute;left:0;top:50%;width:40px;height:22px;margin-top:-11px;border-radius:11px;background:#c3d0d8;transition:background .15s}
+.switch::after{content:"";position:absolute;left:3px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(10,44,61,.3);transition:transform .15s}
+.switch[aria-pressed="true"]::before{background:var(--sky-deep)}
+.switch[aria-pressed="true"]::after{transform:translateX(18px)}
+.switch.bare{width:40px;padding:0;margin-top:2px}
+
+/* field: label, slider, number, unit, mark */
+.fld{display:grid;grid-template-columns:minmax(0,1fr) 150px 230px;gap:0 16px;align-items:center;padding:7px 0}
+.fld.plain{grid-template-columns:minmax(0,1fr) 230px}
+.fld-l{font-weight:500;line-height:1.3}
+.fld-l small{display:block;font-weight:400;color:var(--ink-faded);font-size:12.5px;margin-top:1px}
+input[type=range]{width:100%;accent-color:var(--sky-deep);cursor:pointer;height:22px}
+input[type=range]:disabled{cursor:default}
+.fld-i{display:grid;grid-template-columns:86px 58px 74px;gap:0 6px;align-items:center}
+.fld-i input,.tot input{width:86px;text-align:right;font-family:var(--head);font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums;padding:6px 10px;border:1px solid var(--edge);border-radius:10px;background:#fff;color:var(--ink)}
+.fld-i input:focus,.tot input:focus{outline:2px solid var(--sky-bright);outline-offset:-1px}
+input.exv{border-style:dashed;border-color:#d9a877;color:var(--ink-soft)}
+input.mine{border-color:var(--sky-deep);background:var(--sky-haze)}
+input.bad{border-color:var(--warn);background:#fdf0ef}
+input[type=text]:disabled{background:var(--line-soft);color:var(--ink-faded);border-color:var(--line);border-style:solid}
+.fld-i i{font-style:normal;color:var(--ink-soft);font-size:12.5px;white-space:nowrap}
+/* the mark of an example: a click accepts the value; the slot keeps its place when empty */
+.ex{width:74px;height:22px;border:1px dashed #d9a877;border-radius:6px;background:var(--peach-soft);color:var(--amber);font-family:var(--mono);font-size:10.5px;letter-spacing:.02em;cursor:pointer;padding:0}
+.ex:hover{border-style:solid}
+.ex:empty{visibility:hidden}
+.ex.ours{border-color:transparent;background:none;color:var(--ink-faded);cursor:default}
+.under{height:22px;line-height:22px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.off .fld,.off.card{opacity:.5}
+
+/* one layout: today and with the program, side by side */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.side{margin-bottom:12px;padding:18px 20px 16px;display:flex;flex-direction:column}
+.side.pdc{border-color:var(--sky-soft);background:linear-gradient(160deg,#fff 0%,var(--sky-mist) 100%)}
+.side .cap{margin-bottom:6px}
+.side.now .cap{color:var(--ink-soft)}
+.acts{list-style:none;display:grid;grid-auto-rows:46px}
+.acts li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:0 10px;align-items:center;font-size:.9rem;line-height:1.35;border-top:1px solid var(--line-soft)}
+.acts li:first-child{border-top:none}
+.acts li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-faded);justify-self:center}
+.pdc .acts li{border-top-color:rgba(10,126,168,.1)}
+.pdc .acts li::before{content:"✓";width:18px;height:18px;border-radius:50%;background:var(--sky-deep);color:#fff;font-size:11px;line-height:18px;text-align:center;font-weight:700}
+.side-f{margin-top:8px;padding-top:12px;border-top:1px solid var(--line);min-height:142px}
+.pdc .side-f{border-top-color:rgba(10,126,168,.18)}
+.side-f label,.side-f .lbl{display:block;font-weight:600;font-size:.92rem;margin-bottom:8px}
+.tot{display:grid;grid-template-columns:104px 78px 74px;gap:0 8px;align-items:center;margin-bottom:6px}
+.tot input{width:104px;font-size:1.5rem;padding:5px 10px}
+.unit{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--edge);border-radius:10px;overflow:hidden;height:36px}
+.unit button{border:none;background:#fff;cursor:pointer;font-size:.88rem;color:var(--ink-soft)}
+.unit button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.side-f small{display:block;color:var(--ink-faded);font-size:12.5px;line-height:1.4;margin-top:4px}
+.pd-big{font-family:var(--head);font-weight:700;font-size:2.3rem;line-height:44px;height:44px;letter-spacing:-.03em;color:var(--sky-deep);white-space:nowrap;font-variant-numeric:tabular-nums}
+.pd-big small{display:inline;font-size:.42em;font-weight:500;letter-spacing:0;color:var(--ink-soft);margin:0}
+
+/* two bars on one scale; the value stands next to each bar */
+.bars{padding:18px 24px 14px}
+.bar-row{display:grid;grid-template-columns:118px minmax(0,1fr) 176px;gap:0 14px;align-items:center;height:30px}
+.bar-l{font-size:.9rem;color:var(--ink-soft)}
+.bar-t{display:block;height:14px;border-radius:4px;background:var(--line-soft);overflow:hidden}
+.bar-t i{display:block;height:100%;width:0;border-radius:0 4px 4px 0;background:var(--ink-faded);transition:width .2s}
+.bar-row.pdr .bar-t i{background:var(--sky-deep)}
+.bar-row b{font-family:var(--head);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.diff{display:grid;grid-template-columns:118px minmax(0,1fr);gap:0 14px;align-items:baseline;margin-top:8px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.diff span{font-size:.9rem;color:var(--ink-soft)}
+.diff b{font-family:var(--head);font-weight:700;font-size:1.6rem;letter-spacing:-.025em;height:40px;line-height:40px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.diff small{grid-column:2;height:18px;line-height:18px;font-size:12px;color:var(--amber);font-family:var(--mono)}
+
+.split-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.own{margin-top:6px;padding-top:6px;border-top:1px solid var(--line-soft)}
+
+/* three scales of the same difference */
+.scales{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:4px}
+.sc{border:1px solid var(--line);border-radius:18px;padding:14px 18px;background:var(--surface);font-variant-numeric:tabular-nums}
+.sc.yr{border-color:var(--sky-soft);background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.sc-n{font-family:var(--head);font-weight:700;font-size:1.5rem;letter-spacing:-.025em;height:40px;line-height:40px;white-space:nowrap;overflow:hidden}
+.sub{height:20px;line-height:20px;font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* revenue card: the site's second source, in its colour */
+.card.rev{border-color:var(--peach);background:linear-gradient(135deg,#fff 0%,var(--peach-soft) 100%)}
+.card.rev .chip b{background:var(--peach-soft)}
+.card.rev input[type=range]{accent-color:var(--amber)}
+.card.rev .tag,.tag.once{color:var(--amber);background:var(--peach-soft)}
+
+/* what the program recalculates when the gripper or the layout changes */
+.mech{width:100%;border-collapse:collapse;margin-top:6px;font-size:.92rem}
+.mech th{text-align:left;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faded);padding:6px 12px 6px 0}
+.mech td{padding:8px 12px 8px 0;border-top:1px solid var(--line-soft);vertical-align:top;line-height:1.4}
+.mech td:first-child{font-weight:500;width:42%}
+.eg{margin-top:14px;padding:14px 16px 10px;border-radius:14px;background:var(--bg-alt)}
+.eg .bar-row{grid-template-columns:170px minmax(0,1fr) 128px}
+.eg .bar-t{background:#ebe7d9}
+.eg .bar-t i{background:var(--sky-deep)}
+.eg p{color:var(--ink-soft);font-size:.86rem;line-height:1.5;margin-top:8px}
+
+/* modules: off until switched on; a module that is off does not touch the result */
+.mod-h{display:grid;grid-template-columns:40px minmax(0,1fr) 168px;gap:0 14px;align-items:start}
+.mod-b{display:none;margin-top:8px;padding-top:8px;border-top:1px solid var(--line-soft)}
+.mod.on .mod-b{display:block}
+.mod-in{margin-top:16px;padding-top:14px;border-top:1px solid var(--line-soft)}
+
+/* result: fixed place, fixed size; nothing here is a sum of unlike things */
+.result{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;font-variant-numeric:tabular-nums;scroll-margin-top:16px}
+.sum{border-radius:18px;padding:16px 20px;background:var(--ink);color:var(--cream)}
+.sum .cap{color:var(--sky);height:18px;line-height:18px}
+.big{font-family:var(--head);font-weight:700;letter-spacing:-.03em;white-space:nowrap;overflow:hidden}
+.big small{font-size:.45em;font-weight:500;color:var(--ink-soft);margin-left:5px;letter-spacing:0}
+[data-empty] + small{visibility:hidden}
+.sum .big{color:#fff;font-size:2.8rem;height:58px;line-height:58px}
+.sum .big.long{font-size:1.7rem}
+.sum .big small{color:var(--sky-soft)}
+.sum [data-neg]{color:#ff9d91 !important}
+.sum .sub{color:var(--sky-soft)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:11px 14px 9px;background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.tile .cap{height:28px;line-height:14px;overflow:hidden}
+.tile .big{font-size:1.5rem;height:36px;line-height:36px;color:var(--ink)}
+.tile .big.long{font-size:1.02rem}
+.tile .sub{height:18px;line-height:18px;font-size:12px}
+.tile.b{border-color:var(--peach);background:linear-gradient(135deg,var(--peach-soft) 0%,var(--peach) 100%)}
+.tile.b .cap,.tile.c .cap{color:var(--amber)}
+.tile.c{border-color:var(--peach);background:var(--surface)}
+.sep{display:flex;align-items:center;gap:10px;height:26px;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faded)}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+.sep + .pair{margin-top:0}
+.fine{height:51px;line-height:17px;overflow:hidden;margin-top:10px;font-size:12px;color:var(--ink-soft)}
+.exline{height:22px;line-height:22px;margin-top:4px;font-family:var(--mono);font-size:11px;color:var(--amber);white-space:nowrap;overflow:hidden}
+.next{margin-top:6px;font-size:12.5px;color:var(--ink-soft);height:20px;line-height:20px;white-space:nowrap;overflow:hidden}
+.cta{display:flex;align-items:center;justify-content:center;height:46px;margin-top:4px;border-radius:100px;background:var(--sky-deep);color:#fff;font-weight:700;text-decoration:none;font-size:.98rem}
+.cta:hover{background:var(--ink)}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.links button{height:32px;border:1px solid var(--line);border-radius:100px;background:var(--surface);cursor:pointer;font-size:12.5px;color:var(--ink-soft)}
+.links button:hover{border-color:var(--sky-deep);color:var(--sky-deep)}
+
+/* everything the result stands on */
+.sum-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums}
+.sum-table .c-l{width:42%}
+.sum-table .c-m{width:70px}
+.sum-table th{text-align:left;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);padding:14px 0 6px}
+.sum-table tbody:first-of-type th{padding-top:0}
+.sum-table td{padding:6px 12px 6px 0;border-top:1px solid var(--line-soft);vertical-align:top;line-height:1.4}
+.sum-table td:first-child{color:var(--ink-soft)}
+/* one line on the page, so a row keeps its height; the print and the text file carry it whole */
+.sum-table td:nth-child(2){font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sum-table td:last-child{padding-right:0;text-align:right;font-family:var(--mono);font-size:10.5px;color:var(--amber);white-space:nowrap}
+.print-head{display:none}
+.sum-foot{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);color:var(--ink-soft);font-size:.88rem;line-height:1.5}
+
+details.box{margin-top:6px;background:var(--bg-alt);border:1px solid var(--bg-alt);border-radius:16px;padding:16px 22px;font-size:.93rem;color:var(--ink-soft)}
+details.box summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details.box ul{padding-left:18px;margin:8px 0}
+details.box li{margin:4px 0}
+details.box p{margin-top:8px}
+details.box b{color:var(--ink)}
+.foot{margin-top:18px;font-size:12.5px;color:var(--ink-faded)}
+.foot a{color:var(--sky-deep)}
+
+/* phone: one column and a small bar that leads to the result */
+.mbar{display:none}
+@media (max-width:1040px){
+  .hero,.cols{grid-template-columns:1fr}
+  .result{position:static;max-height:none}
+  .container{padding-bottom:110px}
+  .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:40;align-items:center;justify-content:space-between;gap:12px;height:52px;padding:0 18px;background:var(--ink);color:#fff;text-decoration:none;font-weight:600;font-size:.95rem;font-variant-numeric:tabular-nums}
+  .mbar span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mbar span:last-child{flex:none;color:var(--sky);font-size:.86rem}
+}
+@media (max-width:700px){
+  .container{padding:24px 16px 110px}
+  h1{font-size:1.9rem}
+  .hero-top{flex-wrap:wrap}
+  .steps{grid-template-columns:1fr 1fr}
+  .vs,.scales{grid-template-columns:1fr}
+  .card{padding:16px 16px 12px}
+  .fld,.fld.plain{grid-template-columns:1fr;gap:4px 0}
+  .card-h{grid-template-columns:1fr}
+  .chip{justify-self:start;text-align:left}
+  .mod-h{grid-template-columns:40px minmax(0,1fr)}
+  .mod-h .chip{grid-column:2;margin-top:6px}
+  /* label and value on one line, the bar under them */
+  .bar-row,.eg .bar-row{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:22px 14px;gap:2px 8px;height:auto;margin-bottom:8px}
+  .bar-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-row .bar-t{grid-column:1 / -1;grid-row:2}
+  .diff{grid-template-columns:1fr}
+  .diff small{grid-column:1;height:36px}
+  .split-h{flex-direction:column}
+  /* narrow screen: label over value, the value may wrap */
+  .sum-table colgroup{display:none}
+  .sum-table,.sum-table tbody,.sum-table tr,.sum-table td,.sum-table th{display:block;width:auto}
+  .sum-table tr{position:relative;border-top:1px solid var(--line-soft);padding:6px 0}
+  .sum-table td{border:none;padding:0}
+  .sum-table td:first-child{width:auto;padding-right:76px;font-size:.84rem}
+  .sum-table td:nth-child(2){white-space:normal}
+  .sum-table td:last-child{position:absolute;right:0;top:8px;width:auto}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}html{scroll-behavior:auto}}
+
+/* print: the summary alone, on one page */
+@media print{
+  body{background:#fff;font-size:11pt}
+  .container{padding:0;max-width:none}
+  .hero,.result,.mbar,.foot,details.box,main > .blk:not(#podsumowanie){display:none !important}
+  .cols{display:block}
+  #podsumowanie .blk-h .no,#podsumowanie .blk-lead{display:none}
+  .sum-table tbody th{padding-top:12px}
+  #podsumowanie .card{border:none;padding:0}
+  .print-head{display:block;margin-bottom:10px;color:var(--ink-soft);font-size:10pt}
+  .sum-table td,.sum-table th{padding-top:4px;padding-bottom:4px}
+  .sum-table td:nth-child(2){white-space:normal;overflow:visible}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="hero">
+    <div>
+      <div class="hero-top">
+        <div class="section-label">Kalkulator korzyści · integratorzy i producenci maszyn</div>
+        <button type="button" class="ghost" data-action="reset">Wartości przykładowe</button>
+      </div>
+      <h1>Kolejne układy palet: <em>czas odzyskany dla zespołu</em></h1>
+      <p class="intro">Praca nad kolejnym układem przy paletyzacji lub depaletyzacji: obecnie i z Pallet Designerem. Potencjał korzyści, przed kosztami zakupu i wdrożenia.</p>
+      <ol class="steps">
+        <li>Integracja systemu i konfiguracja stanowiska<small>raz, na początku</small></li>
+        <li>Układ przygotowany w Pallet Designerze</li>
+        <li>Odłożenia wyznaczone, spójne dane dla maszyny wygenerowane</li>
+        <li>Kolejne układy: w ramach skonfigurowanych możliwości stanowiska</li>
+      </ol>
+    </div>
+    <aside class="three">
+      <div class="cap">Kolejny układ</div>
+      <div class="three-n"><small>około</small><span>3</span><small>min</small></div>
+      <p>Przygotowanie układu, wygenerowanie danych i wprowadzenie ich do przygotowanego systemu.</p>
+      <p class="cond">Sprawny użytkownik, po wdrożeniu i początkowej konfiguracji maszyny.</p>
+      <p class="exp">Z wdrożenia: samodzielna praca zespołu po około tygodniu współpracy.</p>
+    </aside>
+  </header>
+
+  <div class="cols">
+    <main>
+
+      <section class="blk" id="uklad">
+        <div class="blk-h"><span class="no">1</span><h2>Ile pracy wymaga <em>kolejny układ</em>?</h2></div>
+        <p class="blk-lead">Nowy układ dla uruchomionej maszyny. Czas wszystkich osób łącznie.</p>
+
+        <div class="card">
+          <div class="seg-l">Obecny sposób pracy</div>
+          <div class="seg" data-seg="workMode" role="group" aria-label="Obecny sposób pracy"></div>
+          <p class="seg-hint" data-out="modeHint"></p>
+        </div>
+
+        <div class="vs">
+          <article class="card side now">
+            <div class="cap">Obecny sposób pracy</div>
+            <ul class="acts">
+              <li>Ustalenie podziału warstwy na odłożenia</li>
+              <li>Wyznaczenie pozycji, orientacji i kolejności</li>
+              <li>Przygotowanie danych lub funkcji dla robota i PLC</li>
+              <li>Wprowadzenie danych i podglądu</li>
+              <li>Sprawdzenie danych i poprawki</li>
+            </ul>
+            <div class="side-f" data-group="total">
+              <label for="f-nowTotal">Łączny czas pracy zespołu</label>
+              <div class="tot">
+                <input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="–" id="f-nowTotal" data-field="nowTotal">
+                <span class="unit" role="group" aria-label="Jednostka czasu"><button type="button" data-opt="nowUnit" data-val="min" aria-pressed="false">min</button><button type="button" data-opt="nowUnit" data-val="h" aria-pressed="false">h</button></span>
+                <button type="button" class="ex" data-ex="nowTotal" title="Wartość przykładowa. Kliknięcie: potwierdzenie"></button>
+              </div>
+              <input type="range" data-range="nowTotal" min="0" max="960" step="5" aria-label="Łączny czas pracy zespołu, suwak">
+              <small>Suma czasu osób: godzina wspólnej pracy dwóch osób to 2 roboczogodziny</small>
+            </div>
+          </article>
+
+          <article class="card side pdc">
+            <div class="cap">Z Pallet Designerem</div>
+            <ul class="acts">
+              <li>Projekt układu w jednym narzędziu</li>
+              <li>Odłożenia i parametry wyznaczone algorytmem</li>
+              <li>Komplet danych z jednego generowania</li>
+              <li>Dane wczytane do przygotowanego systemu</li>
+              <li>Spójny model danych, walidacja względem ustawień stacji</li>
+            </ul>
+            <div class="side-f">
+              <span class="lbl">Łączny czas</span>
+              <div class="pd-big"><small>około</small> <span data-out="pd"></span> <small>łącznie</small></div>
+              <small>Jeden wspólny przebieg, bez osobnych czasów robotyka i automatyka</small>
+            </div>
+          </article>
+        </div>
+
+        <div class="card bars">
+          <div class="bar-row"><span class="bar-l">Obecnie</span><span class="bar-t"><i id="bar-now"></i></span><b data-out="barNow"></b></div>
+          <div class="bar-row pdr"><span class="bar-l">Pallet Designer</span><span class="bar-t"><i id="bar-pd"></i></span><b data-out="barPd"></b></div>
+          <div class="diff"><span>Różnica na układ</span><b data-out="saved"></b><small data-out="exNow"></small></div>
+        </div>
+
+        <article class="card">
+          <div class="split-h">
+            <div>
+              <h3>Czas obecny: czynności</h3>
+              <p class="card-d">Pomoc przy oszacowaniu. Suma czynności zastępuje czas łączny, nie jest do niego dodawana.</p>
+            </div>
+            <button type="button" class="switch" data-opt="split" aria-pressed="false">Rozbij na czynności</button>
+          </div>
+          <div data-group="parts">
+            <div data-slot="nowPlan"></div>
+            <div data-slot="nowRobot"></div>
+            <div data-slot="nowPlc"></div>
+            <div data-slot="nowCheck"></div>
+          </div>
+          <div class="under" data-out="partsSum"></div>
+          <div class="own">
+            <div data-slot="pdMin"></div>
+          </div>
+          <p class="note">Próby wymagane nowym produktem albo zmienionym stanowiskiem: osobna pozycja w punkcie 4.</p>
+        </article>
+      </section>
+
+      <section class="blk" id="skala">
+        <div class="blk-h"><span class="no">2</span><h2>Skala: <em>maszyna i rok</em></h2></div>
+        <p class="blk-lead">Różnica z jednego układu przeliczona na maszyny, zmiany i cały rok.</p>
+
+        <div class="card">
+          <div data-slot="machines"></div>
+          <div data-slot="layouts"></div>
+          <div data-slot="reworks"></div>
+          <div data-slot="requests"></div>
+          <div class="under" data-out="prepLine"></div>
+          <div class="own">
+            <div data-slot="rate"></div>
+          </div>
+        </div>
+
+        <div class="scales">
+          <div class="sc"><div class="cap">Jeden układ</div><div class="sc-n" data-out="s.one"></div><div class="sub">mniej pracy przy jednym przygotowaniu</div></div>
+          <div class="sc"><div class="cap">Jedna maszyna</div><div class="sc-n" data-out="s.machine"></div><div class="sub" data-out="s.machineSub"></div></div>
+          <div class="sc yr"><div class="cap">Rok</div><div class="sc-n" data-out="s.year"></div><div class="sub" data-out="s.yearSub"></div></div>
+        </div>
+        <p class="note">Pierwsze uruchomienie stanowiska: osobno, poza rachunkiem. W rachunku przygotowanie danych układów, także pierwszego.</p>
+      </section>
+
+      <section class="blk" id="konfigurator">
+        <div class="blk-h"><span class="no">3</span><h2>Gotowy konfigurator <em>dla klienta końcowego</em></h2></div>
+        <p class="blk-lead">Konfigurator do samodzielnego dodawania układów, bez własnego projektowania i rozwijania.</p>
+
+        <div class="card">
+          <div class="seg-l">Samodzielne dodawanie układów przez klienta końcowego?</div>
+          <div class="seg" data-seg="cfg" role="group" aria-label="Samodzielne dodawanie układów przez klienta końcowego"></div>
+          <p class="seg-hint" data-out="cfgHint"></p>
+        </div>
+
+        <article class="card" data-group="cfg">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Praca nad własnym konfiguratorem</h3><span class="tag once">jednorazowo</span></div>
+              <p class="card-d">Godziny własnego rozwoju, których nie trzeba ponosić.</p>
+            </div>
+            <div class="chip"><b data-out="devChip"></b><small data-out="devChipSub"></small></div>
+          </div>
+          <div data-slot="devUi"></div>
+          <div data-slot="devAlgo"></div>
+          <div data-slot="devValid"></div>
+          <div data-slot="devDocs"></div>
+          <div class="own">
+            <div data-slot="devRemain"></div>
+          </div>
+          <div class="under" data-out="devLine"></div>
+          <ul class="notes">
+            <li>Raz albo na projekt: nie co roku i nie na każdą maszynę</li>
+            <li>Własny konfigurator już jest: tylko przyszły rozwój albo adaptacja, których da się uniknąć</li>
+            <li>Praca ujęta już w innym porównaniu kosztów: do pominięcia</li>
+          </ul>
+        </article>
+
+        <article class="card rev" data-group="cfg">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Sprzedaż konfiguratora</h3><span class="tag">przychód</span></div>
+              <p class="card-d">Konfigurator jako pozycja w ofercie dla klienta końcowego.</p>
+            </div>
+            <div class="chip"><b data-out="revChip"></b><small data-out="revChipSub"></small></div>
+          </div>
+          <div data-slot="cfgSales"></div>
+          <div data-slot="cfgPrice"></div>
+          <ul class="notes">
+            <li>Przychód, nie zysk: przed kosztami dostarczenia rozwiązania</li>
+            <li>Osobno od wartości odzyskanego czasu</li>
+          </ul>
+        </article>
+      </section>
+
+      <section class="blk" id="dodatkowe">
+        <div class="blk-h"><span class="no">4</span><h2>Dodatkowe obszary <em>korzyści</em></h2></div>
+        <p class="blk-lead">Moduły do włączenia. Wyłączony moduł nie wpływa na wynik.</p>
+
+        <article class="card mod" data-mod="variants">
+          <h3>Chwytaki i warianty układu: szybsze porównanie</h3>
+          <p class="card-d">Po zmianie chwytaka albo układu program wyznacza odłożenia od nowa.</p>
+          <table class="mech">
+            <thead><tr><th>Zmiana</th><th>Wynik</th></tr></thead>
+            <tbody>
+              <tr><td>Wymiary chwytaka</td><td>Ponowne wyznaczenie możliwych odłożeń</td></tr>
+              <tr><td>Układ produktów</td><td>Nowy podział warstwy i kolejność</td></tr>
+              <tr><td>Ograniczenie stanowiska</td><td>Uwzględnione przy planowaniu</td></tr>
+              <tr><td>Średni czas cyklu</td><td>Orientacyjny czas obsługi warstwy lub palety</td></tr>
+            </tbody>
+          </table>
+          <div class="eg">
+            <div class="cap">Przykład działania: dwa warianty, średni cykl 6 s</div>
+            <div class="bar-row"><span class="bar-l">Wariant A · 12 odłożeń</span><span class="bar-t"><i style="width:100%"></i></span><b>72 s na warstwę</b></div>
+            <div class="bar-row"><span class="bar-l">Wariant B · 9 odłożeń</span><span class="bar-t"><i style="width:75%"></i></span><b>54 s na warstwę</b></div>
+            <p>Wartości orientacyjne: liczba odłożeń × średni cykl. Czas całej palety: także liczba warstw, przekładki i inne operacje. Bez gwarancji wydajności stanowiska.</p>
+          </div>
+          <div class="mod-h mod-in">
+            <button type="button" class="switch bare" data-mod-toggle="variants" aria-pressed="false" aria-label="Analiza wariantów: w rachunku"></button>
+            <div>
+              <h3>Analiza wariantów w rachunku</h3>
+              <p class="card-d">Tylko czas analizy. Krótszy cykl robota: bez przeliczenia na zysk produkcyjny.</p>
+            </div>
+            <div class="chip"><b data-out="m.variants.pln"></b><small data-out="m.variants.h"></small></div>
+          </div>
+          <div class="mod-b">
+            <div data-slot="varCount"></div>
+            <div data-slot="varNow"></div>
+            <div data-slot="varPd"></div>
+          </div>
+        </article>
+
+        <article class="card mod" data-mod="recipes">
+          <div class="mod-h">
+            <button type="button" class="switch bare" data-mod-toggle="recipes" aria-pressed="false" aria-label="Obsługa receptur i standard PLC–robot: w rachunku"></button>
+            <div>
+              <h3>Obsługa receptur i standard PLC–robot</h3>
+              <p class="card-d">Adaptacja obecnego standardu a gotowe moduły Pallet Designera. Osobno od danych układów.</p>
+            </div>
+            <div class="chip"><b data-out="m.recipes.pln"></b><small data-out="m.recipes.h"></small></div>
+          </div>
+          <div class="mod-b">
+            <div data-slot="recNow"></div>
+            <div data-slot="recPd"></div>
+            <p class="note">Raz na maszynę. Liczba maszyn: z punktu 2.</p>
+          </div>
+        </article>
+
+        <article class="card mod" data-mod="offers">
+          <div class="mod-h">
+            <button type="button" class="switch bare" data-mod-toggle="offers" aria-pressed="false" aria-label="Ofertowanie i dokumentacja: w rachunku"></button>
+            <div>
+              <h3>Ofertowanie i dokumentacja</h3>
+              <p class="card-d">Warianty palet i materiały dla klienta.</p>
+            </div>
+            <div class="chip"><b data-out="m.offers.pln"></b><small data-out="m.offers.h"></small></div>
+          </div>
+          <div class="mod-b">
+            <div data-slot="offCount"></div>
+            <div data-slot="offNow"></div>
+            <div data-slot="offPd"></div>
+          </div>
+        </article>
+
+        <article class="card mod" data-mod="trips">
+          <div class="mod-h">
+            <button type="button" class="switch bare" data-mod-toggle="trips" aria-pressed="false" aria-label="Wyjazdy: w rachunku"></button>
+            <div>
+              <h3>Wyjazdy</h3>
+              <p class="card-d">Tylko wyjazdy rzeczywiście możliwe do uniknięcia. Wydatki osobno od roboczogodzin.</p>
+            </div>
+            <div class="chip"><b data-out="m.trips.pln"></b><small data-out="m.trips.h"></small></div>
+          </div>
+          <div class="mod-b">
+            <div data-slot="tripCount"></div>
+            <div data-slot="tripExpense"></div>
+            <div data-slot="tripHours"></div>
+            <div class="under" data-out="tripLine"></div>
+            <p class="note">Godziny wyjazdu: tylko tutaj, nie drugi raz w innych polach.</p>
+          </div>
+        </article>
+
+        <article class="card mod" data-mod="trials">
+          <div class="mod-h">
+            <button type="button" class="switch bare" data-mod-toggle="trials" aria-pressed="false" aria-label="Dodatkowe próby i poprawki: w rachunku"></button>
+            <div>
+              <h3>Dodatkowe próby i poprawki</h3>
+              <p class="card-d">Tylko praca nieuwzględniona wcześniej. Próby wymagane nowym produktem zostają.</p>
+            </div>
+            <div class="chip"><b data-out="m.trials.pln"></b><small data-out="m.trials.h"></small></div>
+          </div>
+          <div class="mod-b">
+            <div data-slot="trialCount"></div>
+            <div data-slot="trialMin"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="blk" id="podsumowanie">
+        <div class="blk-h"><span class="no">5</span><h2>Podsumowanie: <em>dane i założenia</em></h2></div>
+        <p class="blk-lead">Wszystko, na czym stoi wynik. Do pobrania i przekazania dalej.</p>
+        <div class="card">
+          <div class="print-head">Pallet Designer · kalkulator korzyści · podsumowanie z dnia <span id="print-date"></span> · palletdesigner.com</div>
+          <table class="sum-table" id="sum-table"></table>
+          <p class="sum-foot">Potencjał korzyści przed kosztami zakupu i wdrożenia. Odzyskany czas to dostępność zespołu, nie zawsze niższe wydatki na wynagrodzenia. Następny krok: sprawdzenie tych założeń na własnym układzie podczas demonstracji.</p>
+        </div>
+      </section>
+
+      <details class="box">
+        <summary>Sposób liczenia</summary>
+        <p><b>Odzyskane godziny = liczba przygotowań × (czas obecny − czas z Pallet Designerem) ÷ 60</b></p>
+        <p><b>Wartość czasu = odzyskane godziny × koszt własny roboczogodziny</b></p>
+        <ul>
+          <li><b>Przygotowania w roku:</b> nowe maszyny × układy na maszynę + dodatkowe przygotowania po zmianach + nowe układy i zmiany na pracujących maszynach.</li>
+          <li><b>Czas z Pallet Designerem:</b> około 3 minut łącznie, jeden przebieg; sprawny użytkownik, po wdrożeniu i początkowej konfiguracji maszyny.</li>
+          <li><b>Czynności:</b> suma zastępuje czas łączny.</li>
+          <li><b>Jednostka czasu w rachunku:</b> minuty. Osobodzień: 8 godzin.</li>
+          <li><b>Wynik zerowy i ujemny:</b> pokazywany tak samo jak dodatni.</li>
+          <li><b>Puste pole:</b> brak danych, bez powrotu do wartości przykładowej.</li>
+          <li><b>Wartość przykładowa:</b> oznaczona do czasu zmiany albo potwierdzenia kliknięciem.</li>
+          <li><b>Moduły:</b> wyłączony moduł nie wpływa na wynik.</li>
+          <li><b>Wyjazdy:</b> wydatki (dojazd, noclegi) osobno od roboczogodzin.</li>
+          <li><b>Konfigurator:</b> praca nad własnym rozwiązaniem jednorazowo; przychód osobno, przed kosztami dostarczenia. Bez wspólnej sumy.</li>
+          <li><b>Zapis:</b> dane i założenia zostają w tej przeglądarce razem z wynikiem.</li>
+        </ul>
+      </details>
+    </main>
+
+    <aside class="result" id="wynik" aria-label="Wynik">
+      <div class="sum">
+        <div class="cap">Odzyskany czas rocznie</div>
+        <div class="big" id="r-hours"><span data-out="hours"></span><small>h</small></div>
+        <div class="sub" data-out="daysLine"></div>
+      </div>
+      <div class="pair">
+        <div class="tile">
+          <div class="cap">Wartość odzyskanego czasu</div>
+          <div class="big" id="r-value"><span data-out="value"></span><small>PLN</small></div>
+          <div class="sub" data-out="valueSub"></div>
+        </div>
+        <div class="tile">
+          <div class="cap">Uniknięte wydatki</div>
+          <div class="big" id="r-expenses"><span data-out="expenses"></span><small>PLN</small></div>
+          <div class="sub" data-out="expensesSub"></div>
+        </div>
+      </div>
+      <div class="sep">osobno, bez sumowania</div>
+      <div class="pair">
+        <div class="tile b">
+          <div class="cap">Potencjalny przychód z konfiguratora</div>
+          <div class="big" id="r-revenue"><span data-out="revenue"></span><small>PLN</small></div>
+          <div class="sub" data-out="revenueSub"></div>
+        </div>
+        <div class="tile c">
+          <div class="cap">Jednorazowo uniknięta praca rozwojowa</div>
+          <div class="big" id="r-dev"><span data-out="dev"></span><small>h</small></div>
+          <div class="sub" data-out="devSub"></div>
+        </div>
+      </div>
+      <p class="fine">Przed kosztami zakupu i wdrożenia. Odzyskany czas to dostępność zespołu, nie zawsze niższe wydatki na wynagrodzenia.</p>
+      <div class="exline" data-out="exLine"></div>
+      <div class="next">Następny krok: te założenia na własnym układzie</div>
+      <a class="cta" id="cta" href="mailto:kontakt@palletdesigner.com">Umów demonstrację</a>
+      <div class="links">
+        <button type="button" id="download">Pobierz podsumowanie</button>
+        <button type="button" id="print">Drukuj / PDF</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<a class="mbar" href="#wynik"><span data-out="mbar"></span><span>wynik ↓</span></a>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  var C = PDCalc;
+  var table = document.getElementById('sum-table');
+  var cta = document.getElementById('cta');
+  var lastSummary = '';
+  var result = null;
+
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  }
+
+  function renderSummary(r) {
+    // the widths come from the columns: the first row of the table spans all three
+    var html = '<colgroup><col class="c-l"><col><col class="c-m"></colgroup>' + C.summary(r).map(function (s) {
+      return '<tbody><tr><th colspan="3">' + esc(s.title) + '</th></tr>' + s.rows.map(function (x) {
+        return '<tr><td>' + esc(x.label) + '</td><td title="' + esc(x.value) + '">' + esc(x.value) + '</td><td>' + esc(x.mark) + '</td></tr>';
+      }).join('') + '</tbody>';
+    }).join('');
+    if (html !== lastSummary) table.innerHTML = lastSummary = html;
+  }
+
+  // both bars on one scale; a bar with a value above zero never vanishes
+  function bar(id, value, max) {
+    var el = document.getElementById(id);
+    el.style.width = (value > 0 && max > 0 ? value / max * 100 : 0) + '%';
+    el.style.minWidth = value > 0 ? '3px' : '0';
+  }
+
+  // the visitor's own mail, with the assumptions already in it
+  function mailto(t) {
+    var body = ['Dzień dobry,', '', 'proszę o demonstrację Pallet Designera na naszym układzie.', '',
+      'Założenia z kalkulatora:',
+      '- czas obecny na układ: ' + t.barNow,
+      '- czas z Pallet Designerem: ' + t.barPd,
+      '- ' + t.prepLine.charAt(0).toLowerCase() + t.prepLine.slice(1),
+      '- odzyskany czas rocznie: ' + t.hours + ' h', '', ''].join('\n').replace(/ /g, ' ');
+    return 'mailto:kontakt@palletdesigner.com?subject=' + encodeURIComponent('Pallet Designer - demonstracja na naszym układzie') +
+      '&body=' + encodeURIComponent(body);
+  }
+
+  C.start(function (r, t) {
+    result = r;
+    C.fill(t);
+
+    // a number too long for its box gets a smaller font; the box keeps its size
+    [['r-hours', t.hours, 6], ['r-value', t.value, 7], ['r-expenses', t.expenses, 7], ['r-revenue', t.revenue, 7], ['r-dev', t.dev, 6]].forEach(function (x) {
+      document.getElementById(x[0]).classList.toggle('long', x[1].length > x[2]);
+    });
+
+    var now = C.get('nowTotal') || 0, pd = C.get('pdMin') || 0, max = Math.max(now, pd);
+    bar('bar-now', now, max);
+    bar('bar-pd', pd, max);
+
+    renderSummary(r);
+    document.getElementById('print-date').textContent = C.today().pl;
+    cta.href = mailto(t);
+  });
+
+  document.getElementById('download').addEventListener('click', function () {
+    // the byte order mark keeps Polish letters right in Notepad
+    var blob = new Blob(['﻿' + C.summaryText(result)], { type: 'text/plain;charset=utf-8' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'pallet-designer-podsumowanie-' + C.today().iso + '.txt';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  });
+
+  document.getElementById('print').addEventListener('click', function () { window.print(); });
+})();
+</script>
+</body>
+</html>

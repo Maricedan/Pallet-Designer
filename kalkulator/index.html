@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3ec5f3">
+<title>Kalkulator korzyści - Pallet Designer</title>
+<link rel="icon" type="image/png" href="../favicon-96x96.png" sizes="96x96">
+<link rel="shortcut icon" href="../favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<style>
+/* Fonts and palette of palletdesigner.com (cennik, section "Zwrot inwestycji") */
+@font-face{font-family:'Plus Jakarta Sans';src:url('../_fonts/PlusJakartaSans-VF.woff2') format('woff2-variations');font-weight:200 800;font-display:swap}
+@font-face{font-family:'IBM Plex Sans';src:url('../_fonts/IBMPlexSans-VF.woff2') format('woff2-variations');font-weight:100 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('../_fonts/JetBrainsMono-VF.woff2') format('woff2-variations');font-weight:100 800;font-display:swap}
+@font-face{font-family:'Lora';src:url('../_fonts/Lora-Italic-VF.woff2') format('woff2-variations');font-weight:400 700;font-style:italic;font-display:swap}
+:root{
+  --sky:#3ec5f3;--sky-bright:#1ba6d4;--sky-deep:#0a7ea8;--sky-soft:#d6eef9;--sky-mist:#ecf6fb;--sky-haze:#f5fbfd;
+  --cream:#fefcf6;--bg:#fbfaf4;--bg-alt:#f7f5ec;
+  --ink:#0a2c3d;--ink-soft:#4f6c7a;--ink-faded:#8aa1ad;
+  --surface:#fff;--line:#e6eef2;--line-soft:#f0f5f8;
+  --peach:#ffe0c8;--peach-soft:#fff1e3;--amber:#b86826;--mint-soft:#e8f7ef;--green:#1b7a43;--warn:#b3261e;
+  --shadow-soft:0 12px 40px -12px rgba(10,80,110,.10);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{overflow-y:scroll}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15.5px;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:44px 32px 90px}
+button{font:inherit;color:inherit}
+em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--sky-deep);font-size:1.04em}
+
+.head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0 24px;align-items:end;margin-bottom:30px}
+.section-label{display:inline-flex;padding:8px 16px;background:var(--sky-soft);color:var(--sky-deep);border-radius:100px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px}
+h1{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:2.5rem;line-height:1.1;letter-spacing:-.028em;margin-bottom:10px}
+.intro{color:var(--ink-soft);font-size:1.06rem;max-width:660px}
+.ghost{padding:8px 16px;border:1px solid var(--line);border-radius:100px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--ink-soft)}
+.ghost:hover{border-color:var(--sky-deep);color:var(--sky-deep)}
+
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 396px;gap:28px;align-items:start}
+.blk{margin-bottom:34px}
+.blk-h{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.blk-h .no{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;color:var(--sky-deep);background:var(--sky-mist);border-radius:7px;padding:3px 8px}
+h2{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:1.42rem;line-height:1.2;letter-spacing:-.022em}
+.blk-lead{color:var(--ink-soft);margin:0 0 14px;max-width:640px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 24px 16px;margin-bottom:12px;position:relative}
+.card:hover{box-shadow:var(--shadow-soft)}
+.card-h{display:grid;grid-template-columns:minmax(0,1fr) 168px;gap:0 16px;align-items:start}
+.card-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+h3{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:1.1rem;letter-spacing:-.015em;line-height:1.25}
+.card-d{color:var(--ink-soft);font-size:.93rem;line-height:1.5;margin:4px 0 8px;max-width:520px}
+.chip{justify-self:end;width:168px;text-align:right;font-variant-numeric:tabular-nums}
+.chip b{display:block;height:30px;line-height:30px;padding:0 10px;border-radius:8px;background:var(--sky-mist);color:var(--sky-deep);font-family:'JetBrains Mono',monospace;font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden}
+.chip small{display:block;height:18px;line-height:18px;font-size:11.5px;color:var(--ink-faded);font-family:'JetBrains Mono',monospace;white-space:nowrap;margin-top:2px}
+
+/* what the program gives at this step: ticks, always in view */
+.pd{margin-top:10px;padding:10px 14px 8px;border-radius:12px;background:var(--sky-haze)}
+.pd-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:.86rem;margin-bottom:2px}
+.pd-h b{font-weight:600;color:var(--sky-deep)}
+.pd-h .we{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--sky-deep);white-space:nowrap}
+.ticks{list-style:none}
+.ticks li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:0 9px;font-size:.92rem;line-height:1.45;padding:3px 0}
+.ticks li::before{content:"✓";width:18px;height:18px;border-radius:50%;background:var(--sky-deep);color:#fff;font-size:11px;line-height:18px;text-align:center;font-weight:700;margin-top:2px}
+
+/* info: the longer text, shown over the page, nothing moves */
+.info{position:relative;display:inline-flex}
+.info button{width:22px;height:22px;border-radius:50%;border:none;background:var(--line);color:var(--ink-soft);font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;cursor:help}
+.info:hover button,.info:focus-within button{background:var(--sky-deep);color:#fff}
+.tip{position:absolute;left:-14px;top:30px;width:440px;z-index:30;visibility:hidden;opacity:0;transition:opacity .15s;background:var(--ink);color:var(--cream);border-radius:14px;padding:14px 16px;font-size:.86rem;line-height:1.55;font-weight:400;box-shadow:0 24px 60px -12px rgba(10,80,110,.35)}
+.info:hover .tip,.info:focus-within .tip{visibility:visible;opacity:1}
+
+/* field: label, slider, number */
+.fld{display:grid;grid-template-columns:minmax(0,1fr) 160px 214px;gap:0 16px;align-items:center;padding:7px 0}
+.fld-l{font-weight:500;line-height:1.3}
+.fld-l small{display:block;font-weight:400;color:var(--ink-faded);font-size:12.5px;margin-top:1px}
+.fld input[type=range]{width:100%;accent-color:var(--sky-deep);cursor:pointer;height:22px}
+.fld-i{display:flex;align-items:center;gap:6px;min-width:0}
+.fld-i input{width:86px;flex:none;text-align:right;font-family:'IBM Plex Sans',sans-serif;font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums;padding:6px 10px;border:1px solid #c9d6dd;border-radius:10px;background:#fff;color:var(--ink)}
+.fld-i input:focus{outline:2px solid var(--sky-bright);outline-offset:-1px}
+.fld-i input.mine{border-color:var(--sky-deep);background:var(--sky-haze)}
+.fld-i input.bad{border-color:var(--warn);background:#fdf0ef}
+.fld-i i{font-style:normal;color:var(--ink-soft);font-size:12.5px;white-space:nowrap}
+.fld-i em{font-family:'JetBrains Mono',monospace;font-style:normal;font-size:11.5px;color:var(--ink-faded);white-space:nowrap;width:96px;overflow:hidden}
+.fld.plain{grid-template-columns:1fr;gap:4px}
+.under{height:20px;line-height:20px;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--ink-faded);text-align:right}
+details.rates{margin-top:8px;border-top:1px solid var(--line-soft);padding-top:10px}
+details.rates summary{cursor:pointer;color:var(--sky-deep);font-size:.92rem}
+.rates-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:0 14px;margin-top:6px}
+.rates-grid .fld-l{font-size:.86rem}
+.rates-grid .fld-i input{width:66px}
+
+/* trip helper */
+details.aid{margin-top:6px;border-top:1px solid var(--line-soft);padding-top:8px}
+details.aid summary{cursor:pointer;color:var(--sky-deep);font-size:.92rem}
+.aid-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 18px;margin-top:6px}
+.aid-grid .fld-l{font-size:.86rem}
+.aid-grid .fld-i input{width:76px}
+.where{display:flex;gap:8px;margin:8px 0 2px}
+.where button{padding:5px 14px;border:1px solid #c9d6dd;border-radius:100px;background:#fff;cursor:pointer;font-size:.88rem}
+.where button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.aid-out{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:10px 14px;border-radius:12px;background:var(--bg-alt)}
+.aid-out span{font-size:.92rem}
+.aid-out b{font-family:'IBM Plex Sans',sans-serif;font-size:1.05rem;display:inline-block;width:110px;text-align:right;font-variant-numeric:tabular-nums}
+.aid-out button{width:150px;padding:7px 0;border-radius:100px;border:none;background:var(--ink);color:var(--cream);cursor:pointer;font-weight:600;font-size:.88rem}
+.aid-out button:hover{background:var(--sky-deep)}
+
+/* revenue card: the site's second source, in its colour */
+.card.rev{border-color:var(--peach);background:linear-gradient(135deg,#fff 0%,var(--peach-soft) 100%)}
+.card.rev .chip b{background:var(--peach-soft);color:var(--amber)}
+.card.rev input[type=range]{accent-color:var(--amber)}
+.card.rev .fld-i input.mine{border-color:var(--amber);background:#fff8f0}
+.card.rev .pd{background:#fff8f0}
+.card.rev .pd-h b{color:var(--amber)}
+.card.rev .ticks li::before{background:var(--amber)}
+.tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--amber);background:var(--peach-soft);border-radius:6px;padding:2px 8px}
+
+/* result: fixed place, fixed size; two numbers that add up */
+.result{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;font-variant-numeric:tabular-nums}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1fr);align-items:center}
+.tile{border:1px solid var(--line);border-radius:18px;padding:14px 16px;background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.tile.b{border-color:var(--peach);background:linear-gradient(135deg,var(--peach-soft) 0%,var(--peach) 100%)}
+.cap{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);height:18px;line-height:18px;white-space:nowrap;overflow:hidden}
+.tile.b .cap{color:var(--amber)}
+.big{font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:1.75rem;letter-spacing:-.03em;height:40px;line-height:40px;color:var(--sky-deep);white-space:nowrap;overflow:hidden}
+.big small{font-size:.45em;font-weight:500;color:var(--ink-soft);margin-left:5px;letter-spacing:0}
+.big.long{font-size:1.05rem}
+.tile.b .big{color:var(--amber)}
+.sub{height:20px;line-height:20px;font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.op{height:26px;line-height:24px;text-align:center;font-family:'IBM Plex Sans',sans-serif;font-weight:300;font-size:1.7rem;color:var(--sky-deep)}
+.sum{border-radius:18px;padding:16px 20px;background:var(--ink);color:var(--cream)}
+.sum .cap{color:var(--sky)}
+.sum .big{color:#fff;font-size:2.7rem;height:58px;line-height:58px}
+.sum .big.long{font-size:1.6rem}
+.sum .big small{color:var(--sky-soft)}
+.split{display:flex;height:8px;border-radius:4px;overflow:hidden;background:rgba(255,255,255,.14);margin-top:8px}
+.split i{display:block;height:100%;width:0}
+.split .a{background:var(--sky)}
+.split .b{background:#f0a868}
+.legend{display:flex;justify-content:space-between;height:18px;line-height:18px;font-size:11px;color:var(--sky-soft);margin-top:5px;font-family:'JetBrains Mono',monospace}
+.time{margin-top:10px;padding:10px 16px;border-radius:14px;background:var(--mint-soft);height:58px;overflow:hidden}
+.time b{display:block;height:20px;line-height:20px;font-family:'IBM Plex Sans',sans-serif;font-size:1rem;color:var(--green);white-space:nowrap}
+.time span{display:block;height:19px;line-height:19px;font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.src{margin-top:10px;border:1px solid var(--line);border-radius:18px;padding:12px 18px 8px;background:var(--surface)}
+.rows{margin-top:4px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 92px;height:30px;align-content:start;font-size:13.5px;border-top:1px solid var(--line-soft);padding-top:4px}
+.row span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row b{text-align:right;font-weight:600;white-space:nowrap}
+.row u{grid-column:1/-1;display:block;height:3px;border-radius:2px;background:var(--line-soft);margin-top:1px;text-decoration:none}
+.row u i{display:block;height:100%;width:0;border-radius:2px;background:var(--sky-bright)}
+.row.rev{color:var(--amber)}
+.row.rev u i{background:#f0a868}
+
+/* below the calculator */
+.more{margin-top:26px}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:16px}
+.ben{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:18px 20px;display:grid;grid-template-columns:24px 1fr;gap:0 12px}
+.ben .ck{width:22px;height:22px;border-radius:50%;background:var(--mint-soft);color:var(--green);font-size:13px;line-height:22px;text-align:center;font-weight:700;margin-top:2px}
+.ben b{display:block;font-family:'IBM Plex Sans',sans-serif;font-weight:700;font-size:1.02rem;letter-spacing:-.01em;line-height:1.3;margin-bottom:3px}
+.ben p{color:var(--ink-soft);font-size:.92rem;line-height:1.5}
+details.box{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px 22px;font-size:.93rem;color:var(--ink-soft)}
+details.box.how{background:var(--bg-alt);border-color:var(--bg-alt)}
+details.box summary{cursor:pointer;font-weight:600;color:var(--ink)}
+details.box ul{padding-left:18px;margin:8px 0}
+details.box li{margin:4px 0}
+details.box p{margin-top:8px}
+details.box p b{color:var(--ink)}
+.foot{margin-top:18px;font-size:12.5px;color:var(--ink-faded)}
+.foot a{color:var(--sky-deep)}
+@media (max-width:1040px){.cols{grid-template-columns:1fr}.result{position:static;max-height:none}.more-grid{grid-template-columns:1fr}.fld{grid-template-columns:1fr}.rates-grid,.aid-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="head">
+    <div>
+      <div class="section-label">Kalkulator korzyści</div>
+      <h1>Korzyści z Pallet Designera <em>w liczbach</em></h1>
+      <p class="intro">Obecna praca nad układami palet przy paletyzacji lub depaletyzacji. Wynik liczony na bieżąco.</p>
+    </div>
+    <button type="button" class="ghost" data-action="reset">Wartości startowe</button>
+  </div>
+
+  <div class="cols">
+    <main>
+
+      <section class="blk">
+        <div class="blk-h"><span class="no">1</span><h2>Projekty</h2></div>
+        <div class="card">
+          <div data-slot="projects"></div>
+          <div data-slot="layouts"></div>
+          <div class="under" data-out="layoutsYear"></div>
+          <div data-slot="rateAll"></div>
+          <details class="rates">
+            <summary>Osobne stawki działów</summary>
+            <div class="rates-grid">
+              <div data-slot="rateSales" data-plain></div>
+              <div data-slot="rateDesign" data-plain></div>
+              <div data-slot="ratePlc" data-plain></div>
+              <div data-slot="rateRobot" data-plain></div>
+              <div data-slot="rateSite" data-plain></div>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section class="blk">
+        <div class="blk-h"><span class="no">2</span><h2>Program maszyny: <em>obsługa receptur</em></h2></div>
+        <p class="blk-lead">Raz na każdą maszynę. Czas w godzinach, łącznie programiści PLC i robota.</p>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Program obsługi receptur i układów</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Gotowe bloki funkcyjne PLC, ekrany panelu operatorskiego i skrypty HMI oraz stała metodyka wymiany danych między maszyną a robotem. Raz wdrożony system jest gotowym członem w każdym kolejnym projekcie.</span></span></div>
+              <p class="card-d">Wymiana danych PLC–robot, ekrany wyboru receptury, obsługa układów w programie maszyny.</p>
+            </div>
+            <div class="chip"><b><span data-out="e.system.pln"></span> PLN</b><small data-out="e.system.h"></small></div>
+          </div>
+          <div data-slot="systemHours"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="system"></span> na maszynę</span></div>
+            <ul class="ticks">
+              <li>Gotowe bloki funkcyjne PLC do obsługi receptur</li>
+              <li>Gotowe ekrany HMI: wybór receptury, podgląd warstwy</li>
+              <li>Jeden standard wymiany danych PLC–robot w każdym projekcie</li>
+            </ul>
+          </div>
+        </article>
+      </section>
+
+      <section class="blk">
+        <div class="blk-h"><span class="no">3</span><h2>Jeden układ palety: <em>czas dziś</em></h2></div>
+        <p class="blk-lead">Cztery etapy pracy nad jednym układem. Czas w minutach, łącznie dla wszystkich zaangażowanych osób. Czas z Pallet Designerem: stały.</p>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Konstrukcja i analiza wykonalności</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Sprawdzenie układu na parametrach stanowiska wpisanych raz: obrys chwytaka, strona otwierania, dopuszczalne wystawanie, wysokość palety. Widoczne od razu: kolizje przy każdym odłożeniu i liczba ruchów na warstwę, także dla dwóch wariantów chwytaka.</span></span></div>
+              <p class="card-d">Rozrysowanie układu w programie graficznym, liczba odłożeń przy danym chwytaku, wykonalność.</p>
+            </div>
+            <div class="chip"><b><span data-out="l.layout.design.pln"></span> PLN</b><small data-out="l.layout.design.h"></small></div>
+          </div>
+          <div data-slot="designNow"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="design"></span></span></div>
+            <ul class="ticks">
+              <li>Układy sprawdzone na wymiarach chwytaka przed jego wykonaniem</li>
+              <li>Blokada kartonu ponad dopuszczalne wystawanie</li>
+              <li>Etykiety kartonów skrajnych na zewnątrz palety</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Programowanie PLC i HMI</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Bez przepisywania z rysunku do arkusza i z arkusza do receptury, czyli bez miejsca, w którym powstaje zamieniona oś, zła orientacja i zła liczba warstw. Dane poza zakresami z ustawień stacji nie są wydawane.</span></span></div>
+              <p class="card-d">Receptura układu w sterowniku, podgląd warstwy na panelu operatora.</p>
+            </div>
+            <div class="chip"><b><span data-out="l.layout.plc.pln"></span> PLN</b><small data-out="l.layout.plc.h"></small></div>
+          </div>
+          <div data-slot="plcNow"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="plc"></span></span></div>
+            <ul class="ticks">
+              <li>DB, dane dla panelu, CSV i PDF z jednego zapisu</li>
+              <li>Zakresy tablic i długości nazw sprawdzone przed eksportem</li>
+              <li>Obraz warstwy na panel razem z danymi</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Programowanie i przygotowanie robota</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Program liczy podział warstwy na pobrania (także po kilka kartonów), pozycję chwytaka bez kolizji z odłożonymi kartonami, kierunek dojazdu i kolejność. Program robota wykonujący te dane: pisany raz na stanowisko.</span></span></div>
+              <p class="card-d">Podział układu na odłożenia, pozycje i kolejność dla robota, symulacja.</p>
+            </div>
+            <div class="chip"><b><span data-out="l.layout.robot.pln"></span> PLN</b><small data-out="l.layout.robot.h"></small></div>
+          </div>
+          <div data-slot="robotNow"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="robot"></span></span></div>
+            <ul class="ticks">
+              <li>Podział warstwy na pobrania i pozycje chwytaka: liczy program</li>
+              <li>Te same dane paletyzacji w PLC przy robocie każdej marki</li>
+              <li>Układ do symulatora z CSV, bez ręcznej budowy</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Testowanie i uruchomienie na obiekcie</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Geometria sprawdzona w programie względem ustawień stacji. Na obiekcie: weryfikacja stanowiska raz, na pierwszym układzie. Kolejne układy bez zmiany programu. Stąd w rachunku godzina na maszynę, nie na układ.</span></span></div>
+              <p class="card-d">Próba układu na maszynie: czekanie na produkt, paleta na próbę, poprawki pozycji.</p>
+            </div>
+            <div class="chip"><b><span data-out="l.layout.site.pln"></span> PLN</b><small data-out="l.layout.site.h"></small></div>
+          </div>
+          <div data-slot="siteNow"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="site"></span> na maszynę</span></div>
+            <ul class="ticks">
+              <li>Stanowisko i punkty robota weryfikowane raz</li>
+              <li>Układy sprawdzone geometrycznie przed dostawą produktu</li>
+              <li>Krócej zajęta linia klienta</li>
+            </ul>
+          </div>
+        </article>
+
+      </section>
+
+      <section class="blk">
+        <div class="blk-h"><span class="no">4</span><h2>Zmiany, poprawki, wyjazdy</h2></div>
+        <p class="blk-lead">Zmiana liczona jak nowy układ w biurze: konstrukcja, PLC i robot.</p>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Zmiana w trakcie projektu</h3></div>
+              <p class="card-d">Zmiana kartonu albo dodatkowy produkt przed wysyłką maszyny. Ten sam układ drugi raz.</p>
+            </div>
+            <div class="chip"><b><span data-out="e.rework.pln"></span> PLN</b><small data-out="e.rework.h"></small></div>
+          </div>
+          <div data-slot="reworks"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="office"></span> na zmianę</span></div>
+            <ul class="ticks">
+              <li>Jedno źródło danych: odłożenia, paleta, dane PLC i HMI generowane od nowa</li>
+              <li>Blokada eksportu układu sprzecznego z ustawieniami stacji</li>
+              <li>Nowy PDF do potwierdzenia zmiany</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Prośba klienta po uruchomieniu</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Otwarcie układu, poprawka, generowanie, wysłanie plików. Bez odrywania seniora od bieżącego projektu.</span></span></div>
+              <p class="card-d">Maszyna pracuje, klient prosi o nowy karton, nowy układ albo korektę.</p>
+            </div>
+            <div class="chip"><b><span data-out="e.request.pln"></span> PLN</b><small data-out="e.request.h"></small></div>
+          </div>
+          <div data-slot="requests"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="office"></span> na zmianę</span></div>
+            <ul class="ticks">
+              <li>Zmianę przygotuje osoba, która nie programowała stacji</li>
+              <li>Bez zmian w logice PLC i programie robota</li>
+              <li>PDF nowego układu do akceptacji przed wgraniem</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Wyjazd do klienta</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Układ to zestaw danych sprawdzonych względem ustawień stacji: przygotowanie w biurze, wysyłka online. Dane sprzeczne z ustawieniami stacji nie są wydawane, więc kolizja chwytaka, pozycja poza paletą czy przekroczony zakres tablic nie docierają do maszyny.</span></span></div>
+              <p class="card-d">Wyjazdy z powodu poprawek albo nowego układu: tyle, o ile mogłoby ich być mniej.</p>
+            </div>
+            <div class="chip"><b><span data-out="e.trip.pln"></span> PLN</b><small>&nbsp;</small></div>
+          </div>
+          <div data-slot="trips"></div>
+          <div data-slot="tripCost"></div>
+          <details class="aid">
+            <summary>Pomocnik: koszt jednego wyjazdu</summary>
+            <div class="where"><button type="button" data-where="0">W Polsce</button><button type="button" data-where="1">Za granicą</button></div>
+            <div class="aid-grid">
+              <div data-slot="aidKm" data-plain></div>
+              <div data-slot="aidKmRate" data-plain></div>
+              <div data-slot="aidPeople" data-plain></div>
+              <div data-slot="aidDriveHours" data-plain></div>
+              <div data-slot="aidDriveRate" data-plain></div>
+              <div data-slot="aidSiteHours" data-plain></div>
+              <div data-slot="aidNights" data-plain></div>
+              <div data-slot="aidNightCost" data-plain></div>
+              <div data-slot="aidDayPln" data-plain></div>
+              <div data-slot="aidDayEur" data-plain></div>
+              <div data-slot="aidEur" data-plain></div>
+            </div>
+            <div class="aid-out"><span>Jeden wyjazd: <b><span data-out="tripAid"></span> PLN</b></span><button type="button" id="aid-use">Wstaw do pola</button></div>
+          </details>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: bez wyjazdu</span></div>
+            <ul class="ticks">
+              <li>Mniej błędów danych układu, mniej wyjazdów z poprawką</li>
+              <li>Nowy układ jako plik danych, wgrywany zdalnie</li>
+              <li>Zmiana układu w biurze, uruchomieniowiec zostaje na obiekcie</li>
+            </ul>
+          </div>
+        </article>
+
+      </section>
+
+      <section class="blk">
+        <div class="blk-h"><span class="no">5</span><h2>Sprzedaż: oferta i konfigurator</h2></div>
+
+        <article class="card">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Układ do oferty</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Karton i paleta klienta na istniejących ustawieniach stacji dają układ, liczbę warstw, liczbę odłożeń robota i PDF. Po wygranej ta sama warstwa przechodzi do konstrukcji.</span></span></div>
+              <p class="card-d">Rysunek układu palety dla klienta i sprawdzenie, czy się zmieści.</p>
+            </div>
+            <div class="chip"><b><span data-out="e.offer.pln"></span> PLN</b><small data-out="e.offer.h"></small></div>
+          </div>
+          <div data-slot="offers"></div>
+          <div data-slot="offerNow"></div>
+          <div class="pd">
+            <div class="pd-h"><b>Z Pallet Designerem</b><span class="we">w rachunku: <span data-pd="offer"></span></span></div>
+            <ul class="ticks">
+              <li>Liczba odłożeń i kartonów na ruch: policzona, nie na oko</li>
+              <li>Układ z oferty przechodzi do konstrukcji bez przepisywania</li>
+              <li>PDF palety do oferty, umowy i protokołu odbioru</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="card rev">
+          <div class="card-h">
+            <div>
+              <div class="card-t"><h3>Konfigurator dla klienta końcowego</h3><span class="info"><button type="button" aria-label="Opis">i</button><span class="tip" role="tooltip">Dorabianie układów przez klienta końcowego, bez udziału integratora przy każdej zmianie smaku, opakowania czy odbiorcy. Sieci handlowe mają twarde limity z prawem odmowy przyjęcia, np. Netto 1,8 m i zero wystawania (2024), Biedronka 1,8 m z paletą dla centrów dystrybucyjnych (2021). Program pilnuje wpisanego limitu.</span></span><span class="tag">przychód</span></div>
+              <p class="card-d">Samodzielne dorabianie układów przez klienta. Osobna pozycja w wycenie maszyny.</p>
+            </div>
+            <div class="chip"><b><span data-out="revenue"></span> PLN</b><small>przychód w roku</small></div>
+          </div>
+          <div data-slot="cfgMachines"></div>
+          <div data-slot="cfgPrice"></div>
+          <div class="pd">
+            <div class="pd-h"><b>W ofercie</b><span class="we"></span></div>
+            <ul class="ticks">
+              <li>Limit wysokości i wystawania ustawiany raz</li>
+              <li>Gotowy program zamiast własnego konfiguratora</li>
+              <li>Klient końcowy sam dorabia układy w ustawionych granicach</li>
+            </ul>
+          </div>
+        </article>
+
+      </section>
+
+    </main>
+
+    <aside class="result" id="result">
+      <div class="pair">
+        <div class="tile">
+          <div class="cap">Oszczędność</div>
+          <div class="big" id="savings"><span data-out="savings"></span><small>PLN</small></div>
+          <div class="sub">praca zespołu, w roku</div>
+        </div>
+        <div class="op" aria-hidden="true">+</div>
+        <div class="tile b">
+          <div class="cap">Przychód</div>
+          <div class="big" id="revenue"><span data-out="revenue"></span><small>PLN</small></div>
+          <div class="sub">konfigurator w ofercie</div>
+        </div>
+      </div>
+      <div class="op eq" aria-hidden="true">=</div>
+      <div class="sum">
+        <div class="cap">Łączna kwota korzyści w pierwszym roku</div>
+        <div class="big" id="total"><span data-out="total"></span><small>PLN</small></div>
+        <div class="split" aria-hidden="true"><i class="a" id="split-a"></i><i class="b" id="split-b"></i></div>
+        <div class="legend"><span>oszczędność</span><span>przychód</span></div>
+      </div>
+      <div class="time"><b data-out="hoursLine"></b><span data-out="daysLine"></span></div>
+      <div class="src">
+        <div class="cap">Składniki</div>
+        <div class="rows">
+          <div class="row"><span>Program obsługi receptur</span><b data-out="e.system.pln"></b><u><i data-bar="system"></i></u></div>
+          <div class="row"><span>Nowe układy w projektach</span><b data-out="e.layout.pln"></b><u><i data-bar="layout"></i></u></div>
+          <div class="row"><span>Zmiany w trakcie projektu</span><b data-out="e.rework.pln"></b><u><i data-bar="rework"></i></u></div>
+          <div class="row"><span>Zmiany po uruchomieniu</span><b data-out="e.request.pln"></b><u><i data-bar="request"></i></u></div>
+          <div class="row"><span>Wyjazdy do klienta</span><b data-out="e.trip.pln"></b><u><i data-bar="trip"></i></u></div>
+          <div class="row"><span>Układy do ofert</span><b data-out="e.offer.pln"></b><u><i data-bar="offer"></i></u></div>
+          <div class="row rev"><span data-out="cfgRow"></span><b data-out="revenue"></b><u><i data-bar="revenue"></i></u></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <section class="more">
+    <div class="blk-h"><h2>Poza liczbami</h2></div>
+    <div class="more-grid">
+      <div class="ben"><span class="ck">✓</span><div><b>Nowy układ nie czeka na uruchomieniowca</b><p>Zmiana przygotowana w biurze. Ludzie zostają na obiekcie.</p></div></div>
+      <div class="ben"><span class="ck">✓</span><div><b>Chwytak sprawdzony przed wykonaniem</b><p>Wszystkie układy projektu na wymiarach chwytaka. Bez przeróbki po pierwszych próbach.</p></div></div>
+      <div class="ben"><span class="ck">✓</span><div><b>Jedno źródło danych</b><p>Ten sam zapis dla konstruktora, automatyka i robotyka. Bez przepisywania.</p></div></div>
+      <div class="ben"><span class="ck">✓</span><div><b>Zmiana bez autora stacji</b><p>Ograniczeń stanowiska pilnuje program. Senior zostaje przy bieżącym projekcie.</p></div></div>
+      <div class="ben"><span class="ck">✓</span><div><b>Układy w plikach, nie w jednej głowie</b><p>Ustawienia stacji i układy każdej maszyny zapisane.</p></div></div>
+      <div class="ben"><span class="ck">✓</span><div><b>PDF do oferty, umowy i odbioru</b><p>Spór „miało być osiem warstw” rozstrzyga dokument.</p></div></div>
+    </div>
+  </section>
+
+  <details class="box how">
+    <summary>Sposób liczenia</summary>
+    <p>W rachunku tylko praca przy układach palet, nie cały projekt maszyny. Jedna zasada:</p>
+    <p><b>liczba w roku × (minuty dziś − minuty z Pallet Designerem) × stawka za godzinę.</b></p>
+    <ul>
+      <li><b>Program obsługi receptur:</b> maszyny × (godziny dziś − godziny z Pallet Designerem) × średnia stawka automatyka i robotyka.</li>
+      <li><b>Nowe układy, biuro:</b> maszyny × układy na maszynę, osobno konstrukcja, PLC/HMI i robot.</li>
+      <li><b>Nowe układy, obiekt:</b> dziś próba każdego układu; z Pallet Designerem godzina na maszynę.</li>
+      <li><b>Zmiana w trakcie projektu i po uruchomieniu:</b> jak nowy układ w biurze, bez próby na obiekcie.</li>
+      <li><b>Wyjazdy:</b> wyjazdy możliwe do uniknięcia × koszt jednego.</li>
+      <li><b>Układy do ofert:</b> oferty × minuty na układ do jednej oferty.</li>
+      <li><b>Konfigurator w ofercie:</b> przychód, nie oszczędność; osobne pole, dodawany dopiero w sumie.</li>
+      <li><b>Dni i miesiące:</b> godziny ÷ 8 i godziny ÷ 160.</li>
+    </ul>
+    <p>Czas: suma dla wszystkich zaangażowanych osób. Minuty z Pallet Designerem na jeden układ: 10 konstrukcja, 10 PLC/HMI, 5 robot, 10 układ do oferty; na obiekcie 60 minut raz na maszynę. Program obsługi receptur: 8 godzin na maszynę. Puste pole: wartość startowa. Tekst i liczba ujemna: 0.</p>
+  </details>
+</div>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  var where = document.querySelectorAll('[data-where]');
+  Array.prototype.forEach.call(where, function (btn) {
+    btn.addEventListener('click', function () { PDCalc.set('aidAbroad', +btn.getAttribute('data-where')); });
+  });
+  // the helper writes its trip into the field only when asked
+  document.getElementById('aid-use').addEventListener('click', function () {
+    PDCalc.set('tripCost', PDCalc.tripFromAid(PDCalc.values()));
+  });
+
+  PDCalc.start(function (r, t) {
+    t.cfgRow = 'Konfigurator: ' + t.cfgLine;
+    PDCalc.fill(t);
+
+    // a number too long for its box gets a smaller font; the box keeps its size
+    [['savings', r.savings, t.savings, 7], ['revenue', r.revenue, t.revenue, 7], ['total', r.total, t.total, 10]].forEach(function (x) {
+      var el = document.getElementById(x[0]);
+      el.setAttribute('data-raw', x[1]);
+      el.classList.toggle('long', x[2].length > x[3]);
+    });
+
+    var max = r.revenue, k;
+    for (k in r.events) max = Math.max(max, r.events[k].plnSaved);
+    Array.prototype.forEach.call(document.querySelectorAll('[data-bar]'), function (el) {
+      var id = el.getAttribute('data-bar');
+      var v = id === 'revenue' ? r.revenue : r.events[id].plnSaved;
+      el.style.width = (max > 0 ? v / max * 100 : 0) + '%';
+    });
+    document.getElementById('split-a').style.width = (r.total > 0 ? r.savings / r.total * 100 : 0) + '%';
+    document.getElementById('split-b').style.width = (r.total > 0 ? r.revenue / r.total * 100 : 0) + '%';
+
+    var abroad = PDCalc.get('aidAbroad') ? '1' : '0';
+    Array.prototype.forEach.call(where, function (btn) { btn.setAttribute('aria-pressed', btn.getAttribute('data-where') === abroad); });
+  });
+})();
+</script>
+</body>
+</html>

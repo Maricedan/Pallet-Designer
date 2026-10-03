@@ -1,0 +1,1094 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#3ec5f3">
+<title>Kalkulator korzyści - Pallet Designer</title>
+<link rel="icon" type="image/png" href="../../favicon-96x96.png" sizes="96x96">
+<link rel="shortcut icon" href="../../favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="../../apple-touch-icon.png">
+<style>
+/* Fonts and palette of palletdesigner.com (cennik, section "Zwrot inwestycji") */
+@font-face{font-family:'Plus Jakarta Sans';src:url('../../_fonts/PlusJakartaSans-VF.woff2') format('woff2-variations');font-weight:200 800;font-display:swap}
+@font-face{font-family:'IBM Plex Sans';src:url('../../_fonts/IBMPlexSans-VF.woff2') format('woff2-variations');font-weight:100 700;font-display:swap}
+@font-face{font-family:'JetBrains Mono';src:url('../../_fonts/JetBrainsMono-VF.woff2') format('woff2-variations');font-weight:100 800;font-display:swap}
+@font-face{font-family:'Lora';src:url('../../_fonts/Lora-Italic-VF.woff2') format('woff2-variations');font-weight:400 700;font-style:italic;font-display:swap}
+/* --sky-deep is the colour of everything chosen or switched on and of the main result; the
+   near-black --ink is for text only */
+:root{
+  --sky:#3ec5f3;--sky-bright:#1ba6d4;--sky-deep:#0a7ea8;--sky-dark:#08678a;--sky-soft:#d6eef9;--sky-mist:#ecf6fb;--sky-haze:#f5fbfd;
+  --cream:#fefcf6;--bg:#fbfaf4;--bg-alt:#f7f5ec;
+  --ink:#0a2c3d;--ink-soft:#4f6c7a;--ink-faded:#7d95a1;
+  --surface:#fff;--line:#e6eef2;--line-soft:#f0f5f8;--edge:#c9d6dd;
+  --peach:#ffe0c8;--peach-soft:#fff1e3;--amber:#a85c1c;--green:#1b7a43;--warn:#b3261e;
+  --seg0:#9db3bd;--seg1:#3f5f6e;--seg2:#6f8b98;--seg3:#c3d0d8;
+  --mono:'JetBrains Mono',monospace;--head:'IBM Plex Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none !important}
+html{overflow-y:scroll;scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:15.5px;-webkit-font-smoothing:antialiased}
+.container{max-width:1200px;margin:0 auto;padding:40px 32px 90px}
+button{font:inherit;color:inherit}
+a{color:var(--sky-deep)}
+h1 em,h2 em{font-family:'Lora',serif;font-style:italic;font-weight:400;color:var(--sky-deep);font-size:1.04em}
+button:focus-visible,a:focus-visible,input:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--sky-bright);outline-offset:2px}
+h2:focus,h3:focus{outline:none}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* opening: what the calculator is about, and the three minutes */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 396px;gap:28px;align-items:stretch;margin-bottom:28px}
+.section-label{display:inline-flex;padding:8px 16px;background:var(--sky-soft);color:var(--sky-deep);border-radius:100px;font-family:var(--mono);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:.14em;margin-bottom:16px}
+h1{font-family:var(--head);font-weight:700;font-size:2.45rem;line-height:1.1;letter-spacing:-.028em;margin-bottom:10px}
+.intro{color:var(--ink-soft);font-size:1.05rem;max-width:640px}
+.three{border:1px solid var(--line);border-radius:22px;padding:22px 26px;background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.cap{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep)}
+.three-n{font-family:var(--head);font-weight:700;font-size:5.2rem;line-height:1;letter-spacing:-.04em;color:var(--sky-deep);margin:4px 0 2px;white-space:nowrap}
+.three-n small{font-size:.24em;font-weight:500;letter-spacing:0;color:var(--ink-soft);margin:0 8px 0 0}
+.three-n span + small{margin:0 0 0 8px}
+.three p{font-size:.92rem;line-height:1.5;margin-top:8px}
+.three p.cond{color:var(--ink-soft)}
+.three p.exp{margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:.88rem}
+
+/* two tabs: two separate calculators. Everything under the line belongs to the chosen one */
+.tabs{display:flex;align-items:flex-end;gap:6px;margin-bottom:30px;border-bottom:1px solid var(--edge)}
+.tabs > button{position:relative;top:1px;padding:12px 22px 11px;border:1px solid var(--edge);border-radius:14px 14px 0 0;background:var(--bg-alt);cursor:pointer;text-align:left;line-height:1.25;color:var(--ink-soft)}
+.tabs > button b{display:block;font-family:var(--head);font-size:1.08rem}
+.tabs > button small{display:block;font-size:12.5px}
+.tabs > button:hover{color:var(--sky-deep)}
+.tabs > button[aria-pressed="true"]{background:var(--bg);border-bottom-color:var(--bg);color:var(--ink);box-shadow:inset 0 3px 0 var(--sky-deep)}
+.tabs > button[aria-pressed="true"] b{color:var(--sky-deep)}
+.tabs-r{display:flex;gap:8px;margin-left:auto;padding-bottom:8px}
+.ghost{height:32px;padding:0 14px;border:1px solid var(--edge);border-radius:100px;background:var(--surface);cursor:pointer;font-size:13px;color:var(--ink-soft);white-space:nowrap}
+.ghost:hover:not(:disabled){border-color:var(--sky-deep);color:var(--sky-deep)}
+.ghost:disabled{opacity:.45;cursor:default}
+
+/* the form on the left, the result on the right. On a narrow screen there is one column:
+   the result stands after all the settings (its place in the page), and a bar with the main
+   figures stays at the top of the screen and leads to it */
+.cols{display:grid;grid-template-columns:minmax(0,1fr) 396px;column-gap:28px;align-items:start}
+.cols > .blk{grid-column:1;min-width:0}
+.cols > .result{grid-column:2;grid-row:1 / span 30}
+.blk{margin-bottom:38px;scroll-margin-top:16px}
+.blk-h{display:flex;align-items:baseline;gap:12px;margin-bottom:4px}
+.blk-h .no{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--sky-deep);background:var(--sky-mist);border-radius:7px;padding:3px 8px}
+h2{font-family:var(--head);font-weight:700;font-size:1.42rem;line-height:1.2;letter-spacing:-.022em}
+.blk-lead{color:var(--ink-soft);margin:0 0 14px;max-width:640px}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:20px 24px 16px;margin-bottom:12px;position:relative;scroll-margin-top:16px}
+h3{font-family:var(--head);font-weight:700;font-size:1.1rem;letter-spacing:-.015em;line-height:1.25}
+.card-d{color:var(--ink-soft);font-size:.93rem;line-height:1.5;margin:4px 0 8px;max-width:520px}
+.chip{justify-self:end;width:168px;text-align:right;font-variant-numeric:tabular-nums}
+.chip b{display:block;height:30px;line-height:30px;padding:0 10px;border-radius:8px;background:var(--sky-mist);color:var(--ink);font-family:var(--mono);font-weight:600;font-size:.9rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip small{display:block;height:18px;line-height:18px;font-size:11.5px;color:var(--ink-soft);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);background:var(--sky-mist);border-radius:6px;padding:2px 8px}
+.tag.warm{color:var(--amber);background:var(--peach-soft)}
+.note{color:var(--ink-soft);font-size:.88rem;line-height:1.5;margin-top:8px}
+[data-neg]{color:var(--warn) !important}
+.under{height:22px;line-height:22px;font-family:var(--mono);font-size:11.5px;color:var(--ink-soft);text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.own{margin-top:6px;padding-top:6px;border-top:1px solid var(--line-soft)}
+.off:not(.card) .fld,.off.card > *:not(.mod-h){opacity:.5}
+
+/* a choice between a few answers */
+.seg-l{font-weight:600;margin-bottom:10px}
+.seg{display:flex;flex-wrap:wrap;gap:8px}
+.seg button{padding:7px 15px;border:1px solid var(--edge);border-radius:100px;background:#fff;cursor:pointer;font-size:.9rem;line-height:1.25}
+.seg button:hover{border-color:var(--sky-deep)}
+.seg button[aria-pressed="true"]{background:var(--sky-deep);border-color:var(--sky-deep);color:#fff}
+.seg-hint{height:40px;line-height:20px;overflow:hidden;margin-top:10px;color:var(--ink-soft);font-size:.88rem}
+
+/* a switch: on / off */
+.switch{position:relative;display:inline-flex;align-items:center;min-height:24px;padding:0 0 0 50px;border:none;background:none;cursor:pointer;font-weight:600;font-size:.92rem;text-align:left;line-height:1.3}
+.switch::before{content:"";position:absolute;left:0;top:50%;width:40px;height:22px;margin-top:-11px;border-radius:11px;background:#aebdc6;transition:background .15s}
+.switch::after{content:"";position:absolute;left:3px;top:50%;width:16px;height:16px;margin-top:-8px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(10,44,61,.3);transition:transform .15s}
+.switch[aria-pressed="true"]::before{background:var(--sky-deep)}
+.switch[aria-pressed="true"]::after{transform:translateX(18px)}
+.switch:disabled{opacity:.5;cursor:default}
+.row-sw{padding:8px 0 4px}
+
+/* a part of a card that unfolds; unfolding changes no value and switches nothing on */
+.fold{border:none;background:none;cursor:pointer;font-size:.9rem;font-weight:600;color:var(--sky-deep);padding:4px 0 4px 8px;white-space:nowrap}
+.fold::after{content:"";display:inline-block;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg);margin:0 3px 3px 9px;transition:transform .15s}
+.fold[aria-expanded="true"]::after{transform:rotate(-135deg);margin-bottom:-1px}
+.split-h{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+
+/* field: label with help and one line for a hint or an error, slider, number, unit */
+.fld{display:grid;grid-template-columns:minmax(0,1fr) 170px 142px;gap:0 16px;align-items:center;padding:6px 0}
+.fld.plain{grid-template-columns:minmax(0,1fr) 142px}
+.fld-l{line-height:1.3;min-width:0}
+/* the "i" stays next to the first line of its label, however the label wraps */
+.fld-t{display:flex;align-items:baseline}
+.fld-t label{flex:0 1 auto;min-width:0;font-weight:500}
+.fld-h{display:block;height:18px;line-height:18px;font-size:12.5px;color:var(--ink-faded);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fld-h.err{color:var(--warn);font-weight:600}
+.fld-h.far{color:var(--amber)}
+.help{flex:none;width:18px;height:18px;margin-left:6px;padding:0;border:1px solid var(--edge);border-radius:50%;background:#fff;color:var(--ink-soft);font-family:var(--mono);font-size:11px;font-weight:700;line-height:16px;cursor:pointer;vertical-align:1px}
+.help:hover,.help[aria-expanded="true"]{background:var(--sky-deep);border-color:var(--sky-deep);color:#fff}
+input[type=range]{width:100%;accent-color:var(--sky-deep);cursor:pointer;height:22px}
+input[type=range]:disabled{cursor:default}
+.fld-i{display:grid;grid-template-columns:86px 50px;gap:0 6px;align-items:center}
+.fld-i input,.tot input{width:86px;text-align:right;font-family:var(--head);font-weight:600;font-size:1.02rem;font-variant-numeric:tabular-nums;padding:6px 10px;border:1px solid var(--edge);border-radius:10px;background:#fff;color:var(--ink)}
+.fld-i input:focus,.tot input:focus{outline:2px solid var(--sky-bright);outline-offset:-1px}
+input.bad{border-color:var(--warn);background:#fdf0ef}
+input[type=text]:disabled{background:var(--line-soft);color:var(--ink-faded);border-color:var(--line)}
+.fld-i i{font-style:normal;color:var(--ink-soft);font-size:12.5px;white-space:nowrap}
+
+/* the longer description of a field: on top of the page, moves nothing */
+.pop{position:absolute;z-index:60;width:340px;max-width:calc(100vw - 24px);padding:12px 14px;border:1px solid var(--sky-soft);border-radius:12px;background:#fff;color:var(--ink);font-size:.86rem;line-height:1.45;box-shadow:0 14px 40px -12px rgba(10,80,110,.35)}
+
+/* one layout: today and with the program, side by side */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.side{padding:18px 20px 16px;display:flex;flex-direction:column}
+.side.pdc{border-color:var(--sky-soft);background:linear-gradient(160deg,#fff 0%,var(--sky-mist) 100%)}
+.side .cap{margin-bottom:6px}
+.side.now .cap{color:var(--ink-soft)}
+.acts{list-style:none;display:grid;grid-auto-rows:38px}
+.acts li{display:grid;grid-template-columns:20px minmax(0,1fr);gap:0 10px;align-items:center;font-size:.9rem;line-height:1.3;border-top:1px solid var(--line-soft)}
+.acts li:first-child{border-top:none}
+.acts li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ink-faded);justify-self:center}
+/* the three stages of one run; a click says what the program does at that stage */
+.stages{list-style:none;counter-reset:st;display:grid;grid-auto-rows:38px}
+.stages li{counter-increment:st;border-top:1px solid rgba(10,126,168,.1)}
+.stages li:first-child{border-top:none}
+.stages button{display:grid;grid-template-columns:20px minmax(0,1fr);gap:0 10px;align-items:center;width:100%;height:100%;border:none;background:none;cursor:pointer;text-align:left;font-size:.9rem;line-height:1.3}
+.stages button::before{content:counter(st);width:18px;height:18px;border-radius:50%;background:#fff;border:1px solid var(--sky-deep);color:var(--sky-deep);font-family:var(--mono);font-size:10.5px;font-weight:700;line-height:16px;text-align:center}
+.stages button[aria-pressed="true"]{font-weight:600}
+.stages button[aria-pressed="true"]::before{background:var(--sky-deep);color:#fff}
+.stage-x{height:38px;line-height:19px;overflow:hidden;font-size:.84rem;color:var(--ink-soft)}
+.side-f{margin-top:auto;padding-top:12px;border-top:1px solid var(--line);min-height:172px}
+.pdc .side-f{border-top-color:rgba(10,126,168,.18)}
+.side-f label,.side-f .lbl{font-weight:600;font-size:.92rem}
+/* whose time the total is: said in full, next to the field */
+.allp{display:inline-block;margin:6px 0 10px;padding:3px 10px;border-radius:8px;background:var(--sky-soft);color:var(--sky-deep);font-weight:700;font-size:.86rem;line-height:1.4}
+.tot{display:grid;grid-template-columns:104px 78px;gap:0 8px;align-items:center;margin-bottom:6px}
+.tot input{width:104px;font-size:1.5rem;padding:5px 10px}
+.unit{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--edge);border-radius:10px;overflow:hidden;height:36px}
+.unit button{border:none;background:#fff;cursor:pointer;font-size:.88rem;color:var(--ink-soft)}
+.unit button[aria-pressed="true"]{background:var(--sky-deep);color:#fff}
+.side-f > small:not(.fld-h){display:block;color:var(--ink-soft);font-size:12.5px;line-height:1.45;margin-top:6px}
+.pd-big{font-family:var(--head);font-weight:700;font-size:2.3rem;line-height:44px;height:44px;letter-spacing:-.03em;color:var(--sky-deep);white-space:nowrap;font-variant-numeric:tabular-nums;margin-top:8px}
+.pd-big small{font-size:.42em;font-weight:500;letter-spacing:0;color:var(--ink-soft)}
+
+/* two bars on one scale: no minimum width that would fake the proportion */
+.bars{padding:18px 24px 14px}
+.bar-row{display:grid;grid-template-columns:118px minmax(0,1fr) 176px;gap:0 14px;align-items:center;height:30px}
+.bar-l{font-size:.9rem;color:var(--ink-soft)}
+.bar-t{display:flex;height:14px;border-radius:4px;background:var(--line-soft);overflow:hidden}
+.bar-t i{display:block;height:100%;width:0;transition:width .2s}
+.bar-t i + i{box-shadow:inset 1px 0 0 #fff}
+.s0{background:var(--seg0)}.s1{background:var(--seg1)}.s2{background:var(--seg2)}.s3{background:var(--seg3)}
+.bar-row.pdr .bar-t i{background:var(--sky-deep);border-radius:0 4px 4px 0}
+.bar-row b{font-family:var(--head);font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 12px;margin:4px 0 0;font-size:12px;color:var(--ink-soft)}
+.legend li{height:20px;line-height:20px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.diff{margin-top:8px;padding-top:10px;border-top:1px solid var(--line-soft)}
+.diff b{display:block;font-family:var(--head);font-weight:700;font-size:1.25rem;letter-spacing:-.02em;height:32px;line-height:32px;color:var(--green);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.diff b[data-nodata]{color:var(--ink-soft)}
+
+/* three scales of the same difference */
+.scales{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:4px}
+.sc{border:1px solid var(--line);border-radius:18px;padding:14px 18px;background:var(--surface);font-variant-numeric:tabular-nums;min-width:0}
+.sc.yr{border-color:var(--sky-soft);background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%)}
+.sc-n{font-family:var(--head);font-weight:700;font-size:1.35rem;letter-spacing:-.025em;height:40px;line-height:40px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sub{height:20px;line-height:20px;font-size:12.5px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* the head of a card with its figure on the right; the body of a card that unfolds */
+.mod-h{display:grid;grid-template-columns:minmax(0,1fr) 168px;gap:0 14px;align-items:start}
+.mod-b{margin-top:10px;padding-top:6px;border-top:1px solid var(--line-soft)}
+
+/* the parts of the calculation as one list. A row: a switch, a name and one figure. A click
+   anywhere on the row unfolds its fields; the switch changes the calculation only and never
+   unfolds anything. Rows unfold on their own, so nothing above the clicked row moves */
+.list{padding:4px 24px 6px;overflow:hidden}
+.grp-h{padding:18px 0 8px;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep)}
+.row{margin:0 -24px;padding:0 24px;border-top:1px solid var(--line-soft);scroll-margin-top:16px}
+.list > .row:first-child{border-top:none}
+.row.open{background:var(--sky-haze)}
+.row-h{position:relative;display:grid;grid-template-columns:40px minmax(0,1fr) 168px 14px;gap:0 14px;align-items:center;min-height:66px}
+.row-h .switch{z-index:1;min-height:44px;padding-left:40px}
+.row-n{display:flex;align-items:center;flex-wrap:wrap;gap:4px 8px;min-width:0}
+.row-t{padding:0;border:none;background:none;cursor:pointer;font:inherit;text-align:left;line-height:1.25}
+/* the whole row is the button */
+.row-t::after{content:"";position:absolute;inset:0 -24px}
+.row-t:focus-visible{outline:none}
+.row-t:focus-visible::after{outline:2px solid var(--sky-bright);outline-offset:-2px}
+.row-h:hover .row-t{color:var(--sky-deep)}
+.row.mod:not(.on) .row-t{color:var(--ink-soft)}
+/* the arrow is rotated, so it would lie on top of the row's button and take the click itself */
+.chev{width:8px;height:8px;margin:0 3px 4px;border-right:2px solid var(--sky-deep);border-bottom:2px solid var(--sky-deep);transform:rotate(45deg);transition:transform .15s;pointer-events:none}
+.row.open .chev{transform:rotate(-135deg);margin-bottom:-4px}
+.row-b{padding:0 0 12px}
+.row-b .card-d{margin-top:0}
+.row.rev .chip b{background:var(--peach-soft)}
+.row.rev input[type=range]{accent-color:var(--amber)}
+.row.rev .switch[aria-pressed="true"]::before{background:var(--amber)}
+.eg-box{margin:6px 0 10px;padding:14px 16px 10px;border-radius:14px;background:var(--bg-alt)}
+.eg-box .bar-row{grid-template-columns:170px minmax(0,1fr) 190px}
+.eg-box .bar-t{background:#ebe7d9}
+.eg-box .bar-t i{background:var(--sky-deep);border-radius:0 4px 4px 0}
+.eg-box p{color:var(--ink-soft);font-size:.86rem;line-height:1.5;margin-top:8px}
+
+/* result: fixed place, fixed size; nothing here is a sum of unlike things */
+.result{position:sticky;top:16px;max-height:calc(100vh - 32px);overflow:auto;font-variant-numeric:tabular-nums;scroll-margin-top:16px}
+.sum{border-radius:18px;padding:16px 20px 12px;background:linear-gradient(135deg,#0b86b3 0%,var(--sky-dark) 100%);color:#fff}
+.sum .cap{color:#e3f5fc;height:18px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.big{font-family:var(--head);font-weight:700;letter-spacing:-.03em;white-space:nowrap;overflow:hidden}
+.big small{font-size:.4em;font-weight:500;color:var(--ink-soft);letter-spacing:0}
+.big small:first-child:not(:empty){margin-right:7px}
+.big small:last-child{margin-left:5px}
+[data-empty] + small{visibility:hidden}
+.sum .big{color:#fff;font-size:2.8rem;height:58px;line-height:58px}
+.sum .big.long{font-size:1.7rem}
+.sum .big small{color:#e3f5fc}
+.sum [data-neg]{color:#ffe0c8 !important}
+.sum .sub{color:#f0fafd}
+.sum .sub.warn{color:#ffe9c9;font-size:12px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.tile{border:1px solid var(--line);border-radius:16px;padding:11px 14px 9px;background:linear-gradient(135deg,#fff 0%,var(--sky-mist) 100%);min-width:0}
+.tile .cap{height:28px;line-height:14px;overflow:hidden}
+.tile .big{font-size:1.45rem;height:36px;line-height:36px;color:var(--ink)}
+.tile .big small{font-size:.52em}
+.tile .big.long{font-size:1.02rem}
+.tile .sub{height:18px;line-height:18px;font-size:12px}
+.tile.b{border-color:var(--peach);background:linear-gradient(135deg,var(--peach-soft) 0%,var(--peach) 100%)}
+.tile.b .cap{color:var(--amber)}
+/* a figure kept apart on its own: the tile takes the whole width, its caption one line */
+.pair.one{grid-template-columns:1fr}
+.pair.one .cap{height:14px}
+.sep{display:flex;align-items:center;gap:10px;height:26px;margin-top:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.sep::before,.sep::after{content:"";flex:1;height:1px;background:var(--line)}
+.sep + .pair{margin-top:0}
+/* where the figure comes from; every line leads to its assumptions */
+.rows{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+.rows caption{text-align:left;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);height:22px;line-height:22px}
+.rows td{height:23px;padding:0 8px 0 0;border-top:1px solid var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rows td:first-child{color:var(--ink-soft)}
+.rows td:nth-child(2){width:126px;text-align:right;font-family:var(--mono);font-size:11.5px}
+.rows td:last-child{width:44px;padding-right:0;text-align:right}
+.fine{height:18px;line-height:18px;margin-top:8px;font-size:12px;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cta{display:flex;align-items:center;justify-content:center;height:46px;margin-top:6px;padding:0 22px;border-radius:100px;background:var(--sky-deep);color:#fff;font-weight:700;text-decoration:none;font-size:.98rem;white-space:nowrap}
+.cta:hover{background:var(--sky-dark)}
+.links{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.links button{height:32px;border:1px solid var(--edge);border-radius:100px;background:var(--surface);cursor:pointer;font-size:12.5px;color:var(--ink-soft);white-space:nowrap}
+.links button:hover{border-color:var(--sky-deep);color:var(--sky-deep)}
+
+/* everything the result stands on */
+.sum-table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:.9rem;font-variant-numeric:tabular-nums;margin-top:8px}
+.sum-table .c-l{width:44%}
+.sum-table th{text-align:left;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--sky-deep);padding:14px 0 6px}
+.sum-table td{padding:6px 12px 6px 0;border-top:1px solid var(--line-soft);vertical-align:top;line-height:1.4}
+.sum-table td:first-child{color:var(--ink-soft)}
+/* one line on the page, so a row keeps its height; the report carries it whole */
+.sum-table td:last-child{padding-right:0;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* one block, folded, at the bottom of the page: the table and the formulas are for the report */
+.more > summary{display:flex;align-items:center;flex-wrap:wrap;gap:4px 16px;padding:16px 24px;border:1px solid var(--line);border-radius:20px;background:var(--bg-alt);cursor:pointer;list-style:none}
+.more > summary::-webkit-details-marker{display:none}
+.more > summary h2{font-size:1.15rem}
+.more > summary span{color:var(--ink-soft);font-size:.9rem}
+.more > summary::after{content:"";width:8px;height:8px;margin:0 3px 4px auto;border-right:2px solid var(--sky-deep);border-bottom:2px solid var(--sky-deep);transform:rotate(45deg);transition:transform .15s}
+.more[open] > summary{margin-bottom:12px}
+.more[open] > summary::after{transform:rotate(-135deg);margin-bottom:-4px}
+.how{padding-left:18px;margin:8px 0 4px;font-size:.93rem;color:var(--ink-soft)}
+.how li{margin:4px 0}
+.how b{color:var(--ink)}
+
+/* the next step: demo, summary, scenario */
+.mail{height:132px;overflow:auto;margin:6px 0 12px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--bg-alt);font-family:var(--mono);font-size:11.5px;line-height:1.55;color:var(--ink-soft);white-space:pre-wrap}
+.acts-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.acts-row .cta{grid-column:1 / -1;margin-top:0}
+.acts-row .ghost{height:40px;padding:0 10px;overflow:hidden;text-overflow:ellipsis}
+.msg{height:22px;line-height:22px;margin-top:8px;font-family:var(--mono);font-size:11.5px;color:var(--sky-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.msg.err{color:var(--warn)}
+.foot{margin-top:18px;font-size:12.5px;color:var(--ink-soft)}
+
+#report{display:none}
+
+/* below the full width the two cards of one layout stand one under the other */
+@media (max-width:1199px){
+  .vs{grid-template-columns:1fr}
+  .side-f{min-height:0}
+  /* a narrower column: two lines are kept for the difference, the legend stands in two rows */
+  .legend{grid-template-columns:1fr 1fr}
+  .diff b{white-space:normal;height:64px}
+}
+@media (max-width:1100px){
+  .fld{grid-template-columns:minmax(0,1fr) 142px}
+  .fld:not(.plain) .fld-l{grid-column:1 / -1}
+}
+/* narrow screen: one column, the result after the settings, and the bar that keeps it in sight */
+.mbar{display:none}
+@media (max-width:980px){
+  .hero,.cols{grid-template-columns:minmax(0,1fr)}
+  /* overflow back to visible: a box that scrolls on its own ignores scroll-margin in Edge */
+  .cols > .result{grid-column:1;grid-row:auto;position:static;max-height:none;overflow:visible;margin-bottom:38px}
+  .mbar{display:flex;position:sticky;top:0;z-index:40;align-items:center;justify-content:space-between;gap:12px;height:52px;margin:-14px -32px 26px;padding:0 32px;background:var(--sky-deep);color:#fff;text-decoration:none;font-size:.95rem;font-variant-numeric:tabular-nums;box-shadow:0 6px 16px -8px rgba(10,44,61,.45)}
+  .mbar span:first-child{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .mbar b{font-family:var(--head);font-weight:700;font-size:1.05rem}
+  .mbar i{font-style:normal}
+  .mbar i:not(:empty)::before{content:" · "}
+  .mbar span:last-child{flex:none;font-size:.86rem;font-weight:600}
+  /* whatever a link leads to stops under the bar, not behind it */
+  .blk,.card,.row,.result{scroll-margin-top:64px}
+}
+@media (max-width:700px){
+  .container{padding:24px 16px 90px}
+  .mbar{margin:-14px -16px 26px;padding:0 16px}
+  h1{font-size:1.9rem}
+  .three-n{font-size:4rem}
+  /* the two tabs share the width; the two small buttons stand under the line */
+  .tabs{position:relative;align-items:stretch;margin-bottom:76px}
+  .tabs > button{flex:1 1 0;min-width:0;padding:10px 12px 9px}
+  .tabs > button b{font-size:.98rem}
+  .tabs-r{position:absolute;left:0;top:100%;margin:12px 0 0;padding:0}
+  .scales{grid-template-columns:1fr}
+  .card{padding:16px 16px 12px}
+  .fld,.fld.plain{grid-template-columns:minmax(0,1fr);gap:4px 0}
+  .fld .fld-l,.fld:not(.plain) .fld-l{grid-column:auto}
+  .fld-h{white-space:normal;height:auto;min-height:18px}
+  .mod-h{grid-template-columns:minmax(0,1fr)}
+  .mod-h .chip{justify-self:start;text-align:left;margin-top:4px}
+  /* a row: the name over its figure, the switch and the arrow at the sides */
+  .list{padding:2px 16px 4px}
+  .row{margin:0 -16px;padding:0 16px}
+  .row-t::after{inset:0 -16px}
+  .row-h{grid-template-columns:40px minmax(0,1fr) 14px;gap:4px 12px;padding:10px 0}
+  .row-h > :first-child,.row-h .chev{grid-row:1 / span 2}
+  .row-h .chip{grid-column:2;grid-row:2;justify-self:start;text-align:left}
+  .row-h .chev{grid-column:3}
+  .more > summary{padding:14px 16px}
+  .split-h{flex-direction:column;gap:4px}
+  .split-h .fold{padding-left:0}
+  /* label and value on one line, the bar under them */
+  .bar-row,.eg-box .bar-row{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:22px 14px;gap:2px 8px;height:auto;margin-bottom:8px}
+  .bar-l{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bar-row .bar-t{grid-column:1 / -1;grid-row:2}
+  .diff b{font-size:1.15rem}
+  .seg-hint{height:60px}
+  .stage-x{height:57px}
+  .under{white-space:normal;height:auto;min-height:22px;text-align:left}
+  .sum .cap{height:32px;line-height:16px;white-space:normal}
+  .fine{white-space:normal;height:36px}
+  /* the names of the sources in full: they do not change, so the rows keep their height */
+  .rows td{height:auto;padding-top:4px;padding-bottom:4px}
+  .rows td:first-child{white-space:normal}
+  .rows td:nth-child(2){width:118px}
+  /* narrow screen: label over value, the value may wrap */
+  .sum-table colgroup{display:none}
+  .sum-table,.sum-table tbody,.sum-table tr,.sum-table td,.sum-table th{display:block;width:auto}
+  .sum-table tr{border-top:1px solid var(--line-soft);padding:6px 0}
+  .sum-table td{border:none;padding:0}
+  .sum-table td:first-child{font-size:.84rem}
+  .sum-table td:last-child{white-space:normal}
+  .acts-row{grid-template-columns:minmax(0,1fr)}
+  .acts-row .cta{grid-column:auto}
+}
+/* fingers: every control about 44 px high */
+@media (pointer:coarse),(max-width:700px){
+  .seg button,.switch,.fold,.unit,.links button,.ghost,.stages button{min-height:44px}
+  .unit{height:44px}
+  .help{width:32px;height:32px;line-height:30px;font-size:13px}
+  .fld-i input,.tot input{min-height:44px}
+  .stages,.acts{grid-auto-rows:46px}
+  .rows td:last-child a{display:inline-block;padding:10px 0}
+  input[type=range]{height:36px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}html{scroll-behavior:auto}}
+
+/* print: the report alone, as many pages as it takes, in a type that can be read */
+@media print{
+  @page{margin:16mm 15mm}
+  body{background:#fff;font-size:10pt;line-height:1.45}
+  .container,.mbar,.pop{display:none !important}
+  #report{display:block;color:#000}
+  #report h1{font-size:17pt;margin:0 0 2pt}
+  #report h2{font-size:11.5pt;margin:14pt 0 4pt;padding-bottom:2pt;border-bottom:.6pt solid #0a7ea8;break-after:avoid}
+  #report table{width:100%;border-collapse:collapse;table-layout:fixed}
+  #report td,#report th{padding:3pt 8pt 3pt 0;border-top:.4pt solid #c9d6dd;vertical-align:top;text-align:left;overflow-wrap:anywhere}
+  #report tr{break-inside:avoid}
+  #report th{font-size:8pt;text-transform:uppercase;letter-spacing:.08em;color:#0a7ea8;border-top:none;padding-top:8pt}
+  #report .r-l{width:42%;color:#33505e}
+  #report .r-meta td:first-child{width:70pt;color:#33505e}
+  #report .r-main td:last-child{font-weight:700}
+  #report .r-warn{margin-top:4pt;font-weight:700;color:#a85c1c}
+  #report p,#report li{margin-top:3pt}
+  #report ul{padding-left:14pt}
+  #report .r-fine{margin-top:12pt;padding-top:6pt;border-top:.4pt solid #c9d6dd;font-size:8.5pt;color:#33505e}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header class="hero">
+    <div>
+      <div class="section-label">Kalkulator korzyści</div>
+      <h1>Ile pracy przy układach palet <em>może odzyskać zespół?</em></h1>
+      <p class="intro">Obecny sposób przygotowania układów obok Pallet Designera. Wszystkie wartości do dopasowania do własnej firmy</p>
+    </div>
+    <aside class="three">
+      <div class="cap">Kolejny układ</div>
+      <div class="three-n"><small>około</small><span>3</span><small>min</small></div>
+      <p>Pełna paleta z przekładkami i warstwami naprzemiennymi, z gotowymi danymi dla maszyny</p>
+      <p class="cond">Po wdrożeniu i konfiguracji stanowiska</p>
+      <p class="exp"><a href="https://www.youtube.com/watch?v=XmZR3UqLgtY" target="_blank" rel="noopener">Zobacz film · 2 min</a></p>
+    </aside>
+  </header>
+
+  <div class="tabs" role="group" aria-label="Rodzaj firmy">
+    <button type="button" data-opt="aud" data-val="integrator" aria-pressed="true"><b>Dla integratora</b><small>producent maszyn</small></button>
+    <button type="button" data-opt="aud" data-val="plant" aria-pressed="false"><b>Dla zakładu produkcyjnego</b><small>użytkownik maszyn</small></button>
+    <span class="tabs-r">
+      <button type="button" class="ghost" data-action="reset">Wartości startowe</button>
+      <button type="button" class="ghost" data-action="undo" disabled>Cofnij</button>
+    </span>
+  </div>
+  <a class="mbar" href="#wynik" data-jump="wynik" aria-label="Wynik: przejście do pełnego wyniku"><span><b data-out="mbar"></b><i data-out="mbar2"></i></span><span>Wynik ↓</span></a>
+  <p class="sr" id="live" role="status" aria-live="polite"></p>
+
+  <div class="cols">
+
+      <section class="blk" id="uklad" data-aud="integrator">
+        <div class="blk-h"><span class="no">1</span><h2 tabindex="-1">Ile pracy wymaga <em>kolejny układ?</em></h2></div>
+        <p class="blk-lead">Dane jednego nowego układu przy paletyzacji lub depaletyzacji</p>
+
+        <div class="vs">
+          <article class="card side now">
+            <div class="cap">Obecnie</div>
+            <ul class="acts">
+              <li>Planowanie odłożeń</li>
+              <li>Przygotowanie danych robota</li>
+              <li>Receptura i dane PLC/HMI</li>
+              <li>Sprawdzenie spójności i poprawki danych</li>
+            </ul>
+            <div class="side-f">
+              <div><label for="f-i_current_min">Łączny obecny czas na nowy układ</label><button type="button" class="help" data-help="i_current_min" aria-label="Opis pola: Łączny obecny czas na nowy układ" aria-expanded="false">i</button></div>
+              <p class="allp">Suma czasu pracy wszystkich osób</p>
+              <div class="tot">
+                <input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="–" id="f-i_current_min" data-field="i_current_min" aria-describedby="h-i_current_min">
+                <span class="unit" role="group" aria-label="Jednostka czasu"><button type="button" data-opt="i_unit" data-val="min" aria-pressed="false">min</button><button type="button" data-opt="i_unit" data-val="h" aria-pressed="false">h</button></span>
+              </div>
+              <input type="range" data-range="i_current_min" min="0" max="480" step="15" aria-label="Łączny obecny czas na nowy układ, suwak">
+              <small class="fld-h" id="h-i_current_min" data-hint="i_current_min"></small>
+            </div>
+          </article>
+
+          <article class="card side pdc">
+            <div class="cap">Z Pallet Designerem</div>
+            <ol class="stages" aria-label="Jeden przebieg: trzy etapy">
+              <li><button type="button" data-stage="0" aria-pressed="true">Projekt układu</button></li>
+              <li><button type="button" data-stage="1" aria-pressed="false">Wyznaczenie odłożeń</button></li>
+              <li><button type="button" data-stage="2" aria-pressed="false">Wygenerowanie i wczytanie danych</button></li>
+            </ol>
+            <p class="stage-x" id="stage-x" aria-live="polite">Układ warstwy i palety w jednym narzędziu, na ustawieniach stanowiska wpisanych raz</p>
+            <div class="side-f">
+              <span class="lbl">Jeden przebieg, łącznie</span>
+              <div class="pd-big"><small>około</small> <span data-out="pd"></span></div>
+              <small>Po wdrożeniu i konfiguracji stanowiska. <a href="#czas-pd" data-jump="czas-pd" style="white-space:nowrap">Zmiana czasu</a></small>
+            </div>
+          </article>
+        </div>
+
+        <div class="card bars">
+          <div class="bar-row"><span class="bar-l">Obecnie</span><span class="bar-t" id="bar-now"><i class="s0"></i><i class="s1"></i><i class="s2"></i><i class="s3"></i></span><b data-out="now"></b></div>
+          <div class="bar-row pdr"><span class="bar-l">Pallet Designer</span><span class="bar-t" id="bar-pd"><i></i></span><b data-out="pd"></b></div>
+          <ul class="legend" aria-label="Czynności w czasie obecnym">
+            <li><i class="s0"></i><span data-out="leg.0"></span></li>
+            <li><i class="s1"></i><span data-out="leg.1"></span></li>
+            <li><i class="s2"></i><span data-out="leg.2"></span></li>
+            <li><i class="s3"></i><span data-out="leg.3"></span></li>
+          </ul>
+          <div class="diff"><b data-out="savedLine"></b></div>
+        </div>
+
+        <article class="card">
+          <div class="split-h">
+            <div>
+              <h3>Czas obecny: cztery czynności</h3>
+              <p class="card-d">Ten sam czas w rozbiciu. Suma czynności to czas łączny</p>
+            </div>
+            <button type="button" class="fold" data-open="parts" aria-expanded="false" aria-controls="b-parts">Szczegóły</button>
+          </div>
+          <div class="mod-b" id="b-parts" data-body="parts" hidden>
+            <div data-slot="i_plan_min"></div>
+            <div data-slot="i_robot_min"></div>
+            <div data-slot="i_plc_min"></div>
+            <div data-slot="i_check_min"></div>
+            <div class="under" data-out="partsSum"></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="blk" id="skala" data-aud="integrator">
+        <div class="blk-h"><span class="no">2</span><h2 tabindex="-1">Skala: <em>rok pracy</em></h2></div>
+        <p class="blk-lead">Różnica z jednego układu przeliczona na maszyny i rok</p>
+
+        <div class="card">
+          <div data-slot="i_machines"></div>
+          <div data-slot="i_layouts"></div>
+          <div class="under" data-out="prepLine"></div>
+          <div class="own" data-group="i_money">
+            <div data-slot="i_rate"></div>
+          </div>
+          <div class="row-sw"><button type="button" class="switch" data-opt="i_time_only" aria-pressed="false">Tylko czas, bez wartości pracy</button></div>
+        </div>
+
+        <div class="scales">
+          <div class="sc"><div class="cap">Jeden układ</div><div class="sc-n" data-out="s.one"></div><div class="sub">mniej pracy na układ</div></div>
+          <div class="sc"><div class="cap">Jedna maszyna</div><div class="sc-n" data-out="s.machine"></div><div class="sub" data-out="s.machineSub"></div></div>
+          <div class="sc yr"><div class="cap">Rok</div><div class="sc-n" data-out="s.year"></div><div class="sub" data-out="s.yearSub"></div></div>
+        </div>
+      </section>
+
+      <section class="blk" id="zaklad" data-aud="plant">
+        <div class="blk-h"><span class="no">1</span><h2 tabindex="-1">Ile kosztuje przygotowanie kolejnych układów <em>w zakładzie?</em></h2></div>
+        <p class="blk-lead">Układy i zmiany w skonfigurowanych granicach maszyny</p>
+
+        <div class="card">
+          <div class="seg-l">Kto dziś przygotowuje dane nowych układów?</div>
+          <div class="seg" data-seg="p_method" role="group" aria-label="Kto dziś przygotowuje dane nowych układów"></div>
+          <p class="seg-hint" data-out="methodHint"></p>
+        </div>
+
+        <article class="card" id="mod-external" data-group="p_external">
+          <div class="mod-h">
+            <div>
+              <h3 tabindex="-1">Dane przygotowywane przez integratora</h3>
+              <p class="card-d">Układ i tak trzeba opracować i przekazać integratorowi: szkic, wymiary, mail, uzgodnienia. To także czas zakładu. Z Pallet Designerem układ powstaje na miejscu: opłata za zlecenie znika</p>
+            </div>
+            <div class="chip"><b data-out="m.external.a"></b><small data-out="m.external.b"></small></div>
+          </div>
+          <div data-slot="p_external_count"></div>
+          <div data-slot="p_external_fee"></div>
+          <div data-slot="p_external_internal_current_min"></div>
+        </article>
+
+        <article class="card" id="mod-internal" data-group="p_internal">
+          <div class="mod-h">
+            <div>
+              <h3 tabindex="-1">Dane przygotowywane wewnętrznie</h3>
+              <p class="card-d">Własne przygotowanie danych i sprawdzenie</p>
+            </div>
+            <div class="chip"><b data-out="m.internal.a"></b><small data-out="m.internal.b"></small></div>
+          </div>
+          <div data-slot="p_internal_count"></div>
+          <div data-slot="p_internal_current_min"></div>
+        </article>
+
+        <div class="card">
+          <div data-group="p_money">
+            <div data-slot="p_rate"></div>
+          </div>
+          <div class="row-sw"><button type="button" class="switch" data-opt="p_time_only" aria-pressed="false">Tylko czas, bez wartości pracy</button></div>
+        </div>
+      </section>
+
+      <section class="blk" id="korzysci" data-aud="integrator">
+        <div class="blk-h"><span class="no">3</span><h2 tabindex="-1">Pozostałe <em>korzyści</em></h2></div>
+        <p class="blk-lead">Każda pozycja z własnym przełącznikiem. Parametry po kliknięciu wiersza</p>
+
+        <div class="card list">
+          <div class="grp-h">Gotowy konfigurator dla klienta końcowego</div>
+
+          <article class="row mod rev" id="mod-rev" data-mod="i_rev_enabled" data-row="i_rev_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_rev_enabled" aria-pressed="false" aria-label="W kalkulacji: Potencjalny przychód" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_rev_enabled" aria-expanded="false" aria-controls="b-rev">Potencjalny przychód</button></h3>
+              <div class="chip"><b data-out="revChip"></b><small data-out="revChipSub"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-rev" data-body="i_rev_enabled" hidden>
+              <p class="card-d">Konfigurator jako pozycja w ofercie: klient końcowy sam dodaje układy, w granicach ustawionych przez integratora</p>
+              <div data-slot="i_cfg_sales"></div>
+              <div data-slot="i_cfg_price"></div>
+            </div>
+          </article>
+
+          <div class="grp-h">Błędy i zmiany</div>
+
+          <article class="row mod" id="mod-changes" data-mod="i_changes_enabled" data-row="i_changes_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_changes_enabled" aria-pressed="false" aria-label="W kalkulacji: Zmiany" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_changes_enabled" aria-expanded="false" aria-controls="b-changes">Zmiany</button></h3>
+              <div class="chip"><b data-out="m.changes.a"></b><small data-out="m.changes.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-changes" data-body="i_changes_enabled" hidden>
+              <p class="card-d">Zmiana po projekcie to kolejny układ do przeliczenia, często z wdrożeniem u klienta. Z Pallet Designerem: nowe dane z biura, bez wyjazdu</p>
+              <div data-slot="i_changes_count"></div>
+              <div data-slot="i_changes_trips"></div>
+              <div class="under" data-out="changesLine"></div>
+            </div>
+          </article>
+
+          <article class="row mod" id="mod-errors" data-mod="i_errors_enabled" data-row="i_errors_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_errors_enabled" aria-pressed="false" aria-label="W kalkulacji: Błędy" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_errors_enabled" aria-expanded="false" aria-controls="b-errors">Błędy</button></h3>
+              <div class="chip"><b data-out="m.errors.a"></b><small data-out="m.errors.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-errors" data-body="i_errors_enabled" hidden>
+              <p class="card-d">Błąd w danych układu wykryty na maszynie: poprawka, test i często wyjazd. Z Pallet Designerem taki błąd nie powstaje</p>
+              <div data-slot="i_errors_count"></div>
+              <div data-slot="i_errors_hours"></div>
+              <div data-slot="i_errors_trips"></div>
+              <div class="under" data-out="errorsLine"></div>
+            </div>
+          </article>
+
+          <article class="row" id="row-trip" data-row="trip">
+            <div class="row-h">
+              <span></span>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="trip" aria-expanded="false" aria-controls="b-trip">Jeden wyjazd do klienta</button></h3>
+              <div class="chip"><b data-out="m.trip.a"></b><small data-out="m.trip.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-trip" data-body="trip" hidden>
+              <p class="card-d">Wspólny koszt i czas wyjazdu przy zmianach i błędach. Liczba wyjazdów osobno w każdym z nich: część spraw da się obsłużyć zdalnie</p>
+              <div data-slot="i_trip_cash"></div>
+              <div data-slot="i_trip_hours"></div>
+              <p class="note">Wdrożenie u klienta to także postój maszyny, wolne okno w produkcji i produkty do próby</p>
+            </div>
+          </article>
+
+          <div class="grp-h">Pozostałe obszary pracy</div>
+
+          <article class="row mod" id="mod-system" data-mod="i_system_enabled" data-row="i_system_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_system_enabled" aria-pressed="false" aria-label="W kalkulacji: Standard receptur kolejnej maszyny" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_system_enabled" aria-expanded="false" aria-controls="b-system">Standard receptur kolejnej maszyny</button></h3>
+              <div class="chip"><b data-out="m.system.a"></b><small data-out="m.system.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-system" data-body="i_system_enabled" hidden>
+              <p class="card-d">Adaptacja obsługi receptur i wymiany danych, raz na nową maszynę</p>
+              <div data-slot="i_system_current_hours"></div>
+              <div data-slot="i_system_pd_hours"></div>
+            </div>
+          </article>
+
+          <article class="row mod" id="mod-construct" data-mod="i_construct_enabled" data-row="i_construct_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_construct_enabled" aria-pressed="false" aria-label="W kalkulacji: Analiza wariantów chwytaka" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_construct_enabled" aria-expanded="false" aria-controls="b-construct">Analiza wariantów chwytaka</button></h3>
+              <div class="chip"><b data-out="m.construct.a"></b><small data-out="m.construct.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-construct" data-body="i_construct_enabled" hidden>
+              <p class="card-d">Porównanie wariantów i geometrii przed wyborem rozwiązania, raz na nową maszynę</p>
+              <div class="eg-box">
+                <div class="cap">Przykład działania: dwa warianty chwytaka, średni cykl 12 s</div>
+                <div class="bar-row"><span class="bar-l">Wariant A · 12 odłożeń</span><span class="bar-t"><i style="width:100%"></i></span><b>144 s na warstwę</b></div>
+                <div class="bar-row"><span class="bar-l">Wariant B · 9 odłożeń</span><span class="bar-t"><i style="width:75%"></i></span><b>108 s na warstwę</b></div>
+                <p>Zmiana chwytaka to nowy podział warstwy i inna liczba odłożeń. Przy 10 warstwach: 24 min i 18 min odkładania</p>
+              </div>
+              <div data-slot="i_construct_current_min"></div>
+              <div data-slot="i_construct_pd_min"></div>
+            </div>
+          </article>
+
+          <article class="row mod" id="mod-offer" data-mod="i_offer_enabled" data-row="i_offer_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_offer_enabled" aria-pressed="false" aria-label="W kalkulacji: Opracowania ofertowe" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_offer_enabled" aria-expanded="false" aria-controls="b-offer">Opracowania ofertowe</button></h3>
+              <div class="chip"><b data-out="m.offer.a"></b><small data-out="m.offer.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-offer" data-body="i_offer_enabled" hidden>
+              <p class="card-d">Układ i materiał dla klienta na etapie oferty</p>
+              <div data-slot="i_offer_count"></div>
+              <div data-slot="i_offer_current_min"></div>
+              <div data-slot="i_offer_pd_min"></div>
+            </div>
+          </article>
+
+          <article class="row mod" id="mod-trials" data-mod="i_trials_enabled" data-row="i_trials_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="i_trials_enabled" aria-pressed="false" aria-label="W kalkulacji: Powtarzane próby układów" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="i_trials_enabled" aria-expanded="false" aria-controls="b-trials">Powtarzane próby układów</button></h3>
+              <div class="chip"><b data-out="m.trials.a"></b><small data-out="m.trials.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-trials" data-body="i_trials_enabled" hidden>
+              <p class="card-d">Kolejne próby na maszynie, zbędne po sprawdzeniu stanowiska na pierwszym układzie</p>
+              <div data-slot="i_trials_count"></div>
+              <div data-slot="i_trials_current_min"></div>
+              <div data-slot="i_trials_pd_min"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="blk" id="zaklad-inne" data-aud="plant">
+        <div class="blk-h"><span class="no">2</span><h2 tabindex="-1">Wizyty serwisu <em>i oczekiwanie</em></h2></div>
+        <p class="blk-lead">Opłaty za wizyty oraz czas od zgłoszenia do gotowych danych. Parametry po kliknięciu wiersza</p>
+
+        <div class="card list">
+          <article class="row mod" id="mod-visits" data-mod="p_visits_enabled" data-row="p_visits_enabled">
+            <div class="row-h">
+              <button type="button" class="switch" data-opt="p_visits_enabled" aria-pressed="false" aria-label="W kalkulacji: Uniknięte wizyty serwisu" title="W kalkulacji"></button>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="p_visits_enabled" aria-expanded="false" aria-controls="b-visits">Uniknięte wizyty serwisu</button></h3>
+              <div class="chip"><b data-out="m.visits.a"></b><small data-out="m.visits.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-visits" data-body="p_visits_enabled" hidden>
+              <p class="card-d">Wizyty, których nie trzeba zamawiać, gdy układ powstaje na miejscu</p>
+              <div data-slot="p_visits_count"></div>
+              <div data-slot="p_visits_fee"></div>
+            </div>
+          </article>
+
+          <article class="row" id="row-wait" data-row="wait">
+            <div class="row-h">
+              <span></span>
+              <h3 class="row-n"><button type="button" class="row-t" data-open="wait" aria-expanded="false" aria-controls="b-wait">Oczekiwanie na nowy układ</button><span class="tag">informacja</span></h3>
+              <div class="chip"><b data-out="m.wait.a"></b><small data-out="m.wait.b"></small></div>
+              <i class="chev" aria-hidden="true"></i>
+            </div>
+            <div class="row-b" id="b-wait" data-body="wait" hidden>
+              <p class="card-d">Dni robocze od zgłoszenia do gotowych danych</p>
+              <div data-slot="p_wait_now_days"></div>
+              <div data-slot="p_wait_after_days"></div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <aside class="result" id="wynik" aria-label="Wynik">
+        <div class="sum">
+          <div class="cap" data-out="p.cap"></div>
+          <div class="big" id="r-main"><small data-out="p.pre"></small><span data-out="p.big"></span><small data-out="p.unit"></small></div>
+          <div class="sub" data-out="p.sub"></div>
+          <div class="sub warn" id="r-note" data-out="p.note"></div>
+        </div>
+        <div class="pair">
+          <div class="tile">
+            <div class="cap" data-out="a.cap"></div>
+            <div class="big" id="r-a"><small data-out="a.pre"></small><span data-out="a.big"></span><small data-out="a.unit"></small></div>
+            <div class="sub" data-out="a.sub"></div>
+          </div>
+          <div class="tile">
+            <div class="cap" data-out="b.cap"></div>
+            <div class="big" id="r-b"><small data-out="b.pre"></small><span data-out="b.big"></span><small data-out="b.unit"></small></div>
+            <div class="sub" data-out="b.sub"></div>
+          </div>
+        </div>
+        <div data-aud="integrator">
+          <div class="sep">osobno, bez sumowania</div>
+          <div class="pair one">
+            <div class="tile b">
+              <div class="cap">Potencjalny przychód w roku</div>
+              <div class="big" id="r-rev"><small data-out="rev.pre"></small><span data-out="rev.big"></span><small data-out="rev.unit"></small></div>
+              <div class="sub" data-out="rev.sub"></div>
+            </div>
+          </div>
+        </div>
+        <table class="rows" id="rows"></table>
+        <p class="fine">Typowy rok po wdrożeniu, przed kosztami zakupu i wdrożenia</p>
+        <a class="cta" data-cta href="mailto:kontakt@palletdesigner.com">Demo na własnym układzie</a>
+        <div class="links">
+          <button type="button" data-action="download">Pobierz podsumowanie</button>
+          <button type="button" data-action="save">Zapisz scenariusz</button>
+        </div>
+      </aside>
+
+      <section class="blk" id="demo">
+        <div class="blk-h"><span class="no" data-no="4,3"></span><h2 tabindex="-1">Sprawdzenie <em>na własnym układzie</em></h2></div>
+        <p class="blk-lead">20 minut demo: własny przykład, założenia kalkulacji i zakres wdrożenia</p>
+        <div class="card">
+          <div class="row-sw"><button type="button" class="switch" data-opt="demo_attach" aria-pressed="true">Założenia kalkulacji w wiadomości</button></div>
+          <pre class="mail" id="mail" tabindex="0" aria-label="Treść dołączana do wiadomości"></pre>
+          <div class="acts-row">
+            <a class="cta" data-cta href="mailto:kontakt@palletdesigner.com">Demo na własnym układzie</a>
+            <button type="button" class="ghost" data-action="download">Pobierz podsumowanie</button>
+            <button type="button" class="ghost" data-action="save">Zapisz scenariusz</button>
+            <button type="button" class="ghost" data-action="open">Wczytaj scenariusz</button>
+            <input type="file" id="file" accept=".json,application/json" hidden>
+          </div>
+          <p class="msg" id="msg" role="status"></p>
+        </div>
+      </section>
+
+      <details class="blk more" id="zalozenia">
+        <summary><h2>Założenia <em>i sposób liczenia</em></h2><span>Dane, wzory i czas z Pallet Designerem</span></summary>
+
+        <article class="card" id="czas-pd">
+          <h3 tabindex="-1">Czas z Pallet Designerem: około 3 minut</h3>
+          <p class="card-d" id="scope">Realny czas przy znajomości programu: pełna paleta z przekładkami i warstwami naprzemiennymi oraz gotowe dane do wysłania klientowi albo wgrania na maszynę. Widać to na filmie</p>
+          <div data-aud="integrator"><div data-slot="i_pd_min"></div></div>
+          <div data-aud="plant"><div data-slot="p_pd_min"></div></div>
+          <p class="note"><a href="https://www.youtube.com/watch?v=XmZR3UqLgtY" target="_blank" rel="noopener">Zobacz film · 2 min</a></p>
+        </article>
+
+        <div class="card">
+          <h3>Dane i założenia</h3>
+          <table class="sum-table" id="sum-table"></table>
+        </div>
+
+        <div class="card">
+          <h3>Sposób liczenia</h3>
+          <ul class="how" id="formulas-integrator" data-aud="integrator">
+            <li><b>Nowe układy:</b> nowe maszyny × układy na maszynę × (czas obecny − czas z Pallet Designerem)</li>
+            <li><b>Zmiany:</b> zmiany × (czas obecny − czas z Pallet Designerem) oraz wyjazdy × czas wyjazdu. Osobno, w złotych: wyjazdy × koszt wyjazdu</li>
+            <li><b>Błędy:</b> błędy × czas poprawy oraz wyjazdy × czas wyjazdu. Osobno, w złotych: wyjazdy × koszt wyjazdu</li>
+            <li><b>Wyjazd:</b> jeden koszt i jeden czas, wspólne dla zmian i błędów</li>
+            <li><b>Standard receptur i analiza wariantów chwytaka:</b> nowe maszyny × (obecnie − z Pallet Designerem)</li>
+            <li><b>Opracowania ofertowe i powtarzane próby:</b> liczba × (obecnie − z Pallet Designerem)</li>
+            <li><b>Wartość czasu:</b> odzyskane godziny × koszt godziny. Osobodzień: 8 godzin</li>
+            <li><b>Potencjalny przychód:</b> sprzedaże pakietu × cena. Osobno, bez wspólnej sumy</li>
+            <li><b>Główne liczby:</b> zaokrąglone, z dopiskiem "około": godziny do 1 h, kwoty do 100 zł</li>
+            <li><b>Puste pole:</b> brak danych; pozycja pominięta i nazwana przy wyniku</li>
+          </ul>
+          <ul class="how" id="formulas-plant" data-aud="plant">
+            <li><b>Opłaty możliwe do uniknięcia:</b> zlecenia u integratora × opłata oraz wizyty serwisu × opłata</li>
+            <li><b>Praca wewnętrzna:</b> układy w roku × (czas obecny − czas z Pallet Designerem)</li>
+            <li><b>Zlecenia zewnętrzne, praca własna:</b> zlecenia × (przekazanie układu integratorowi − czas z Pallet Designerem). Ujemna, gdy przekazanie trwa krócej niż praca z programem</li>
+            <li><b>Wartość czasu:</b> czas własny × koszt godziny. Osobodzień: 8 godzin</li>
+            <li><b>Główne liczby:</b> zaokrąglone, z dopiskiem "około": godziny do 1 h, kwoty do 100 zł</li>
+            <li><b>Puste pole:</b> brak danych; pozycja pominięta i nazwana przy wyniku</li>
+          </ul>
+        </div>
+      </details>
+
+  </div>
+</div>
+
+<div class="pop" id="pop" role="note" aria-live="polite" hidden></div>
+<div id="report"></div>
+
+<script src="calc.js"></script>
+<script>
+(function () {
+  var C = PDCalc;
+  var result = null;
+  var lastRows = '', lastSummary = '';
+  var liveTimer = null;
+
+  function $(id) { return document.getElementById(id); }
+  function all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+  function esc(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+  }
+
+  /* one layout: both bars on one scale. The present time shows its four activities; the bar
+     of the program is as short as it really is - only a hairline keeps it from vanishing */
+  function bars() {
+    var total = C.overLimit() ? null : C.get('i_current_min');
+    var pd = C.get('i_pd_min') || 0;
+    var max = Math.max(total || 0, pd);
+    var segs = $('bar-now').children;
+    C.PARTS.forEach(function (id, i) {
+      segs[i].style.width = (total && max ? (C.get(id) || 0) / max * 100 : 0) + '%';
+    });
+    // without a present time there is no scale to draw the program's bar on
+    var bar = $('bar-pd').firstElementChild;
+    bar.style.width = (total != null && pd > 0 ? pd / max * 100 : 0) + '%';
+    bar.style.minWidth = total != null && pd > 0 ? '2px' : '0';
+  }
+
+  function renderRows(r) {
+    var html = '<caption>Źródła wyniku</caption>' + C.rows(r).map(function (x) {
+      return '<tr><td>' + esc(x.label) + '</td><td' + (x.value.charAt(0) === '−' ? ' data-neg' : '') + '>' + esc(x.value) +
+        '</td><td><a href="#' + x.at + '" data-jump="' + x.at + '" aria-label="Zmień założenia: ' + esc(x.label) + '">zmień</a></td></tr>';
+    }).join('');
+    if (html !== lastRows) $('rows').innerHTML = lastRows = html;
+  }
+
+  function renderSummary(r) {
+    // the widths come from the columns: the first row of the table spans both
+    var html = '<colgroup><col class="c-l"><col></colgroup>' + C.summary(r).map(function (s) {
+      return '<tbody><tr><th colspan="2">' + esc(s.title) + '</th></tr>' + s.rows.map(function (x) {
+        return '<tr><td>' + esc(x.label) + '</td><td title="' + esc(x.value) + '">' + esc(x.value) + '</td></tr>';
+      }).join('') + '</tbody>';
+    }).join('');
+    if (html !== lastSummary) $('sum-table').innerHTML = lastSummary = html;
+  }
+
+  /* The report: who and when, the main results, every assumption, what is missing, the three
+     minutes, the way of counting and the next step. Built from the same result as the page,
+     printed on as many pages as it takes. */
+  function buildReport() {
+    var r = result, plant = r.aud === 'plant';
+    var missing = C.texts(r)['p.note'];
+    function table(cls, rows) {
+      return '<table class="' + cls + '">' + rows.map(function (x) {
+        return '<tr><td>' + esc(x.label) + '</td><td>' + esc(x.value) + '</td></tr>';
+      }).join('') + '</table>';
+    }
+    var html = '<h1>Pallet Designer · kalkulator korzyści</h1>' + table('r-meta', C.reportHead()) +
+      '<h2>Główne wyniki</h2>' + table('r-main', C.headline(r)) +
+      (missing ? '<p class="r-warn">' + esc(missing) + '</p>' : '') +
+      '<h2>Dane i założenia</h2><table><colgroup><col class="r-l"><col></colgroup>' +
+      C.summary(r).map(function (s) {
+        return '<tr><th colspan="2">' + esc(s.title) + '</th></tr>' + s.rows.map(function (x) {
+          return '<tr><td class="r-l">' + esc(x.label) + '</td><td>' + esc(x.value) + '</td></tr>';
+        }).join('');
+      }).join('') + '</table>' +
+      '<h2>Czas z Pallet Designerem: około 3 minut</h2><p>' + $('scope').innerHTML + '</p>' +
+      '<h2>Sposób liczenia</h2><ul>' + $(plant ? 'formulas-plant' : 'formulas-integrator').innerHTML + '</ul>' +
+      '<h2>Następny krok</h2><p>Demo na własnym układzie, 20 minut: własny przykład, założenia tej kalkulacji i zakres wdrożenia. kontakt@palletdesigner.com · palletdesigner.com</p>' +
+      '<p class="r-fine">' + esc(C.DISCLAIMER) + '</p>';
+    $('report').innerHTML = html;
+  }
+
+  // the visitor's own mail; the assumptions go in only when the switch says so
+  function mailBody(r) {
+    var body = ['Dzień dobry,', '', 'proszę o demo Pallet Designera na własnym układzie.', ''];
+    if (C.opts().demo_attach) body.push(C.mailText(r), '');
+    return body.join('\n');
+  }
+
+  function say(text, bad) {
+    var el = $('msg');
+    el.textContent = text;
+    el.classList.toggle('err', !!bad);
+  }
+
+  function download(name, text, type) {
+    var blob = new Blob([text], { type: type });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  }
+
+  /* ---------- the longer description of a field ---------- */
+
+  var pop = $('pop'), popFor = null;
+
+  function closePop() {
+    if (popFor) popFor.setAttribute('aria-expanded', 'false');
+    pop.hidden = true;
+    popFor = null;
+  }
+
+  function openPop(btn) {
+    closePop();
+    pop.textContent = C.FIELDS[btn.getAttribute('data-help')].help;
+    pop.hidden = false;
+    var box = btn.getBoundingClientRect();
+    var left = Math.max(12, Math.min(box.left - 12, document.documentElement.clientWidth - pop.offsetWidth - 12));
+    pop.style.left = left + window.scrollX + 'px';
+    pop.style.top = box.bottom + window.scrollY + 8 + 'px';
+    btn.setAttribute('aria-expanded', 'true');
+    popFor = btn;
+  }
+
+  /* ---------- the way from a figure to its assumptions ---------- */
+
+  // a row unfolds on the way, and so does the folded block at the bottom of the page
+  function jump(id) {
+    var el = $(id);
+    if (!el) return;
+    var fold = el.closest('details');
+    if (fold) fold.open = true;
+    if (el.hasAttribute('data-row')) C.setOpen(el.getAttribute('data-row'), true);
+    el.scrollIntoView({ block: 'start' });
+    var head = el.querySelector('.row-t') || el.querySelector('h2, h3');
+    if (head) head.focus({ preventScroll: true });
+  }
+
+  document.addEventListener('click', function (e) {
+    var help = e.target.closest('[data-help]');
+    if (help) return popFor === help ? closePop() : openPop(help);
+    if (!e.target.closest('#pop')) closePop();
+    var link = e.target.closest('[data-jump]');
+    if (link) {
+      e.preventDefault();
+      jump(link.getAttribute('data-jump'));
+    }
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape' || !popFor) return;
+    var btn = popFor;
+    closePop();
+    btn.focus();
+  });
+  window.addEventListener('resize', closePop);
+
+  /* ---------- one run of the program, stage by stage ---------- */
+
+  // the first one stands in the page from the start
+  var STAGES = [
+    'Układ warstwy i palety w jednym narzędziu, na ustawieniach stanowiska wpisanych raz',
+    'Podział na odłożenia, pozycje i kolejność: wyznaczone przez program na podstawie ustawień stanowiska',
+    'Dane dla robota i PLC/HMI z jednego generowania, wczytane do przygotowanego systemu'
+  ];
+  function stage(n) {
+    all('[data-stage]').forEach(function (btn) {
+      btn.setAttribute('aria-pressed', btn.getAttribute('data-stage') === String(n) ? 'true' : 'false');
+    });
+    $('stage-x').textContent = STAGES[n];
+  }
+  all('[data-stage]').forEach(function (btn) {
+    btn.addEventListener('click', function () { stage(Number(btn.getAttribute('data-stage'))); });
+  });
+
+  /* ---------- the page follows the state ---------- */
+
+  C.start(function (r, t) {
+    result = r;
+    C.fill(t);
+
+    // a number too long for its box gets a smaller font; the box keeps its size
+    [['r-main', 'p', 10], ['r-a', 'a', 9], ['r-b', 'b', 9], ['r-rev', 'rev', 9]].forEach(function (x) {
+      $(x[0]).classList.toggle('long', (t[x[1] + '.big'] || '').length > x[2]);
+    });
+    $('r-note').title = t['p.note'];
+    all('[data-no]').forEach(function (el) {
+      el.textContent = el.getAttribute('data-no').split(',')[r.aud === 'plant' ? 1 : 0];
+    });
+
+    if (r.aud === 'integrator') bars();
+    renderRows(r);
+    renderSummary(r);
+    $('mail').textContent = C.opts().demo_attach ? C.mailText(r) : 'Bez założeń kalkulacji: sama prośba o demo';
+    var href = 'mailto:kontakt@palletdesigner.com?subject=' + encodeURIComponent('Pallet Designer - demo na własnym układzie') +
+      '&body=' + encodeURIComponent(mailBody(r));
+    all('[data-cta]').forEach(function (a) { a.href = href; });
+
+    // read out once the figures settle, not on every step of a slider
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () { $('live').textContent = t.live; }, 900);
+  });
+
+  /* ---------- summary and scenario ---------- */
+
+  window.addEventListener('beforeprint', buildReport);
+  all('[data-action="download"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      buildReport();
+      window.print();
+    });
+  });
+  all('[data-action="save"]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      download('pallet-designer-scenariusz-' + C.today().iso + '.json', C.exportText(), 'application/json');
+      say('Scenariusz zapisany do pliku');
+    });
+  });
+  all('[data-action="open"]').forEach(function (btn) {
+    btn.addEventListener('click', function () { $('file').click(); });
+  });
+  $('file').addEventListener('change', function () {
+    var file = this.files[0], input = this;
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function () {
+      var err = C.importText(String(reader.result));
+      say(err || 'Scenariusz wczytany: ' + file.name, !!err);
+      input.value = '';
+    };
+    reader.onerror = function () { say('Pliku nie udało się odczytać', true); };
+    reader.readAsText(file);
+  });
+})();
+</script>
+</body>
+</html>
