@@ -1,0 +1,57 @@
+# Pallet Designer
+
+> Pallet Designer is a tool for industrial automation integrators
+> and manufacturing plants for configuring palletizing layouts without
+> programming the PLC, HMI or robot. From a layer pattern it calculates
+> the complete robot pick-and-place sequence automatically, and it exports
+> the whole configuration to the machine. It cuts the time to start up a
+> new layout from days to minutes.
+
+## Polish version (primary)
+- [Homepage PL](https://palletdesigner.com/): full product description, features, screenshots, contact
+- [Value calculator PL](https://palletdesigner.com/kalkulator/): interactive calculator of the time and money saved on pallet layouts, for integrators and for manufacturing plants (values in PLN)
+
+## English version
+- [Homepage EN](https://palletdesigner.com/en/): full product description, features, screenshots, contact
+- [Value calculator EN](https://palletdesigner.com/en/calculator/): interactive calculator of the time and money saved on pallet layouts, for integrators and for manufacturing plants (values in EUR)
+
+## German version
+- [Homepage DE](https://palletdesigner.com/de/): full product description, features, screenshots, contact
+- [Value calculator DE](https://palletdesigner.com/de/rechner/): interactive calculator of the time and money saved on pallet layouts, for integrators and for manufacturing plants (Vorteilsrechner, values in EUR)
+
+## Key facts
+- Product: Pallet Designer
+- Industry: industrial automation, palletizing, depalletizing
+- Target users: automation system integrators, manufacturing plants, PLC/HMI programmers, robot programmers, sales teams for palletizing machines
+- Sales model: licences for the integrator and for the end customer, plus optional machine integration; pricing on request
+- Vendor: Pallet Designer (Mardan Automatyka; legal name: Marcin Daniun Automatyka, Poland)
+
+## Features
+- Automatic robot move planning: from a layer pattern the program calculates the complete robot sequence - which cases the gripper picks together (multi-case gripping), collision-free gripper positions, approach direction and placing order; manual mode for special cases; batch computing of many layers
+- Automatic layer pattern optimization: auto fill proposes layouts with the maximum number of cases, marks proven optimal layouts, and builds interlocked alternating layers (layer A/B)
+- Visual layer pattern and pallet stack designer: labels-outward orientation, overhang control, slip sheets, 3D pallet view
+- Mixed-product palletizing on a single pallet (variant mix)
+- Production orders for palletizing and depalletizing
+- Validation against the real station: gripper, reach, allowed rotations, station obstacles and PLC array limits are checked before data reaches the machine
+- Generation of data ready to load into the machine (Siemens TIA Portal data block, JSON, CSV, custom structures)
+- Ready function blocks, HMI screens and scripts for Siemens PLC/HMI as part of the delivery; other control platforms on request
+- Configuration export for robot simulation environments (e.g. FANUC ROBOGUIDE)
+- Automatic PDF documentation of the layout
+- Self-service mode: end-customer configurator (an operator or process engineer designs layouts themselves, within parameters set up by the integrator)
+- Multi-workstation use with a shared data folder and edit locks
+- Multilingual interface, user manual and PDF documentation; further languages on request
+
+## Pricing model
+- Pricing is on request for every component: contact the vendor for a quote.
+- Integrator licence: full program functionality, data export to the machine, files for robot simulation, PDF documentation, user manual and team training; works without permanent internet; transferable between devices.
+- End-customer application licence: the configurator delivered together with the machine, so the end customer creates new layouts within parameters set up by the integrator.
+- Machine integration: ready PLC function blocks, HMI screens and scripts (Siemens standard), team training and assistance at first commissioning; other control systems and custom modifications on request.
+- Before buying: 20-minute online demo on the customer's own pallet layout, followed by a tailored offer. A demo version for the customer's own tests is available on request.
+
+## Contact
+- Email: kontakt@palletdesigner.com (PL/DE), contact@palletdesigner.com (EN)
+- Phone: +48 517 734 241
+- LinkedIn: https://www.linkedin.com/in/marcin-daniun
+- Initial conversation format: 20-minute online demo with a layout proposed by the customer
+- Brochure (PL): https://palletdesigner.com/Pallet_Designer_broszura.pdf
+- Brochure (EN): https://palletdesigner.com/Pallet_Designer_broszura_eng.pdf
